@@ -15,8 +15,7 @@ sudo adduser --disabled-password --gecos "" $user
 sudo echo -e "$password\n$password" | passwd $user
 mkdir -p /home/$user/my-projects
 cd /home/$user/my-projects
-git clone https://github.com/gvoze32/C9IDECoreDeploy
-cd C9IDECoreDeploy
+wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/bonus-instagram.sh
 bash bonus-instagram.sh
 cd
 
