@@ -18,6 +18,7 @@ cd /home/$user/my-projects
 git clone https://github.com/gvoze32/C9IDECoreDeploy
 cd C9IDECoreDeploy
 bash bonus-instagram.sh
+cd
 
 #Get script to user directory
 git clone https://github.com/c9/core.git /home/$user/c9sdk
