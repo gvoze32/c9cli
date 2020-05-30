@@ -25,8 +25,5 @@ sudo chown $user.$user /home/$user -R
 sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
 sudo chown $user.$user /home/$user/ -R
 sudo chmod 700 /home/$user/ -R
-sudo tmux new -d -s c9
-sudo tmux new -d -n $user
-sudo tmux send-keys -t c9:$user "node server.js --auth $user:$password --listen 0.0.0.0 --port $port -w /home/$user/my-projects" Enter
-
-# ATTENTION! Script not finished yet, don't run it.
+tmux new -d -s $user
+tmux send-keys -t 1 "node server.js --auth $user:$password --listen 0.0.0.0 --port $port -w /home/$user/my-projects" Enter

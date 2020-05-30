@@ -14,28 +14,37 @@ sudo bash c9-maker.sh
 ```
 
 To check active user
+
 ```
 sudo systemctl status c9-username.service
 ```
 
-### Using tmux (BETA)
+### Using tmux
 
 ```
 chmod +x c9-maker-tmux.sh
 sudo bash c9-maker-tmux.sh
 ```
 
-To check active user
+To check active sessions
+
 ```
-tmux attach
+tmux list-sessions
 ```
 
-If you just want to run separate bash script, you can user this command or run from cloned repository
+To attach selected session
+
+```
+tmux a -t sessionname
+```
+
+If you still confuse, open this [cheatsheet](https://tmuxcheatsheet.com/)
+
+**If you just want to run separate bash script, you can user this command or run from cloned repository**
 
 ### Delete User
 
 ```
-wget https://github.com/gvoze32/C9IDECoreDeploy/raw/master/c9-deluser.sh
 chmod +x c9-deluser.sh
 bash c9-deluser.sh
 ```
@@ -48,10 +57,9 @@ chmod +x ioncubesc.sh
 bash ioncubesc.sh
 ```
 
-### Build bonus-instagram packages
+### Clone bonus-instagram packages
 
 ```
-wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/bonus-instagram.sh
 bash bonus-instagram.sh
 ```
 
