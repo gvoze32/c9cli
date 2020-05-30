@@ -1,4 +1,4 @@
-echo Pastikan PHP kamu adalah versi 7.2 dan menggunakan CLI, jika bukan silahkan keluar
+echo Pastikan PHP kamu adalah versi 7.2, jika bukan, silahkan keluar
 read -r -p "Yakin ingin melanjutkan? [y/N] " response
 case "$response" in
     [yY][eE][sS]|[yY]) 
@@ -13,7 +13,11 @@ php -i | grep additional
         ;;
 esac
 
-read -r -p "Jika php kamu menggunakan cli, silahkan ketik y, atau ketik n jika php kamu menggunakan fpm" response
+echo .
+echo Silahkan baca tulisan diatas, apabila ada kata cli, maka php kamu menggunakan cli.
+echo Apabila ada kata fpm, maka php kamu menggunakan fpm.
+echo .
+read -r -p "Jika php kamu menggunakan cli, silahkan ketik Y, atau ketik N jika php kamu menggunakan fpm" response
 case "$response" in
     [yY][eE][sS]|[yY]) 
 sudo bash -c 'echo 'zend_extension=ioncube_loader_lin_7.2.so' > /etc/php/7.2/cli/conf.d/00-ioncube-loader.ini'
@@ -21,7 +25,7 @@ service php7.2-fpm restart
 php -v
         ;;
     *)
-echo 'zend_extension=ioncube_loader_lin_7.2.so' > /etc/php/7.2/fpm/conf.d/00-ioncube-loader.ini
+sudo bash -c 'echo 'zend_extension=ioncube_loader_lin_7.2.so' > /etc/php/7.2/fpm/conf.d/00-ioncube-loader.ini'
 service php7.2-fpm restart
 php -v
         ;;
