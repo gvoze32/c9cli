@@ -19,7 +19,7 @@ To check active user
 sudo systemctl status c9-username.service
 ```
 
-### Using tmux
+### Using tmux (BETA)
 
 ```
 chmod +x c9-maker-tmux.sh
@@ -49,10 +49,9 @@ chmod +x c9-deluser.sh
 bash c9-deluser.sh
 ```
 
-### Install IonCube
+### Install IonCube for PHP 7.2
 
 ```
-wget ioncubesc.sh
 chmod +x ioncubesc.sh
 bash ioncubesc.sh
 ```
