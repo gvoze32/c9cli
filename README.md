@@ -1,6 +1,6 @@
 # C9IDECoreDeploy
 
-Bash scripts to automatically create user IDE workspace and add some required packages.
+Simple bash script to create C9 IDE Workspace for separate user and automatically install some required packages.
 
 ### Install
 
@@ -38,9 +38,9 @@ To attach selected session
 tmux a -t sessionname
 ```
 
-If you still confuse, open this [cheatsheet](https://tmuxcheatsheet.com/)
+If you still confuse, open this [cheatsheet](https://tmuxcheatsheet.com/).
 
-**If you just want to run separate bash script, you can user this command or run from cloned repository**
+**If you just want to run additional bash scripts, you can use this command**
 
 ### Delete User
 
