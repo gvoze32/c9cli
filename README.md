@@ -10,11 +10,27 @@ Make sure you have root access to doing this installation.
 git clone https://github.com/gvoze32/C9IDECoreDeploy
 cd C9IDECoreDeploy
 chmod +x c9-maker.sh
-sudo ./c9-maker.sh
+sudo bash c9-maker.sh
+```
+
+To check active user
+```
+sudo systemctl status c9-username.service
+```
+
+### Using tmux (BETA)
+
+```
+chmod +x c9-maker-tmux.sh
+sudo bash c9-maker-tmux.sh
+```
+
+To check active user
+```
+tmux attach
 ```
 
 If you just want to run separate bash script, you can user this command or run from cloned repository
-
 
 ### Delete User
 

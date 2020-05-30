@@ -1,3 +1,4 @@
+#!/bin/bash
 echo Pastikan PHP kamu adalah versi 7.2, jika bukan, silahkan keluar
 read -r -p "Yakin ingin melanjutkan? [y/N] " response
 case "$response" in

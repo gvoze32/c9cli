@@ -1,3 +1,4 @@
+#!/bin/bash
 mkdir bonus-instagram
 cd bonus-instagram
 mkdir hypervote-nulled
