@@ -25,3 +25,5 @@ git clone https://github.com/auliaahmad165/igfeedliker
 git clone https://github.com/areltiyan/igfirstcomment
 git clone https://github.com/sandrocods/instagram-views
 git clone https://github.com/nthanfp/storyloop
+git clone https://github.com/corrykalam/InstagramAPI
+git clone https://github.com/ppabcd/Instagram-Story-Downloader
