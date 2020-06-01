@@ -1,10 +1,10 @@
 # C9IDECoreDeploy
 
-Simple bash script to create C9 IDE Workspace for separate user and automatically install some required packages.
+Simple bash script to create user and install C9 IDE Workspace then automatically install some required packages.
 
 ### Install
 
-Make sure you have root access to doing this installation.
+Make sure you have root access before doing this installation.
 
 ```
 git clone https://github.com/gvoze32/C9IDECoreDeploy
