@@ -3,16 +3,16 @@
 HEIGHT=15
 WIDTH=40
 CHOICE_HEIGHT=4
-BACKTITLE="Original script by nicolasjulian modified by gvoze32"
+BACKTITLE="Simple bash script to create user and install C9 IDE Workspace then automatically install some required packages."
 TITLE="C9IDECoreDeploy"
 MENU="Choose one of the following options:"
 
 OPTIONS=(1 "Deploy User Workspace"
          2 "Delete User Workspace"
          3 "See User Workspace Status"
-		 4 "Install IonCube for PHP 7.2"
-		 5 "See Used Port List"
-		 6 "chmod All Scripts")
+	 4 "Install IonCube for PHP 7.2"
+	 5 "See Used Port List"
+	 6 "chmod All Scripts")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
@@ -31,7 +31,7 @@ case $CHOICE in
             sudo bash scripts/c9-deluser.sh
             ;;
         3)
-			read -p "Username : " crot
+	    read -p "Username : " crot
             sudo systemctl status c9-$crot.service
             ;;
         4)
