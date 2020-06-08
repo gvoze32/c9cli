@@ -12,7 +12,6 @@ OPTIONS=(1 "Deploy User Workspace"
          3 "See User Workspace Status"
 	 4 "Install IonCube for PHP 7.2"
 	 5 "See Used Port List"
-	 6 "chmod All Scripts")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
