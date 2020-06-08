@@ -4,7 +4,9 @@ read -p "Input User : " user
 read -p "Input Password : " password
 read -p "Input Port (Recomend Range : 1000-5000) : " port
 
-sudo apt-get update && apt-get upgrade
+sudo apt-get update -y
+sudo apt-get upgrade -y
+sudo apt-get update -y
 curl -sL https://deb.nodesource.com/setup_10.x | sudo bash -
 sudo apt-get install -y curl git build-essential nodejs npm php php-exif php-gd php-mbstring php-curl php-mysqli php-json php-dom php-fpm python-pip python3-pip python python2.7 python-pyfiglet build-essential zip unzip unp unrar unrar-free unar p7zip
 pip install requests selenium colorama bs4
