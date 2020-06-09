@@ -1,6 +1,6 @@
 #!/bin/bash
-echo Pastikan PHP kamu adalah versi 7.2, jika bukan, silahkan keluar
-read -r -p "Yakin ingin melanjutkan? [y/N] " response
+echo Make sure you have PHP 7.2, if not... please exit
+read -r -p "Continue? [y/N] " response
 case "$response" in
     [yY][eE][sS]|[yY]) 
 wget https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
@@ -15,10 +15,10 @@ php -i | grep additional
 esac
 
 echo .
-echo Silahkan baca tulisan diatas, apabila ada kata cli, maka php kamu menggunakan cli.
-echo Apabila ada kata fpm, maka php kamu menggunakan fpm.
+echo Read text above, if there is cli in it, you have php cli version.
+echo If the text contains fpm, then you have php fpm version.
 echo .
-read -r -p "Jika php kamu menggunakan cli, silahkan ketik Y, atau ketik N jika php kamu menggunakan fpm" response
+read -r -p "If you have cli, press Y, or press N if you have fpm" response
 case "$response" in
     [yY][eE][sS]|[yY]) 
 sudo bash -c 'echo 'zend_extension=ioncube_loader_lin_7.2.so' > /etc/php/7.2/cli/conf.d/00-ioncube-loader.ini'
