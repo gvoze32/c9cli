@@ -15,4 +15,4 @@ chmod +x run.sh
 sudo bash run.sh
 ```
 
-This project is fork of [C9IDE-User-Maker](https://github.com/nicolasjulian/C9IDE-User-Maker) added with own modified packages
+This project is fork of [C9IDE-User-Maker](https://github.com/nicolasjulian/C9IDE-User-Maker) and [C9-Docker-Compose](https://github.com/nicolasjulian/C9-Docker-Compose)
