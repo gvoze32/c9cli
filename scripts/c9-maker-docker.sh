@@ -12,7 +12,7 @@ MEMORY=$ram
 CPUS=$cpus
 EOF
 sudo docker-compose --env-file $user.c9 -p $user.c9 up -d
-cd /home/c9users/$user
+cd /home/c9users/$user/workspace
 mkdir bonus-instagram
 cd bonus-instagram
 mkdir hypervote-nulled
