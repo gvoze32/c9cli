@@ -16,7 +16,8 @@ OPTIONS=(1 "chmod All Scripts (required to do this once at first installation)"
 		 7 "Install Docker Packages (do this only once)"
 		 8 "Deploy Docker User Workspace"
 		 9 "Delete Docker User Workspace"
-		 10 "See Docker User Workspace Status")
+		 10 "See Docker User Workspace Status"
+		 11 "Restart User Workspace")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
@@ -36,6 +37,7 @@ case $CHOICE in
 			chmod +x scripts/c9-maker-docker.sh
 			chmod +x scripts/c9-deluser-docker.sh
 			chmod +x scripts/c9-status.sh
+			chmod +x script/restart.sh
             ;;
         2)
             sudo bash scripts/c9-maker.sh
@@ -64,4 +66,7 @@ case $CHOICE in
         10)
             docker ps -a
             ;;
+		11)
+			sudo bash script/restart.sh
+			;;
 esac
