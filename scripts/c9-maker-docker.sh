@@ -4,14 +4,14 @@ read -p "Port : " port
 read -p "Password : " pw
 read -p "Memory/RAM Limit (Example=1024m): " ram
 read -p "CPU (Example=1): " cpus
-sudo cat > /home/c9users/$user.c9 << EOF
+sudo cat > /home/c9users/$user.env << EOF
 PORT=$port
 NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$pw
 MEMORY=$ram
 CPUS=$cpus
 EOF
-sudo docker-compose --env-file $user.c9 -p $user.c9 up -d
+sudo docker-compose -p $user.env up -d
 cd /home/c9users/$user/workspace
 mkdir bonus-instagram
 cd bonus-instagram
