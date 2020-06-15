@@ -37,7 +37,7 @@ case $CHOICE in
 			chmod +x scripts/c9-maker-docker.sh
 			chmod +x scripts/c9-deluser-docker.sh
 			chmod +x scripts/c9-status.sh
-			chmod +x script/restart.sh
+			chmod +x script/c9-restart.sh
             ;;
         2)
             sudo bash scripts/c9-maker.sh
