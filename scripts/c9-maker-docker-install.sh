@@ -6,4 +6,4 @@ sudo apt-get install -y curl git build-essential nodejs npm php php-exif php-gd 
 pip install requests selenium colorama bs4
 sudo adduser c9users
 cd /home/c9users
-git clone https://github.com/nicolasjulian/C9-Docker-Compose.git
+sudo git clone https://github.com/nicolasjulian/C9-Docker-Compose.git
