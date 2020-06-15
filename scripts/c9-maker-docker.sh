@@ -1,18 +1,14 @@
 #!/bin/bash
 read -p "Input User : " user
-read -p "Port : " port
 read -p "Password : " pw
-read -p "Memory/RAM Limit (Example=1024m): " ram
-read -p "CPU (Example=1): " cpus
+read -p "Port : " port
 sudo cat > /home/c9users/$user.env << EOF
 PORT=$port
 NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$pw
-MEMORY=$ram
-CPUS=$cpus
 EOF
-sudo docker-compose -p $user.env up -d
-cd /home/c9users/$user/workspace
+sudo docker-compose --env-file=$user.env -p $user.env up -d
+cd /home/c9users/$user
 mkdir bonus-instagram
 cd bonus-instagram
 mkdir hypervote-nulled

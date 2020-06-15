@@ -67,6 +67,6 @@ case $CHOICE in
             docker ps -a
             ;;
 		11)
-			sudo bash script/restart.sh
+			sudo bash script/c9-restart.sh
 			;;
 esac
