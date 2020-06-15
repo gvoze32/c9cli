@@ -3,7 +3,7 @@ read -p "Input User : " user
 read -p "Port : " port
 read -p "Password : " pw
 read -p "Memory/RAM Limit (Example=1024m): " ram
-read -p "CPU : (Example=1)" cpus
+read -p "CPU (Example=1): " cpus
 sudo cat > /home/c9users/$user.c9 << EOF
 PORT=$port
 NAMA_PELANGGAN=$user
