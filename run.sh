@@ -8,12 +8,12 @@ TITLE="C9IDECoreDeploy"
 MENU="Choose one of the following options:"
 
 OPTIONS=(1 "chmod All Scripts (required to do this once at first installation)"
-		 2 "Deploy User Workspace"
-         3 "Delete User Workspace"
-         4 "See User Workspace Status"
-		 5 "Install IonCube for PHP 7.2 (do this only once)"
-		 6 "See Used Port List"
-		 7 "Install Docker Packages (do this only once)"
+		 2 "Install Packages (required to do this once at first installation)"
+		 3 "Install IonCube for PHP 7.2 (do this only once)"
+		 4 "Deploy User Workspace"
+         5 "Delete User Workspace"
+         6 "See User Workspace Status"
+		 7 "See Used Port List"
 		 8 "Deploy Docker User Workspace"
 		 9 "Delete Docker User Workspace"
 		 10 "See Docker User Workspace Status"
@@ -40,22 +40,22 @@ case $CHOICE in
 			chmod +x scripts/c9-restart.sh
             ;;
         2)
-            sudo bash scripts/c9-maker.sh
+            sudo bash scripts/firstinstall.sh
             ;;
         3)
-			sudo bash scripts/c9-deluser.sh
-            ;;
-        4)
-			sudo bash scripts/c9-status.sh
-            ;;
-        5)
             sudo bash scripts/ioncubesc.sh
             ;;
+        4)
+            sudo bash scripts/c9-maker.sh
+            ;;
+        5)
+			sudo bash scripts/c9-deluser.sh
+            ;;
         6)
-            sudo lsof -i -P -n | grep LISTEN
+			sudo bash scripts/c9-status.sh
             ;;
         7)
-            sudo bash scripts/c9-maker-docker-install.sh
+            sudo lsof -i -P -n | grep LISTEN
             ;;
         8)
             sudo bash scripts/c9-maker-docker.sh
