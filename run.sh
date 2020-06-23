@@ -17,7 +17,8 @@ OPTIONS=(1 "chmod All Scripts (required to do this once at first installation)"
 		 8 "Deploy Docker User Workspace"
 		 9 "Delete Docker User Workspace"
 		 10 "See Docker User Workspace Status"
-		 11 "Restart User Workspace")
+		 11 "Restart User Workspace"
+		 12 "Schedule User Workspace Service Stop & Deletion")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
@@ -38,6 +39,8 @@ case $CHOICE in
 			chmod +x scripts/c9-deluser-docker.sh
 			chmod +x scripts/c9-status.sh
 			chmod +x scripts/c9-restart.sh
+			chmod +x scripts/schedule.sh
+			chmod +x scripts/firstinstall.sh
             ;;
         2)
             sudo bash scripts/firstinstall.sh
@@ -68,5 +71,8 @@ case $CHOICE in
             ;;
 		11)
 			sudo bash scripts/c9-restart.sh
+			;;
+		12)
+			sudo bash scripts/schedule.sh
 			;;
 esac
