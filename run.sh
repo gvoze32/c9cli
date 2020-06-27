@@ -40,12 +40,15 @@ case $CHOICE in
 			chmod +x scripts/c9-restart.sh
 			chmod +x scripts/schedule.sh
 			chmod +x scripts/firstinstall.sh
+			sudo bash run.sh
             ;;
         2)
             sudo bash scripts/firstinstall.sh
+            sudo bash run.sh
             ;;
         3)
             sudo bash scripts/ioncubesc.sh
+            sudo bash run.sh
             ;;
         4)
             sudo bash scripts/c9-maker.sh
