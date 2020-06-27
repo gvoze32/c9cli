@@ -18,7 +18,8 @@ OPTIONS=(1 "chmod All Scripts (required to do this once at first installation)"
 		 9 "Delete Docker User Workspace"
 		 10 "See Docker User Workspace Status"
 		 11 "Restart User Workspace"
-		 12 "Schedule User Workspace Service Stop & Deletion")
+		 12 "Schedule User Workspace Service Stop & Deletion"
+		 13 "See Scheduled User Workspace Service Stop & Deletion")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
@@ -76,5 +77,8 @@ case $CHOICE in
 			;;
 		12)
 			sudo bash scripts/schedule.sh
+			;;
+		13)
+			sudo atq
 			;;
 esac
