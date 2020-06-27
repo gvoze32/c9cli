@@ -34,7 +34,6 @@ case $CHOICE in
             chmod +x scripts/c9-maker.sh
             chmod +x scripts/ioncubesc.sh
             chmod +x scripts/c9-deluser.sh
-			chmod +x scripts/c9-maker-docker-install.sh
 			chmod +x scripts/c9-maker-docker.sh
 			chmod +x scripts/c9-deluser-docker.sh
 			chmod +x scripts/c9-status.sh
