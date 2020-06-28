@@ -88,9 +88,9 @@ case $CHOICE in
 			sudo atq
 			;;
 		14)
-			sudo bash dialogforlimitrestore.sh
+			sudo bash scripts/dialogforlimitrestore.sh
 			;;
 		15)
-			sudo bash c9-maker-dockermemlimit.sh
+			sudo bash scripts/c9-maker-dockermemlimit.sh
 			;;
 esac
