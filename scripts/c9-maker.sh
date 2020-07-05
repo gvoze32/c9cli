@@ -46,6 +46,9 @@ git clone https://github.com/sandrocods/instagram-views
 git clone https://github.com/nthanfp/storyloop
 git clone https://github.com/corrykalam/InstagramAPI
 git clone https://github.com/ppabcd/Instagram-Story-Downloader
+git clone https://github.com/addrmwn/fft
+cd fft
+unzip node_modules.zip
 cd
 
 #Get script to user directory
