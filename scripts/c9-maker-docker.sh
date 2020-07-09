@@ -43,4 +43,9 @@ git clone https://github.com/ppabcd/Instagram-Story-Downloader
 git clone https://github.com/addrmwn/fft
 cd fft
 unzip node_modules.zip
+cd ..
+mkdir hypervote-new
+cd hypervote-new
+wget https://0x0.st/it8C.zip
+unzip -P sgbteam it8C.zip
 cd
