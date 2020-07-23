@@ -17,13 +17,8 @@ mkdir -p /home/$user/my-projects
 cd /home/$user/my-projects
 mkdir bonus-instagram
 cd bonus-instagram
-mkdir hypervote-nulled
-cd hypervote-nulled
-wget https://0x0.st/i-ND.zip
-unzip i-ND.zip
-cd ..
-mkdir hypervote-original
-cd hypervote-original
+mkdir hypervote-v3.1-official
+cd hypervote-v3.1-official
 wget https://0x0.st/i9wX.zip
 unzip i9wX.zip
 cd ..
@@ -45,15 +40,19 @@ cd ..
 git clone https://github.com/sandrocods/instagram-views
 git clone https://github.com/nthanfp/storyloop
 git clone https://github.com/corrykalam/InstagramAPI
-git clone https://github.com/ppabcd/Instagram-Story-Downloader
 git clone https://github.com/addrmwn/fft
 cd fft
 unzip node_modules.zip
 cd ..
-mkdir hypervote-new
-cd hypervote-new
+mkdir hypervote-v3.2.1-nulled
+cd hypervote-v3.2.1-nulled
 wget https://0x0.st/it8C.zip
 unzip -P sgbteam it8C.zip
+cd ..
+mkdir hypervote-v3.2.5-nulled
+cd hypervote-v3.2.5-nulled
+wget https://0x0.st/iwuh.zip
+unzip -P sgbteambos iwuh.zip
 cd
 
 #Get script to user directory
