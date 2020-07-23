@@ -27,3 +27,21 @@ services:
 #    mem_limit: ${MEMORY}
 #    cpus: ${CPUS}
 EOF
+sudo adduser c9usersmemlimit
+sudo cat > /home/c9usersmemlimit/docker-compose.yml << EOF
+version: '2.2'
+services:
+  cloud9:
+    image: sapk/cloud9:latest
+    volumes:
+      - /home/c9usersmemlimit/${NAMA_PELANGGAN}:/workspace
+    restart: always
+    ports:
+      - "${PORT}:${PORT}"
+    command:
+      - --auth=${NAMA_PELANGGAN}:${PASSWORD_PELANGGAN}
+      - --port=${PORT}
+#Optinal uncomment if you need to use it.
+    mem_limit: ${MEMORY}
+    cpus: ${CPUS}
+EOF

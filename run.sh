@@ -11,17 +11,16 @@ OPTIONS=(1 "chmod All Scripts (required to do this once at first installation)"
 		 2 "Install Packages (required to do this once at first installation)"
 		 3 "Install IonCube for PHP 7.2 (do this only once)"
 		 4 "Deploy User Workspace"
-        5 "Delete User Workspace"
-        6 "See User Workspace Status"
+         5 "Delete User Workspace"
+         6 "See User Workspace Status"
 		 7 "See Used Port List"
 		 8 "Deploy Docker User Workspace"
-		 9 "Delete Docker User Workspace"
-		 10 "See Docker User Workspace Status"
-		 11 "Restart User Workspace"
-		 12 "Schedule User Workspace Service Stop & Deletion"
-		 13 "See Scheduled User Workspace Service Stop & Deletion"
-		 14 "Toggle Docker CPU & Memory Limit Options"
-		 15 "Deploy Docker User Workspace With Memory Limit")
+		 9 "Deploy Docker User Workspace With Memory Limit")
+		 10 "Delete Docker User Workspace"
+		 11 "See Docker User Workspace Status"
+		 12 "Restart User Workspace"
+		 13 "Schedule User Workspace Service Stop & Deletion"
+		 14 "See Scheduled User Workspace Service Stop & Deletion"
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
@@ -44,8 +43,6 @@ case $CHOICE in
 			chmod +x scripts/schedule.sh
 			chmod +x scripts/firstinstall.sh
 			chmod +x scripts/restore.sh
-			chmod +x scripts/dialogforlimitrestore.sh
-			chmod +x scripts/cpumemlimit.sh
 			chmod +x scripts/c9-maker-dockermemlimit.sh
 			sudo bash run.sh
             ;;
@@ -72,25 +69,22 @@ case $CHOICE in
         8)
             sudo bash scripts/c9-maker-docker.sh
             ;;
-        9)
+		9)
+			sudo bash scripts/c9-maker-dockermemlimit.sh
+			;;
+        10)
             sudo bash scripts/c9-deluser-docker.sh
             ;;
-        10)
+        11)
             docker ps -a
             ;;
-		11)
+		12)
 			sudo bash scripts/c9-restart.sh
 			;;
-		12)
+		13)
 			sudo bash scripts/schedule.sh
 			;;
-		13)
-			sudo atq
-			;;
 		14)
-			sudo bash scripts/dialogforlimitrestore.sh
-			;;
-		15)
-			sudo bash scripts/c9-maker-dockermemlimit.sh
+			sudo atq
 			;;
 esac

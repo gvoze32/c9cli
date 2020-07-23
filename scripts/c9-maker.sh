@@ -19,10 +19,10 @@ mkdir bonus-instagram
 cd bonus-instagram
 mkdir hypervote-v3.1-official
 cd hypervote-v3.1-official
-wget https://0x0.st/i9wX.zip
+wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/resources/i9wX.zip
 unzip i9wX.zip
 cd ..
-wget https://0x0.st/i-5g.zip
+wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/resources/i-5g.zip
 unzip i-5g.zip
 cd auto_view_story
 npm install
@@ -46,12 +46,12 @@ unzip node_modules.zip
 cd ..
 mkdir hypervote-v3.2.1-nulled
 cd hypervote-v3.2.1-nulled
-wget https://0x0.st/it8C.zip
+wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/resources/it8C.zip
 unzip -P sgbteam it8C.zip
 cd ..
 mkdir hypervote-v3.2.5-nulled
 cd hypervote-v3.2.5-nulled
-wget https://0x0.st/iwuh.zip
+wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/resources/iwuh.zip
 unzip -P sgbteambos iwuh.zip
 cd
 
