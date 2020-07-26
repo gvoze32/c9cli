@@ -2,25 +2,25 @@
 
 HEIGHT=15
 WIDTH=90
-CHOICE_HEIGHT=4
+CHOICE_HEIGHT=13
 BACKTITLE="Simple bash script to create user and install C9 IDE Workspace then automatically install some required packages."
 TITLE="C9IDECoreDeploy"
 MENU="Choose one of the following options:"
 
-OPTIONS=(1 "chmod All Scripts (required to do this once at first installation)"
-	 2 "Install Packages (required to do this once at first installation)"
-	 3 "Install IonCube for PHP 7.2 (do this only once)"
+OPTIONS=(1 "chmod All Scripts [required to do this once at first installation]"
+	 2 "Install Packages [required to do this once at first installation]"
+	 3 "Install IonCube for PHP 7.2 [do this only once]"
 	 4 "Deploy User Workspace"
          5 "Delete User Workspace"
          6 "See User Workspace Status"
 	 7 "See Used Port List"
 	 8 "Deploy Docker User Workspace"
-	 9 "Deploy Docker User Workspace With Memory Limit")
+	 9 "Deploy Docker User Workspace With Memory Limit"
 	 10 "Delete Docker User Workspace"
 	 11 "See Docker User Workspace Status"
 	 12 "Restart User Workspace"
 	 13 "Schedule User Workspace Service Stop & Deletion"
-	 14 "See Scheduled User Workspace Service Stop & Deletion"
+	 14 "See Scheduled User Workspace Service Stop & Deletion")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
