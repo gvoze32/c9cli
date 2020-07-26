@@ -1,7 +1,7 @@
 #!/bin/bash
 
-HEIGHT=15
-WIDTH=70
+HEIGHT=30
+WIDTH=90
 CHOICE_HEIGHT=4
 BACKTITLE="Simple bash script to create user and install C9 IDE Workspace then automatically install some required packages."
 TITLE="C9IDECoreDeploy"
