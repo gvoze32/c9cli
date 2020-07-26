@@ -1,7 +1,7 @@
 #!/bin/bash
 
 HEIGHT=15
-WIDTH=40
+WIDTH=70
 CHOICE_HEIGHT=4
 BACKTITLE="Simple bash script to create user and install C9 IDE Workspace then automatically install some required packages."
 TITLE="C9IDECoreDeploy"
@@ -11,8 +11,8 @@ OPTIONS=(1 "chmod All Scripts (required to do this once at first installation)"
 		 2 "Install Packages (required to do this once at first installation)"
 		 3 "Install IonCube for PHP 7.2 (do this only once)"
 		 4 "Deploy User Workspace"
-         5 "Delete User Workspace"
-         6 "See User Workspace Status"
+         	 5 "Delete User Workspace"
+         	 6 "See User Workspace Status"
 		 7 "See Used Port List"
 		 8 "Deploy Docker User Workspace"
 		 9 "Deploy Docker User Workspace With Memory Limit")
@@ -36,15 +36,15 @@ case $CHOICE in
             chmod +x scripts/c9-maker.sh
             chmod +x scripts/ioncubesc.sh
             chmod +x scripts/c9-deluser.sh
-			chmod +x scripts/c9-maker-docker.sh
-			chmod +x scripts/c9-deluser-docker.sh
-			chmod +x scripts/c9-status.sh
-			chmod +x scripts/c9-restart.sh
-			chmod +x scripts/schedule.sh
-			chmod +x scripts/firstinstall.sh
-			chmod +x scripts/restore.sh
-			chmod +x scripts/c9-maker-dockermemlimit.sh
-			sudo bash run.sh
+	    chmod +x scripts/c9-maker-docker.sh
+	    chmod +x scripts/c9-deluser-docker.sh
+	    chmod +x scripts/c9-status.sh
+	    chmod +x scripts/c9-restart.sh
+	    chmod +x scripts/schedule.sh
+	    chmod +x scripts/firstinstall.sh
+	    chmod +x scripts/restore.sh
+	    chmod +x scripts/c9-maker-dockermemlimit.sh
+	    sudo bash run.sh
             ;;
         2)
             sudo bash scripts/firstinstall.sh
@@ -58,10 +58,10 @@ case $CHOICE in
             sudo bash scripts/c9-maker.sh
             ;;
         5)
-			sudo bash scripts/c9-deluser.sh
+	    sudo bash scripts/c9-deluser.sh
             ;;
         6)
-			sudo bash scripts/c9-status.sh
+	    sudo bash scripts/c9-status.sh
             ;;
         7)
             sudo lsof -i -P -n | grep LISTEN
@@ -69,22 +69,22 @@ case $CHOICE in
         8)
             sudo bash scripts/c9-maker-docker.sh
             ;;
-		9)
-			sudo bash scripts/c9-maker-dockermemlimit.sh
-			;;
+	9)
+	    sudo bash scripts/c9-maker-dockermemlimit.sh
+	    ;;
         10)
             sudo bash scripts/c9-deluser-docker.sh
             ;;
         11)
             docker ps -a
             ;;
-		12)
-			sudo bash scripts/c9-restart.sh
-			;;
-		13)
-			sudo bash scripts/schedule.sh
-			;;
-		14)
-			sudo atq
-			;;
+	12)
+	    sudo bash scripts/c9-restart.sh
+	    ;;
+	13)
+	    sudo bash scripts/schedule.sh
+	    ;;
+	14)
+	    sudo atq
+	    ;;
 esac
