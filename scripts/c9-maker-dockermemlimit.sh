@@ -13,8 +13,8 @@ PASSWORD_PELANGGAN=$pw
 MEMORY=$mem
 CPUS=1
 EOF
-sed '$ d' /home/c9usersmemlimit/docker-compose.yml
-sed '$ d' /home/c9usersmemlimit/docker-compose.yml
+sed -i '$ d' /home/c9usersmemlimit/docker-compose.yml
+sed -i '$ d' /home/c9usersmemlimit/docker-compose.yml
 echo "mem_limit: $mem" >> /home/c9usersmemlimit/docker-compose.yml
 echo "cpus: $cpu" >> /home/c9usersmemlimit/docker-compose.yml
 sudo docker-compose -p $user up -d
