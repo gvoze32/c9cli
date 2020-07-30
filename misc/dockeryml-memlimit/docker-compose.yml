@@ -3,7 +3,7 @@ services:
   cloud9:
     image: sapk/cloud9:latest
     volumes:
-      - /home/c9users/${NAMA_PELANGGAN}:/workspace
+      - /home/c9usersmemlimit/${NAMA_PELANGGAN}:/workspace
     restart: always
     ports:
       - "${PORT}:${PORT}"
