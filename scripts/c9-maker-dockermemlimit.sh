@@ -12,23 +12,11 @@ PORT=$portenv
 NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$pw
 EOF
-sudo cat > /home/c9usersmemlimit/docker-compose.yml << EOF
-version: '2.2'
-services:
-  cloud9:
-    image: sapk/cloud9:latest
-    volumes:
-      - /home/c9usersmemlimit/${NAMA_PELANGGAN}:/workspace
-    restart: always
-    ports:
-      - "${PORT}:${PORT}"
-    command:
-      - --auth=${NAMA_PELANGGAN}:${PASSWORD_PELANGGAN}
-      - --port=${PORT}
-#Optinal uncomment if you need to use it.
-    mem_limit: $mem
-    cpus: $cpu
-EOF
+sed '$ d' /home/c9usersmemlimit/.env
+sed '$ d' /home/c9usersmemlimit/.env
+sed '$ d' /home/c9usersmemlimit/.env
+echo "mem_limit: $mem" >> /home/c9usersmemlimit/.env
+echo "cpus: $cpu" >> /home/c9usersmemlimit/.env
 sudo docker-compose -p $user up -d
 cd /home/c9usersmemlimit/$user
 mkdir bonus-instagram

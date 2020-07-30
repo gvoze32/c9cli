@@ -10,41 +10,9 @@ source ~/.nvm/nvm.sh
 systemctl start atd
 sudo apt install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common docker docker.io docker-compose
 sudo adduser c9users
-sudo cat > /home/c9users/docker-compose.yml << EOF
-version: '2.2'
-services:
-  cloud9:
-    image: sapk/cloud9:latest
-    volumes:
-      - /home/c9users/${NAMA_PELANGGAN}:/workspace
-    restart: always
-    ports:
-      - "${PORT}:${PORT}"
-    command:
-      - --auth=${NAMA_PELANGGAN}:${PASSWORD_PELANGGAN}
-      - --port=${PORT}
-#Optinal uncomment if you need to use it.
-#    mem_limit: ${MEMORY}
-#    cpus: ${CPUS}
-EOF
+sudo wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/misc/dockeryml/docker-compose.yml -O /home/c9users/docker-compose.yml
 sudo adduser c9usersmemlimit
-sudo cat > /home/c9usersmemlimit/docker-compose.yml << EOF
-version: '2.2'
-services:
-  cloud9:
-    image: sapk/cloud9:latest
-    volumes:
-      - /home/c9usersmemlimit/${NAMA_PELANGGAN}:/workspace
-    restart: always
-    ports:
-      - "${PORT}:${PORT}"
-    command:
-      - --auth=${NAMA_PELANGGAN}:${PASSWORD_PELANGGAN}
-      - --port=${PORT}
-#Optinal uncomment if you need to use it.
-    mem_limit: ${MEMORY}
-    cpus: ${CPUS}
-EOF
+sudo wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/misc/dockeryml-memlimit/docker-compose.yml -O /home/c9usersmemlimit/docker-compose.yml
 sudo cat > /home/c9users/.env << EOF
 blank
 EOF

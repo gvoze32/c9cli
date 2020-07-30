@@ -1,0 +1,12 @@
+version: '2.2'
+services:
+  cloud9:
+    image: sapk/cloud9:latest
+    volumes:
+      - /home/c9users/${NAMA_PELANGGAN}:/workspace
+    restart: always
+    ports:
+      - "${PORT}:${PORT}"
+    command:
+      - --auth=${NAMA_PELANGGAN}:${PASSWORD_PELANGGAN}
+      - --port=${PORT}
