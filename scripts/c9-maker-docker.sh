@@ -8,6 +8,7 @@ NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$pw
 EOF
 sudo docker-compose --env-file=$user.env -p $user.env up -d
+mkdir /home/c9usersmemlimit/$user
 cd /home/c9users/$user
 mkdir bonus-instagram
 cd bonus-instagram
