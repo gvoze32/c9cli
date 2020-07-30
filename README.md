@@ -12,6 +12,7 @@ sudo apt-get install dialog
 git clone https://github.com/gvoze32/C9IDECoreDeploy
 cd C9IDECoreDeploy
 chmod +x run.sh
+sudo su
 sudo bash run.sh
 ```
 
