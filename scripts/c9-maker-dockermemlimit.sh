@@ -1,19 +1,35 @@
 #!/bin/bash
 read -p "Input User : " user
 read -p "Password : " pw
-read -p "Port : " port
+read -p "Port : " portenv
 read -p "CPU Limit (Example = 1) : " cpu
 read -p "Memory Limit (Example = 1024m) : " mem
-sudo cat > /home/c9usersmemlimit/$user << EOF
-PORT=$port
+cd /home/c9usersmemlimit
+rm .env
+rm docker-compose.yml
+sudo cat > /home/c9usersmemlimit/.env << EOF
+PORT=$portenv
 NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$pw
-MEMORY=$mem
-CPUS=$cpu
 EOF
-cd /home/c9usersmemlimit/$user
+sudo cat > /home/c9usersmemlimit/docker-compose.yml << EOF
+version: '2.2'
+services:
+  cloud9:
+    image: sapk/cloud9:latest
+    volumes:
+      - /home/c9usersmemlimit/${NAMA_PELANGGAN}:/workspace
+    restart: always
+    ports:
+      - "${PORT}:${PORT}"
+    command:
+      - --auth=${NAMA_PELANGGAN}:${PASSWORD_PELANGGAN}
+      - --port=${PORT}
+#Optinal uncomment if you need to use it.
+    mem_limit: $mem
+    cpus: $cpu
+EOF
 sudo docker-compose -p $user up -d
-mkdir /home/c9usersmemlimit/$user
 cd /home/c9usersmemlimit/$user
 mkdir bonus-instagram
 cd bonus-instagram

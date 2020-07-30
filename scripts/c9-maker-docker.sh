@@ -2,14 +2,14 @@
 read -p "Input User : " user
 read -p "Password : " pw
 read -p "Port : " port
-sudo cat > /home/c9users/$user << EOF
+cd /home/c9users
+rm .env
+sudo cat > /home/c9users/.env << EOF
 PORT=$port
 NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$pw
 EOF
-cd /home/c9users/$user
 sudo docker-compose -p $user up -d
-mkdir /home/c9users/$user
 cd /home/c9users/$user
 mkdir bonus-instagram
 cd bonus-instagram

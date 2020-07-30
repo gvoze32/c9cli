@@ -45,3 +45,9 @@ services:
     mem_limit: ${MEMORY}
     cpus: ${CPUS}
 EOF
+sudo cat > /home/c9users/.env << EOF
+blank
+EOF
+sudo cat > /home/c9usersmemlimit/.env << EOF
+blank
+EOF
