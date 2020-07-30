@@ -1,17 +1,17 @@
 #!/bin/bash
-echo "Make sure you have enabled CPU & Memory Limit Options!!!"
 read -p "Input User : " user
 read -p "Password : " pw
 read -p "Port : " port
 read -p "CPU Limit (Example = 1) : " cpu
 read -p "Memory Limit (Example = 1024m) : " mem
-sudo cat > /home/c9usersmemlimit/$user.env << EOF
+sudo cat > /home/c9usersmemlimit/$user << EOF
 PORT=$port
 NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$pw
 MEMORY=$mem
 CPUS=$cpu
 EOF
+cd /home/c9usersmemlimit/$user
 sudo docker-compose -p $user up -d
 mkdir /home/c9usersmemlimit/$user
 cd /home/c9usersmemlimit/$user
