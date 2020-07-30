@@ -2,12 +2,12 @@
 read -p "Input User : " user
 read -p "Password : " pw
 read -p "Port : " port
-sudo cat > /home/c9users/$user.env << EOF
+sudo cat > /home/c9users/$user << EOF
 PORT=$port
 NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$pw
 EOF
-sudo docker-compose --env-file=$user.env -p $user.env up -d
+sudo docker-compose -p $user up -d
 mkdir /home/c9usersmemlimit/$user
 cd /home/c9users/$user
 mkdir bonus-instagram
