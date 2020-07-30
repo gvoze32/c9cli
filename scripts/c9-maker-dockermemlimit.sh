@@ -12,7 +12,7 @@ PASSWORD_PELANGGAN=$pw
 MEMORY=$mem
 CPUS=$cpu
 EOF
-sudo docker-compose --env-file=$user.env -p $user.env up -d
+sudo docker-compose -p $user up -d
 mkdir /home/c9usersmemlimit/$user
 cd /home/c9usersmemlimit/$user
 mkdir bonus-instagram
