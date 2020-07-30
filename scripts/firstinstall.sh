@@ -13,9 +13,5 @@ sudo adduser c9users
 sudo wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/misc/dockeryml/docker-compose.yml -O /home/c9users/docker-compose.yml
 sudo adduser c9usersmemlimit
 sudo wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/misc/dockeryml-memlimit/docker-compose.yml -O /home/c9usersmemlimit/docker-compose.yml
-sudo cat > /home/c9users/.env << EOF
-blank
-EOF
-sudo cat > /home/c9usersmemlimit/.env << EOF
-blank
-EOF
+echo "blank" >> /home/c9users/.env
+echo "blank" >> /home/c9usersmemlimit/.env
