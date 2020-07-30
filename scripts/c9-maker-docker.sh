@@ -7,8 +7,9 @@ PORT=$port
 NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$pw
 EOF
+cd /home/c9users/$user
 sudo docker-compose -p $user up -d
-mkdir /home/c9usersmemlimit/$user
+mkdir /home/c9users/$user
 cd /home/c9users/$user
 mkdir bonus-instagram
 cd bonus-instagram
