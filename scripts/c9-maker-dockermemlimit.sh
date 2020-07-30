@@ -6,17 +6,17 @@ read -p "CPU Limit (Example = 1) : " cpu
 read -p "Memory Limit (Example = 1024m) : " mem
 cd /home/c9usersmemlimit
 rm .env
-rm docker-compose.yml
 sudo cat > /home/c9usersmemlimit/.env << EOF
 PORT=$portenv
 NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$pw
+MEMORY=$mem
+CPUS=1
 EOF
-sed '$ d' /home/c9usersmemlimit/.env
-sed '$ d' /home/c9usersmemlimit/.env
-sed '$ d' /home/c9usersmemlimit/.env
-echo "mem_limit: $mem" >> /home/c9usersmemlimit/.env
-echo "cpus: $cpu" >> /home/c9usersmemlimit/.env
+sed '$ d' /home/c9usersmemlimit/docker-compose.yml
+sed '$ d' /home/c9usersmemlimit/docker-compose.yml
+echo "mem_limit: $mem" >> /home/c9usersmemlimit/docker-compose.yml
+echo "cpus: $cpu" >> /home/c9usersmemlimit/docker-compose.yml
 sudo docker-compose -p $user up -d
 cd /home/c9usersmemlimit/$user
 mkdir bonus-instagram
