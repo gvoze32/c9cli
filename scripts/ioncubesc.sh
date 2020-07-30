@@ -33,7 +33,7 @@ echo .
 echo Read text above, if there is cli in it, you have php cli version.
 echo If the text contains fpm, then you have php fpm version.
 echo .
-read -r -p "If you have cli, press Y, or press N if you have fpm" :  response
+read -r -p "If you have cli, press Y, or press N if you have fpm : " response
 case "$response" in
     [yY][eE][sS]|[yY]) 
 sudo bash -c 'echo 'zend_extension=ioncube_loader_lin_$version.so' > /etc/php/$version/cli/conf.d/00-ioncube-loader.ini'
