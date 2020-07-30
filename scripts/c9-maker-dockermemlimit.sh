@@ -13,6 +13,7 @@ MEMORY=$mem
 CPUS=$cpu
 EOF
 sudo docker-compose --env-file=$user.env -p $user.env up -d
+mkdir /home/c9usersmemlimit/$user
 cd /home/c9usersmemlimit/$user
 mkdir bonus-instagram
 cd bonus-instagram
