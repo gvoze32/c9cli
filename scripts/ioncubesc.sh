@@ -17,7 +17,7 @@ echo .
 php -v
 echo Write the php version below
 read -p "Version : " version
-sudo cp ioncube_loader_lin_$version.so /usr/lib/php/$folde
+sudo cp ioncube_loader_lin_${version}.so /usr/lib/php/${folde}
 echo .
 echo .
 echo .
@@ -36,13 +36,13 @@ echo .
 read -r -p "If you have cli, press Y, or press N if you have fpm : " response
 case "$response" in
     [yY][eE][sS]|[yY]) 
-sudo bash -c 'echo 'zend_extension=ioncube_loader_lin_$version.so' > /etc/php/$version/cli/conf.d/00-ioncube-loader.ini'
-service php$version-fpm restart
+sudo bash -c 'echo 'zend_extension=ioncube_loader_lin_${version}.so' > /etc/php/${version}/cli/conf.d/00-ioncube-loader.ini'
+service php${version}-fpm restart
 php -v
         ;;
     *)
-sudo bash -c 'echo 'zend_extension=ioncube_loader_lin_$version.so' > /etc/php/$version/fpm/conf.d/00-ioncube-loader.ini'
-service php$version-fpm restart
+sudo bash -c 'echo 'zend_extension=ioncube_loader_lin_${version}.so' > /etc/php/${version}/fpm/conf.d/00-ioncube-loader.ini'
+service php${version}-fpm restart
 php -v
         ;;
 esac
