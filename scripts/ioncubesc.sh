@@ -17,8 +17,9 @@ echo .
 echo .
 echo .
 php -v
-echo Write the php version below, example 7.2
-read -p "Version : " version
+version="$(command php --version 2>'/dev/null' \
+    | command head -n 1 \
+    | command cut --characters=5-7)"
 cp ioncube_loader_lin_${version}.so /usr/lib/php/${folde}
 echo .
 echo .
@@ -27,23 +28,7 @@ php -i | grep additional
 echo .
 echo .
 echo .
-echo Read text above, if there is cli in it, you have php cli version.
-echo If the text contains fpm, then you have php fpm version.
-echo .
-read -r -p "If you have cli, press Y, or press N if you have fpm : " response
-case "$response" in
-    [yY][eE][sS]|[yY]) 
 cat > /etc/php/${version}/cli/conf.d/00-ioncube-loader.ini << EOF
 zend_extension=ioncube_loader_lin_${version}.so
 EOF
-service php${version}-fpm restart
 php -v
-        ;;
-    *)
-cat > /etc/php/${version}/fpm/conf.d/00-ioncube-loader.ini << EOF
-zend_extension=ioncube_loader_lin_${version}.so
-EOF
-service php${version}-fpm restart
-php -v
-        ;;
-esac
