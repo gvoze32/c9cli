@@ -21,6 +21,15 @@ $ apt install php7.2
 Silahkan ganti **7.2** dengan versi php yang kalian inginkan
 
 ### Bagaimana cara menginstall ionCube?
+
+**Bash Script**
+```
+$ wget https://github.com/gvoze32/C9IDECoreDeploy/raw/master/scripts/ioncubesc.sh
+$ bash ioncubesc.sh
+```
+
+**Manual**
+
 ```
 $ wget https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
 $ tar -xvzf ioncube_loaders_lin_x86-64.tar.gz
