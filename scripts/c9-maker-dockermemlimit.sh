@@ -18,7 +18,7 @@ sed -i '$ d' /home/c9usersmemlimit/docker-compose.yml
 echo "    mem_limit: $mem" >> /home/c9usersmemlimit/docker-compose.yml
 echo "    cpus: $cpu" >> /home/c9usersmemlimit/docker-compose.yml
 sudo docker-compose -p $user up -d
-if [ -d "/home/c9users/$user" ]; then
+if [ -d "/home/c9usersmemlimit/$user" ]; then
 cd /home/c9usersmemlimit/$user
 mkdir bonus-instagram
 cd bonus-instagram
