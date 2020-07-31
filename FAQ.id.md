@@ -24,7 +24,7 @@ Silahkan ganti **7.2** dengan versi php yang kalian inginkan
 
 **Bash Script**
 ```
-$ wget https://github.com/gvoze32/C9IDECoreDeploy/raw/master/scripts/ioncubesc.sh
+$ wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/scripts/ioncubesc.sh
 $ bash ioncubesc.sh
 ```
 
