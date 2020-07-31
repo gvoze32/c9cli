@@ -2,6 +2,8 @@
 wget https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
 tar -xvzf ioncube_loaders_lin_x86-64.tar.gz
 cd ioncube
+echo List of supported php versions:
+ls
 echo .
 echo .
 echo .
