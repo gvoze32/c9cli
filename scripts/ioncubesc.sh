@@ -16,6 +16,6 @@ cd ..
 rm -rf ioncube
 php -i | grep additional
 cat > /etc/php/${php_version}/cli/conf.d/00-ioncube-loader.ini << EOF
-zend_extension=ioncube_loader_lin_${version}.so
+zend_extension=ioncube_loader_lin_${php_version}.so
 EOF
 php -v
