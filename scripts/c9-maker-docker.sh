@@ -10,6 +10,7 @@ NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$pw
 EOF
 sudo docker-compose -p $user up -d
+if [ -d "/home/c9users/$user" ]; then
 cd /home/c9users/$user
 mkdir bonus-instagram
 cd bonus-instagram
@@ -50,3 +51,6 @@ cd hypervote-v3.2.5-nulled
 wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/resources/iwuh.zip
 unzip -P sgbteambos iwuh.zip
 cd
+else
+echo "Workspace directory not found"
+fi
