@@ -9,24 +9,19 @@ ls /usr/lib/php/
 echo .
 echo .
 echo .
-echo Write the PHP extension folder name below
+echo Write the PHP extension folder name below, example 20170718
 read -p "Folder Name : " folde
 echo .
 echo .
 echo .
 php -v
-echo Write the php version below
+echo Write the php version below, example 7.2
 read -p "Version : " version
-sudo cp ioncube_loader_lin_${version}.so /usr/lib/php/${folde}
+cp ioncube_loader_lin_${version}.so /usr/lib/php/${folde}
 echo .
 echo .
 echo .
 php -i | grep additional
-        ;;
-    *)
-        :
-        ;;
-esac
 echo .
 echo .
 echo .
@@ -36,12 +31,16 @@ echo .
 read -r -p "If you have cli, press Y, or press N if you have fpm : " response
 case "$response" in
     [yY][eE][sS]|[yY]) 
-sudo bash -c 'echo 'zend_extension=ioncube_loader_lin_${version}.so' > /etc/php/${version}/cli/conf.d/00-ioncube-loader.ini'
+cat > /etc/php/${version}/cli/conf.d/00-ioncube-loader.ini << EOF
+zend_extension=ioncube_loader_lin_${version}.so
+EOF
 service php${version}-fpm restart
 php -v
         ;;
     *)
-sudo bash -c 'echo 'zend_extension=ioncube_loader_lin_${version}.so' > /etc/php/${version}/fpm/conf.d/00-ioncube-loader.ini'
+cat > /etc/php/${version}/fpm/conf.d/00-ioncube-loader.ini << EOF
+zend_extension=ioncube_loader_lin_${version}.so
+EOF
 service php${version}-fpm restart
 php -v
         ;;
