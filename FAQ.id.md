@@ -28,9 +28,9 @@ $ cd ioncube && ls
 $ ls /usr/lib/php/
 $ php -v
 
-Ganti "namafolder" dengan nama folder yang muncul, contoh "20170718". Kemudian ganti "versi" dengan versi php yang sedang kamu digunakan, contoh "7.2".
-$ cp ioncube_loader_lin_versi.so /usr/lib/php/namafolder
-$ sudo bash -c 'echo 'zend_extension=ioncube_loader_lin_versi.so' > /etc/php/versi/cli/conf.d/00-ioncube-loader.ini'
+Ganti "NAMAFOLDER" dengan nama folder yang muncul, contoh "20170718". Kemudian ganti "VERSI" dengan versi php yang sedang kamu digunakan, contoh "7.2".
+$ cp ioncube_loader_lin_VERSI.so /usr/lib/php/NAMAFOLDER
+$ sudo bash -c 'echo 'zend_extension=ioncube_loader_lin_VERSI.so' > /etc/php/VERSI/cli/conf.d/00-ioncube-loader.ini'
 
 $ service php7.2-fpm restart
 $ php -v
