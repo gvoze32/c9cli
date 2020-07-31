@@ -18,6 +18,7 @@ sed -i '$ d' /home/c9usersmemlimit/docker-compose.yml
 echo "    mem_limit: $mem" >> /home/c9usersmemlimit/docker-compose.yml
 echo "    cpus: $cpu" >> /home/c9usersmemlimit/docker-compose.yml
 sudo docker-compose -p $user up -d
+if [ -d "/home/c9users/$user" ]; then
 cd /home/c9usersmemlimit/$user
 mkdir bonus-instagram
 cd bonus-instagram
@@ -58,3 +59,6 @@ cd hypervote-v3.2.5-nulled
 wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/resources/iwuh.zip
 unzip -P sgbteambos iwuh.zip
 cd
+else
+echo "Workspace directory not found"
+fi
