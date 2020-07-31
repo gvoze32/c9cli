@@ -14,7 +14,6 @@ php_version="$(command php --version 2>'/dev/null' \
 cp ioncube_loader_lin_${php_version}.so /usr/lib/php/${php_ext_dir}
 cd ..
 rm -rf ioncube
-php -i | grep additional
 cat > /etc/php/${php_version}/cli/conf.d/00-ioncube-loader.ini << EOF
 zend_extension=ioncube_loader_lin_${php_version}.so
 EOF
