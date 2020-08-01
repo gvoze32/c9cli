@@ -19,6 +19,10 @@ $ apt update
 $ apt install php7.2
 ```
 Silahkan ganti **7.2** dengan versi php yang kalian inginkan
+```
+$ apt install php-exif php-gd php-mbstring php-curl php-mysqli php-json php-dom php-fpm
+```
+Install juga beberapa ekstensi untuk keperluan script kamu. Jika gagal, tambahkan versi php kamu setelah php, contoh **php7.2-curl**
 
 ### Bagaimana cara menginstall ionCube?
 
