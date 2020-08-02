@@ -1,5 +1,5 @@
 #!/bin/bash
-wget https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
+curl -O https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
 tar -xvzf ioncube_loaders_lin_x86-64.tar.gz
 rm ioncube_loaders_lin_x86-64.tar.gz
 cd ioncube
