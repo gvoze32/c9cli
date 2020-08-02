@@ -3,8 +3,6 @@ wget https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.t
 tar -xvzf ioncube_loaders_lin_x86-64.tar.gz
 rm ioncube_loaders_lin_x86-64.tar.gz
 cd ioncube
-echo List of supported php versions:
-ls
 php_ext_dir="$(command php -i | grep extension_dir 2>'/dev/null' \
     | command head -n 1 \
     | command cut --characters=31-38)"
