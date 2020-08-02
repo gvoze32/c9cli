@@ -52,3 +52,9 @@ $ sudo bash -c 'echo 'zend_extension=ioncube_loader_lin_VERSI.so' > /etc/php/VER
 $ service php7.2-fpm restart
 $ php -v
 ```
+
+### Bagaimana cara menginstall Node.js?
+```
+$ curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
+$ apt install nodejs
+```
