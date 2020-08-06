@@ -37,7 +37,6 @@ case $CHOICE in
 			chmod +x scripts/c9-restart.sh
 			chmod +x scripts/schedule.sh
 			chmod +x scripts/firstinstall.sh
-			chmod +x scripts/restore.sh
 			chmod +x scripts/c9-maker-dockermemlimit.sh
 			chmod +x run.sh
             ;;
