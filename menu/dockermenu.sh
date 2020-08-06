@@ -8,7 +8,8 @@ TITLE="C9IDECoreDeploy"
 MENU="Choose one of the following options:"
 
 OPTIONS=(1 "Docker"
-		 2 "Docker with Memory Limit")
+		 2 "Docker with Memory Limit"
+		 3 "< Back")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
@@ -26,4 +27,7 @@ case $CHOICE in
 		2)
 			sudo bash scripts/c9-maker-dockermemlimit.sh
 			;;
+		3)
+			sudo bash menu/deploy.sh
+            ;;
 esac

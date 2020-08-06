@@ -9,7 +9,8 @@ MENU="Choose one of the following options:"
 
 OPTIONS=(1 "chmod +x All Scripts"
 		 2 "Install Required Packages"
-		 3 "Auto Install IonCube PHP Loader")
+		 3 "Auto Install IonCube PHP Loader"
+		 4 "< Back")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
@@ -22,23 +23,22 @@ CHOICE=$(dialog --clear \
 clear
 case $CHOICE in
         1)
-			chmod +x menu/status.sh
 			chmod +x menu/manage.sh
 			chmod +x menu/dockermenu.sh
 			chmod +x menu/managesystemctl.sh
 			chmod +x menu/managedocker.sh
 			chmod +x menu/install.sh
-			chmod +x /scripts/c9-maker.sh
-			chmod +x /scripts/ioncubesc.sh
-			chmod +x /scripts/c9-deluser.sh
-			chmod +x /scripts/c9-maker-docker.sh
-			chmod +x /scripts/c9-deluser-docker.sh
-			chmod +x /scripts/c9-status.sh
-			chmod +x /scripts/c9-restart.sh
-			chmod +x /scripts/schedule.sh
-			chmod +x /scripts/firstinstall.sh
-			chmod +x /scripts/restore.sh
-			chmod +x /scripts/c9-maker-dockermemlimit.sh
+			chmod +x scripts/c9-maker.sh
+			chmod +x scripts/ioncubesc.sh
+			chmod +x scripts/c9-deluser.sh
+			chmod +x scripts/c9-maker-docker.sh
+			chmod +x scripts/c9-deluser-docker.sh
+			chmod +x scripts/c9-status.sh
+			chmod +x scripts/c9-restart.sh
+			chmod +x scripts/schedule.sh
+			chmod +x scripts/firstinstall.sh
+			chmod +x scripts/restore.sh
+			chmod +x scripts/c9-maker-dockermemlimit.sh
 			chmod +x run.sh
             ;;
         2)
@@ -46,5 +46,8 @@ case $CHOICE in
             ;;
         3)
 			sudo bash scripts/ioncubesc.sh
+            ;;
+        4)
+			sudo bash run.sh
             ;;
 esac

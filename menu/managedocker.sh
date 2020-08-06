@@ -11,7 +11,8 @@ OPTIONS=(1 "Delete Docker Workspace"
 		 2 "See Docker Workspace List"
 		 3 "See Docker Workspace Status"
 		 4 "Schedule Docker Workspace Deletion"
-		 5 "See Scheduled Docker Workspace Deletion")
+		 5 "See Scheduled Docker Workspace Deletion"
+		 6 "< Back")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
@@ -37,5 +38,8 @@ case $CHOICE in
             ;;
         5)
             sudo atq
+            ;;
+		6)
+			sudo bash /menu/manage.sh
             ;;
 esac

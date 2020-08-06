@@ -8,7 +8,8 @@ TITLE="C9IDECoreDeploy"
 MENU="Choose one of the following options:"
 
 OPTIONS=(1 "Systemctl"
-		 2 "Docker")
+		 2 "Docker"
+		 3 "< Back")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
@@ -25,5 +26,8 @@ case $CHOICE in
             ;;
         2)
 			sudo bash menu/dockermenu.sh
+            ;;
+		3)
+			sudo bash run.sh
             ;;
 esac

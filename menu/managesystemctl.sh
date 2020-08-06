@@ -12,7 +12,8 @@ OPTIONS=(1 "Delete Workspace"
 		 3 "See Used Port List"
 		 4 "Restart Workspace"
 		 5 "Schedule Workspace Service Deletion"
-		 6 "See Scheduled Workspace Deletion")
+		 6 "See Scheduled Workspace Deletion"
+		 7 "< Back")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
@@ -42,4 +43,7 @@ case $CHOICE in
 		6)
 			sudo atq
 			;;
+		7)
+			sudo bash /menu/manage.sh
+            ;;
 esac
