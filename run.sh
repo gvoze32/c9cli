@@ -22,12 +22,12 @@ CHOICE=$(dialog --clear \
 clear
 case $CHOICE in
         1)
-			sudo bash install.sh
+			sudo bash menu/install.sh
             ;;
         2)
-			sudo bash deploy.sh
+			sudo bash menu/deploy.sh
             ;;
         3)
-            sudo bash manage.sh
+            sudo bash menu/manage.sh
             ;;
 esac
