@@ -44,6 +44,6 @@ case $CHOICE in
 			sudo atq
 			;;
 		7)
-			sudo bash /menu/manage.sh
+			sudo bash menu/manage.sh
             ;;
 esac
