@@ -3,13 +3,12 @@
 HEIGHT=15
 WIDTH=90
 CHOICE_HEIGHT=13
-BACKTITLE="Simple bash script to create user and install C9 IDE Workspace."
+BACKTITLE="Manage Workspaces."
 TITLE="C9IDECoreDeploy"
 MENU="Choose one of the following options:"
 
-OPTIONS=(1 "Install"
-		 2 "Deploy"
-		 3 "Manage")
+OPTIONS=(1 "Systemctl"
+		 2 "Docker")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
@@ -22,12 +21,9 @@ CHOICE=$(dialog --clear \
 clear
 case $CHOICE in
         1)
-			sudo bash install.sh
+			sudo bash managesystemctl.sh
             ;;
         2)
-			sudo bash deploy.sh
-            ;;
-        3)
-            sudo bash manage.sh
+			sudo bash managedocker.sh
             ;;
 esac

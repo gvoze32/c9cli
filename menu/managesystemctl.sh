@@ -3,13 +3,16 @@
 HEIGHT=15
 WIDTH=90
 CHOICE_HEIGHT=13
-BACKTITLE="Simple bash script to create user and install C9 IDE Workspace."
+BACKTITLE="Manage Systemctl Workspaces."
 TITLE="C9IDECoreDeploy"
 MENU="Choose one of the following options:"
 
-OPTIONS=(1 "Install"
-		 2 "Deploy"
-		 3 "Manage")
+OPTIONS=(1 "Delete Workspace"
+         2 "See Workspace Status"
+		 3 "See Used Port List"
+		 4 "Restart Workspace"
+		 5 "Schedule Workspace Service Deletion"
+		 6 "See Scheduled Workspace Deletion")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
@@ -22,12 +25,21 @@ CHOICE=$(dialog --clear \
 clear
 case $CHOICE in
         1)
-			sudo bash install.sh
+			sudo bash ../scripts/c9-deluser.sh
             ;;
         2)
-			sudo bash deploy.sh
+			sudo bash ../scripts/c9-status.sh
             ;;
         3)
-            sudo bash manage.sh
+			sudo lsof -i -P -n | grep LISTEN
             ;;
+		4)
+			sudo bash ../scripts/c9-restart.sh
+			;;
+		5)
+			sudo bash ../scripts/schedule.sh
+			;;
+		6)
+			sudo atq
+			;;
 esac

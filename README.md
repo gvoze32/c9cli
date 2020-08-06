@@ -17,4 +17,6 @@ $ sudo bash run.sh
 
 If you have any problem in using C9IDECoreDeploy, please head to [FAQ.id](https://github.com/gvoze32/C9IDECoreDeploy/blob/master/FAQ.id.md) before opening a new issue.
 
-This project is fork of [C9IDE-User-Maker](https://github.com/nicolasjulian/C9IDE-User-Maker) and [C9-Docker-Compose](https://github.com/nicolasjulian/C9-Docker-Compose)
+Next to-do list is change get resources method using cp instead of downloading files again using wget.
+
+This project is fork of [C9IDE-User-Maker](https://github.com/nicolasjulian/C9IDE-User-Maker) and [C9-Docker-Compose](https://github.com/nicolasjulian/C9-Docker-Compose).

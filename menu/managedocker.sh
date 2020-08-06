@@ -3,13 +3,15 @@
 HEIGHT=15
 WIDTH=90
 CHOICE_HEIGHT=13
-BACKTITLE="Simple bash script to create user and install C9 IDE Workspace."
+BACKTITLE="Manage Docker Workspaces."
 TITLE="C9IDECoreDeploy"
 MENU="Choose one of the following options:"
 
-OPTIONS=(1 "Install"
-		 2 "Deploy"
-		 3 "Manage")
+OPTIONS=(1 "Delete Docker Workspace"
+		 2 "See Docker Workspace List"
+		 3 "See Docker Workspace Status"
+		 4 "Schedule Docker Workspace Deletion"
+		 5 "See Scheduled Docker Workspace Deletion")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
@@ -22,12 +24,18 @@ CHOICE=$(dialog --clear \
 clear
 case $CHOICE in
         1)
-			sudo bash install.sh
+            sudo bash ../scripts/c9-deluser-docker.sh
             ;;
         2)
-			sudo bash deploy.sh
+            docker ps
             ;;
         3)
-            sudo bash manage.sh
+            docker stats
+            ;;
+        4)
+            sudo bash ../scripts/scheduledocker.sh
+            ;;
+        5)
+            sudo atq
             ;;
 esac
