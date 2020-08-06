@@ -21,9 +21,9 @@ CHOICE=$(dialog --clear \
 clear
 case $CHOICE in
         1)
-			sudo bash managesystemctl.sh
+			sudo bash menu/managesystemctl.sh
             ;;
         2)
-			sudo bash managedocker.sh
+			sudo bash menu/managedocker.sh
             ;;
 esac

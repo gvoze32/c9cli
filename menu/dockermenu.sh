@@ -21,9 +21,9 @@ CHOICE=$(dialog --clear \
 clear
 case $CHOICE in
         1)
-			cd ../scripts && sudo bash scripts/c9-maker-docker.sh
+			sudo bash scripts/c9-maker-docker.sh
             ;;
 		2)
-			cd ../scripts && sudo bash scripts/c9-maker-dockermemlimit.sh
+			sudo bash scripts/c9-maker-dockermemlimit.sh
 			;;
 esac

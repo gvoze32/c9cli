@@ -22,31 +22,29 @@ CHOICE=$(dialog --clear \
 clear
 case $CHOICE in
         1)
-			chmod +x install.sh
-			chmod +x status.sh
-			chmod +x manage.sh
-			chmod +x dockermenu.sh
-			chmod +x managesystemctl.sh
-			chmod +x managedocker.sh
-			cd ../scripts
-			chmod +x c9-maker.sh
-			chmod +x ioncubesc.sh
-			chmod +x c9-deluser.sh
-			chmod +x c9-maker-docker.sh
-			chmod +x c9-deluser-docker.sh
-			chmod +x c9-status.sh
-			chmod +x c9-restart.sh
-			chmod +x schedule.sh
-			chmod +x firstinstall.sh
-			chmod +x restore.sh
-			chmod +x c9-maker-dockermemlimit.sh
+			chmod +x menu/status.sh
+			chmod +x menu/manage.sh
+			chmod +x menu/dockermenu.sh
+			chmod +x menu/managesystemctl.sh
+			chmod +x menu/managedocker.sh
+			chmod +x menu/install.sh
+			chmod +x /scripts/c9-maker.sh
+			chmod +x /scripts/ioncubesc.sh
+			chmod +x /scripts/c9-deluser.sh
+			chmod +x /scripts/c9-maker-docker.sh
+			chmod +x /scripts/c9-deluser-docker.sh
+			chmod +x /scripts/c9-status.sh
+			chmod +x /scripts/c9-restart.sh
+			chmod +x /scripts/schedule.sh
+			chmod +x /scripts/firstinstall.sh
+			chmod +x /scripts/restore.sh
+			chmod +x /scripts/c9-maker-dockermemlimit.sh
 			chmod +x run.sh
-
             ;;
         2)
-			cd ../scripts && sudo bash scripts/firstinstall.sh
+			sudo bash scripts/firstinstall.sh
             ;;
         3)
-			cd ../scripts && sudo bash scripts/ioncubesc.sh
+			sudo bash scripts/ioncubesc.sh
             ;;
 esac
