@@ -21,7 +21,8 @@ CHOICE=$(dialog --clear \
 clear
 case $CHOICE in
         1)
-            sudo bash ../scripts/c9-maker.sh
+            cd ..
+			sudo bash scripts/c9-maker.sh
             ;;
         2)
 			sudo bash dockermenu.sh

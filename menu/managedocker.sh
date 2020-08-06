@@ -24,7 +24,8 @@ CHOICE=$(dialog --clear \
 clear
 case $CHOICE in
         1)
-            sudo bash ../scripts/c9-deluser-docker.sh
+			cd ..
+            sudo bash scripts/c9-deluser-docker.sh
             ;;
         2)
             docker ps
@@ -33,7 +34,8 @@ case $CHOICE in
             docker stats
             ;;
         4)
-            sudo bash ../scripts/scheduledocker.sh
+			cd ..
+            sudo bash scripts/scheduledocker.sh
             ;;
         5)
             sudo atq

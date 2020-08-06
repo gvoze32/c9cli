@@ -22,26 +22,33 @@ CHOICE=$(dialog --clear \
 clear
 case $CHOICE in
         1)
-			chmod +x ../scripts/c9-maker.sh
-			chmod +x ../scripts/ioncubesc.sh
-			chmod +x ../scripts/c9-deluser.sh
-			chmod +x ../scripts/c9-maker-docker.sh
-			chmod +x ../scripts/c9-deluser-docker.sh
-			chmod +x ../scripts/c9-status.sh
-			chmod +x ../scripts/c9-restart.sh
-			chmod +x ../scripts/schedule.sh
-			chmod +x ../scripts/firstinstall.sh
-			chmod +x ../scripts/restore.sh
-			chmod +x ../scripts/c9-maker-dockermemlimit.sh
-			chmod +x ../run.sh
 			chmod +x install.sh
 			chmod +x status.sh
 			chmod +x manage.sh
+			chmod +x dockermenu.sh
+			chmod +x managesystemctl.sh
+			chmod +x managedocker.sh
+			cd ..
+			chmod +x scripts/c9-maker.sh
+			chmod +x scripts/ioncubesc.sh
+			chmod +x scripts/c9-deluser.sh
+			chmod +x scripts/c9-maker-docker.sh
+			chmod +x scripts/c9-deluser-docker.sh
+			chmod +x scripts/c9-status.sh
+			chmod +x scripts/c9-restart.sh
+			chmod +x scripts/schedule.sh
+			chmod +x scripts/firstinstall.sh
+			chmod +x scripts/restore.sh
+			chmod +x scripts/c9-maker-dockermemlimit.sh
+			chmod +x run.sh
+
             ;;
         2)
-			sudo bash ../scripts/firstinstall.sh
+			cd ..
+			sudo bash scripts/firstinstall.sh
             ;;
         3)
-			sudo bash ../scripts/ioncubesc.sh
+			cd ..
+			sudo bash scripts/ioncubesc.sh
             ;;
 esac
