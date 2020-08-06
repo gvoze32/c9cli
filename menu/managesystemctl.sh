@@ -25,23 +25,19 @@ CHOICE=$(dialog --clear \
 clear
 case $CHOICE in
         1)
-			cd ..
-			sudo bash scripts/c9-deluser.sh
+			cd ../scripts && sudo bash scripts/c9-deluser.sh
             ;;
         2)
-			cd ..
-			sudo bash scripts/c9-status.sh
+			cd ../scripts && sudo bash scripts/c9-status.sh
             ;;
         3)
 			sudo lsof -i -P -n | grep LISTEN
             ;;
 		4)
-			cd ..
-			sudo bash scripts/c9-restart.sh
+			cd ../scripts && sudo bash scripts/c9-restart.sh
 			;;
 		5)
-			cd ..
-			sudo bash scripts/schedule.sh
+			cd ../scripts && sudo bash scripts/schedule.sh
 			;;
 		6)
 			sudo atq
