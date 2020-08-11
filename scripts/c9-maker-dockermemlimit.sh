@@ -54,7 +54,12 @@ cd ..
 mkdir hypervote-v3.3.2-nulled
 cd hypervote-v3.3.2-nulled
 wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/resources/hjas.zip 
-unzip hjas.zip 
+unzip hjas.zip
+cd ..
+mkdir hypervote-v3.3.5-nulled
+cd hypervote-v3.3.5-nulled
+wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/resources/jkjf.zip 
+unzip -P sgbshare jkjf.zip
 cd
 else
 echo "Workspace directory not found"
