@@ -37,6 +37,7 @@ cd ..
 git clone https://github.com/sandrocods/instagram-views
 git clone https://github.com/nthanfp/storyloop
 git clone https://github.com/sanjidtk/sbot
+git clone https://github.com/sanjidtk/masslooker
 git clone https://github.com/corrykalam/InstagramAPI
 mkdir hypervote-v3.2.1-nulled
 cd hypervote-v3.2.1-nulled
