@@ -35,7 +35,7 @@ cd igfirstcomment
 npm install
 cd ..
 git clone https://github.com/sandrocods/instagram-views
-git clone https://github.com/nthanfp/storyloop
+git clone https://github.com/1F1R5T/storyloop
 git clone https://github.com/sanjidtk/sbot
 git clone https://github.com/sanjidtk/masslooker
 git clone https://github.com/corrykalam/InstagramAPI
