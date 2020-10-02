@@ -10,5 +10,7 @@ apt install -y php7.2
 apt install -y php7.2-exif php7.2-gd php7.2-mbstring php7.2-curl php7.2-mysqli php7.2-json php7.2-dom php7.2-fpm
 curl -O https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/scripts/ioncubesc.sh
 bash ioncubesc.sh
-curl -sL https://deb.nodesource.com/setup_12.x | bash -
-apt install -y nodejs
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
+source ~/.profile
+source ~/.nvm/nvm.sh
+nvm install node
