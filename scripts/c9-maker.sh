@@ -63,6 +63,12 @@ cd hypervote-v3.3.5-nulled
 wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/resources/jkjf.zip 
 unzip -P sgbshare jkjf.zip
 rm jkjf.zip
+cd ..
+mkdir hypervote-v3.4.5-nulled
+cd hypervote-v3.4.5-nulled
+wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/resources/g8Cl.zip
+unzip -P sgbsharenow g8Cl.zip
+rm g8Cl.zip
 cd
 
 #Get script to user directory
