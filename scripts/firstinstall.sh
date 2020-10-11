@@ -4,7 +4,6 @@ sudo apt upgrade -y
 sudo apt update -y
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
 source ~/.profile
-source ~/.nvm/nvm.sh
 nvm install node
 sudo apt install -y curl at git build-essential php php-exif php-gd php-mbstring php-curl php-mysqli php-json php-dom php-fpm python-pip python3-pip python python2.7 python-pyfiglet build-essential zip unzip unp unrar unrar-free unar p7zip dos2unix
 pip install requests selenium colorama bs4 wget

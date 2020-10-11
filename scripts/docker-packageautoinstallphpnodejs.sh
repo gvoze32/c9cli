@@ -12,5 +12,4 @@ curl -O https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/scripts
 bash ioncubesc.sh
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
 source ~/.profile
-source ~/.nvm/nvm.sh
 nvm install node
