@@ -7,12 +7,13 @@ BACKTITLE="Manage Docker Workspaces."
 TITLE="C9IDECoreDeploy"
 MENU="Choose one of the following options:"
 
-OPTIONS=(1 "Delete Docker Workspace"
-		 2 "See Docker Workspace List"
-		 3 "See Docker Workspace Status"
-		 4 "Schedule Docker Workspace Deletion"
-		 5 "See Scheduled Docker Workspace Deletion"
-		 6 "< Back")
+OPTIONS=(1 "Delete Docker Container"
+		 2 "See Docker Container Lists"
+		 3 "See Docker Container Status"
+		 4 "Schedule Docker Container Deletion"
+		 5 "See Scheduled Docker Containers Deletion"
+		 6 "Restart All Running Containers"
+		 7 "< Back")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
@@ -39,7 +40,10 @@ case $CHOICE in
         5)
             sudo atq
             ;;
-		6)
+	6)
+            docker restart $(docker ps -q)
+            ;;
+	7)
 			sudo bash menu/manage.sh
             ;;
 esac
