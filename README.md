@@ -10,8 +10,12 @@ Make sure you have root access before doing this installation.
 $ sudo apt-get update
 $ sudo apt-get install dialog
 $ git clone https://github.com/gvoze32/C9IDECoreDeploy
-$ cd C9IDECoreDeploy
-$ chmod +x run.sh
+$ chmod +x C9IDECoreDeploy/run.sh
+```
+
+### Deploy
+
+```
 $ sudo bash run.sh
 ```
 
