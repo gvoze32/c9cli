@@ -39,12 +39,15 @@ case $CHOICE in
 			chmod +x scripts/firstinstall.sh
 			chmod +x scripts/c9-maker-dockermemlimit.sh
 			chmod +x run.sh
+			sudo bash run.sh
             ;;
         2)
 			sudo bash scripts/firstinstall.sh
+			sudo bash run.sh
             ;;
         3)
 			sudo bash scripts/ioncubesc.sh
+			sudo bash run.sh
             ;;
         4)
 			sudo bash run.sh
