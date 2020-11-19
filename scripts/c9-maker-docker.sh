@@ -65,6 +65,18 @@ cd hypervote-v3.4.5-nulled
 wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/resources/g8Cl.zip
 unzip -P sgbsharenow g8Cl.zip
 rm g8Cl.zip
+cd ..
+mkdir hypervote-v3.6-nulled
+cd hypervote-v3.6-nulled
+wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/resources/mo8N.zip
+unzip -P sgbteam mo8N.zip
+rm mo8N.zip
+cd ..
+mkdir hypervote-v3.6.2-nulled
+cd hypervote-v3.6.2-nulled
+wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/resources/IUs9.zip
+unzip -P sgbhypervoting IUs9.zip
+rm IUs9.zip
 cd
 else
 echo "Workspace directory not found"
