@@ -1,9 +1,11 @@
 #!/bin/bash
 read -p "Input User : " user
-echo Are the file is using docker or dockermemlimit?
-read -r -p "Answer Y if you are using docker and answer N if you are using dockermemlimit [y/N] " response
+echo Are the file is using Docker or Docker Memory Limit?
+echo 1. Docker
+echo 2. Docker Memory Limit
+read -r -p "Choose: " response
 case "$response" in
-    [yY][eE][sS]|[yY]) 
+    1) 
 cd /home/c9users
         ;;
     *)
