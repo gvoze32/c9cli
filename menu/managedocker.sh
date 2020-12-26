@@ -13,7 +13,8 @@ OPTIONS=(1 "Delete Docker Container"
 		 4 "Schedule Docker Container Deletion"
 		 5 "See Scheduled Docker Containers Deletion"
 		 6 "Restart All Running Containers"
-		 7 "< Back")
+		 7 "Stop, Start or Restart Running Containers"
+		 8 "< Back")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
@@ -44,6 +45,9 @@ case $CHOICE in
             docker restart $(docker ps -q)
             ;;
 	7)
+            sudo bash scripts/dockerrestart.sh
+            ;;
+	8)
 			sudo bash menu/manage.sh
             ;;
 esac
