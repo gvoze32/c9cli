@@ -45,7 +45,7 @@ case $CHOICE in
             docker restart $(docker ps -q)
             ;;
 	7)
-            sudo bash scripts/dockerrestart.sh
+            sudo bash scripts/restartdocker.sh
             ;;
 	8)
 			sudo bash menu/manage.sh

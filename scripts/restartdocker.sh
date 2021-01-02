@@ -18,7 +18,7 @@ cd /home/c9users
 cd /home/c9usersmemlimit
         ;;
 esac
-sudo docker-compose -p $user stop
+sudo docker container stop $user
         ;;
     2) 
 echo Are the file is using Docker or Docker Memory Limit?
@@ -33,7 +33,7 @@ cd /home/c9users
 cd /home/c9usersmemlimit
         ;;
 esac
-sudo docker-compose -p $user start
+sudo docker container start $user
         ;;
     *)
 echo Are the file is using Docker or Docker Memory Limit?
@@ -48,7 +48,7 @@ cd /home/c9users
 cd /home/c9usersmemlimit
         ;;
 esac
-sudo docker-compose -p $user stop
-sudo docker-compose -p $user start
+sudo docker container stop $user
+sudo docker container start $user
         ;;
 esac
