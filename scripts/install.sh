@@ -1,4 +1,6 @@
 #!/bin/bash
+sudo apt-get update -y
+sudo apt-get install dialog -y
 chmod +x C9IDECoreDeploy/menu/manage.sh
 chmod +x C9IDECoreDeploy/menu/dockermenu.sh
 chmod +x C9IDECoreDeploy/menu/managesystemctl.sh
