@@ -11,6 +11,7 @@ $ sudo apt-get update
 $ sudo apt-get install dialog
 $ git clone https://github.com/gvoze32/C9IDECoreDeploy
 $ chmod +x C9IDECoreDeploy/run.sh
+$ sudo bash C9IDECoreDeploy/scripts/install.sh
 ```
 
 ### Deploy
