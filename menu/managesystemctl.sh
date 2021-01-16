@@ -13,7 +13,8 @@ OPTIONS=(1 "Delete Workspace"
 		 4 "Restart Workspace"
 		 5 "Schedule Workspace Service Deletion"
 		 6 "See Scheduled Workspace Deletion"
-		 7 "< Back")
+		 7 "Convert User to Superuser"
+		 8 "< Back")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
@@ -44,6 +45,9 @@ case $CHOICE in
 			sudo atq
 			;;
 		7)
+			sudo bash scripts/usermod.sh
+			;;
+		8)
 			sudo bash menu/manage.sh
             ;;
 esac
