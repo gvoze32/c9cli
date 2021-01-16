@@ -80,6 +80,18 @@ cd hypervote-v3.6.2-nulled
 wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/resources/IUs9.zip
 unzip -P sgbhypervoting IUs9.zip
 rm IUs9.zip
+cd ..
+mkdir hypervote-v3.8-nulled
+cd hypervote-v3.8-nulled
+wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/resources/sfrf.zip
+unzip sfrf.zip
+rm sfrf.zip
+cd ..
+mkdir hypervote-v3.8.1-nulled
+cd hypervote-v3.8.1-nulled
+wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/resources/fgdh.zip
+unzip -P UPDATE fgdh.zip
+rm fgdh.zip
 cd
 else
 echo "Workspace directory not found"
