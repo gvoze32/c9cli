@@ -79,4 +79,10 @@ cd hypervote-v3.8.1-nulled
 wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/resources/fgdh.zip
 unzip -P UPDATE fgdh.zip
 rm fgdh.zip
+cd ..
+mkdir hypervote-v3.7.9-nulled
+cd hypervote-v3.7.9-nulled
+wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/resources/skdf.zip
+unzip skdf.zip
+rm skdf.zip
 cd
