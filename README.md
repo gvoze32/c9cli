@@ -8,8 +8,9 @@ Make sure you have root access before doing this installation.
 
 ```
 $ git clone https://github.com/gvoze32/C9IDECoreDeploy
-$ chmod +x C9IDECoreDeploy/scripts/install.sh
-$ sudo bash C9IDECoreDeploy/scripts/install.sh
+$ cd C9IDECoreDeploy
+$ chmod +x scripts/install.sh
+$ sudo bash scripts/install.sh
 ```
 
 ### Deploy
