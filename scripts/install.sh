@@ -21,7 +21,7 @@ sudo apt update -y
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
 source ~/.profile
 nvm install node
-sudo apt install -y dialog curl at git npm build-essential php php-exif php-gd php-mbstring php-curl php-mysqli php-json php-dom php-fpm python python2.7 python3-pip build-essential zip unzip unp unrar unrar-free unar p7zip dos2unix
+sudo apt install -y dialog curl at git npm build-essential php php-exif php-gd php-mbstring php-curl php-mysqli php-json php-dom php-fpm python python2.7 python3-pip zip unzip unp unrar unrar-free unar p7zip dos2unix
 curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
 sudo python2 get-pip.py
 pip3 install requests selenium colorama bs4 wget pyfiglet
