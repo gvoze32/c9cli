@@ -28,9 +28,9 @@ pip3 install requests selenium colorama bs4 wget pyfiglet
 pip2 install requests selenium colorama bs4 wget pyfiglet
 systemctl start atd
 sudo apt install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common docker docker.io docker-compose
-sudo adduser c9users
+sudo adduser --disabled-password --gecos "" c9users
 sudo wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/misc/dockeryml/docker-compose.yml -O /home/c9users/docker-compose.yml
-sudo adduser c9usersmemlimit
+sudo adduser --disabled-password --gecos "" c9usersmemlimit
 sudo wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/misc/dockeryml-memlimit/docker-compose.yml -O /home/c9usersmemlimit/docker-compose.yml
 echo "blank" >> /home/c9users/.env
 echo "blank" >> /home/c9usersmemlimit/.env
