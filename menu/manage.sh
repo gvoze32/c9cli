@@ -9,7 +9,8 @@ MENU="Choose one of the following options:"
 
 OPTIONS=(1 "Systemctl"
 		 2 "Docker"
-		 3 "< Back")
+		 3 "Backup"
+		 4 "< Back")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
@@ -27,7 +28,10 @@ case $CHOICE in
         2)
 			sudo bash menu/managedocker.sh
             ;;
-		3)
+        3)
+			sudo bash scripts/rclone.sh
+            ;;
+		4)
 			sudo bash run.sh
             ;;
 esac

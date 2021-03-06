@@ -13,11 +13,13 @@ chmod +x scripts/c9-status.sh
 chmod +x scripts/c9-restart.sh
 chmod +x scripts/schedule.sh
 chmod +x scripts/firstinstall.sh
+chmod +x scripts/rclone.sh
 chmod +x scripts/c9-maker-dockermemlimit.sh
 chmod +x run.sh
 sudo apt update -y
 sudo apt upgrade -y
 sudo apt update -y
+curl https://rclone.org/install.sh | sudo bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
 source ~/.profile
 nvm install node
