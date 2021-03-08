@@ -9,7 +9,7 @@ date=\$(date +%y-%m-%d)
 rclone mkdir $name:Backup/backup-\$date
 zip -r /root/backup-\$date.zip /home
 rclone copy /root/backup-\$date.zip $name:Backup/backup-\$date
-rm -rf /root/backup-\$date.zip 
+rm /root/backup-\$date.zip 
 EOF
 chmod +x /home/backup-$name.sh
 echo ""
