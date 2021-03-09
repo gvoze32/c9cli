@@ -1,17 +1,15 @@
 #!/bin/bash
-sudo apt update -y
-sudo apt upgrade -y
-sudo apt update -y
+apt update -y
+apt upgrade -y
+apt update -y
+apt install -y apt-transport-https lsb-release ca-certificates mc
+curl -o /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
+apt update
+apt install -y php7.2
+apt install -y php7.2-exif php7.2-gd php7.2-mbstring php7.2-curl php7.2-mysqli php7.2-json php7.2-dom php7.2-fpm
+curl -O https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/scripts/ioncubesc.sh
+bash ioncubesc.sh
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
 source ~/.profile
 nvm install node
-sudo apt install -y curl at git npm build-essential php php-exif php-gd php-mbstring php-curl php-mysqli php-json php-dom php-fpm python-pip python3-pip python python2.7 python-pyfiglet build-essential zip unzip unp unrar unrar-free unar p7zip dos2unix
-pip install requests selenium colorama bs4 wget
-systemctl start atd
-sudo apt install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common docker docker.io docker-compose
-sudo adduser c9users
-sudo wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/misc/dockeryml/docker-compose.yml -O /home/c9users/docker-compose.yml
-sudo adduser c9usersmemlimit
-sudo wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/misc/dockeryml-memlimit/docker-compose.yml -O /home/c9usersmemlimit/docker-compose.yml
-echo "blank" >> /home/c9users/.env
-echo "blank" >> /home/c9usersmemlimit/.env
