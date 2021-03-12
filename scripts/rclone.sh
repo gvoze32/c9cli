@@ -7,7 +7,8 @@ sudo cat > /home/backup-$name.sh << EOF
 #!/bin/bash
 date=\$(date +%y-%m-%d)
 rclone mkdir $name:Backup/backup-\$date
-zip -r /root/backup-\$date.zip /home
+zip -r /root/backup-\$date.zip /home &
+cpulimit -e zip -l 10
 rclone copy /root/backup-\$date.zip $name:Backup/backup-\$date
 rm /root/backup-\$date.zip 
 EOF
