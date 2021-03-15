@@ -47,6 +47,7 @@ npm install
 cd ..
 git clone https://github.com/sanjidtk/masslooker
 git clone https://github.com/gvoze32/massseen
+git clone https://github.com/verssache/igviewstory
 git clone https://github.com/corrykalam/InstagramAPI
 mkdir hypervote-v3.2.1-nulled
 cd hypervote-v3.2.1-nulled
