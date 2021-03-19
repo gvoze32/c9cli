@@ -7,8 +7,8 @@ Simple bash script to create user and install C9 IDE Workspace then automaticall
 Make sure you have root access before doing this installation.
 
 ```
-$ git clone https://github.com/gvoze32/C9IDECoreDeploy
-$ cd C9IDECoreDeploy
+$ git clone https://github.com/gvoze32/C9IDECoreDeploy c9tui
+$ cd c9tui
 $ chmod +x scripts/install.sh
 $ sudo bash scripts/install.sh
 ```
