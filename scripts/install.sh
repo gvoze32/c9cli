@@ -32,9 +32,9 @@ pip2 install requests selenium colorama bs4 wget pyfiglet
 systemctl start atd
 sudo apt install -y pythonpy apt-transport-https ca-certificates curl gnupg-agent software-properties-common docker docker.io docker-compose
 sudo adduser --disabled-password --gecos "" c9users
-sudo wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/misc/dockeryml/docker-compose.yml -O /home/c9users/docker-compose.yml
+sudo wget https://raw.githubusercontent.com/gvoze32/c9tui/master/misc/dockeryml/docker-compose.yml -O /home/c9users/docker-compose.yml
 sudo adduser --disabled-password --gecos "" c9usersmemlimit
-sudo wget https://raw.githubusercontent.com/gvoze32/C9IDECoreDeploy/master/misc/dockeryml-memlimit/docker-compose.yml -O /home/c9usersmemlimit/docker-compose.yml
+sudo wget https://raw.githubusercontent.com/gvoze32/c9tui/master/misc/dockeryml-memlimit/docker-compose.yml -O /home/c9usersmemlimit/docker-compose.yml
 echo "blank" >> /home/c9users/.env
 echo "blank" >> /home/c9usersmemlimit/.env
 curl -O https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz

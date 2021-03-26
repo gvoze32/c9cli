@@ -1,4 +1,4 @@
-# C9IDECoreDeploy
+# c9tui
 
 Simple bash script to create user and install C9 IDE Workspace then automatically install some required packages.
 
@@ -7,7 +7,7 @@ Simple bash script to create user and install C9 IDE Workspace then automaticall
 Make sure you have root access before doing this installation.
 
 ```
-$ git clone https://github.com/gvoze32/C9IDECoreDeploy c9tui
+$ git clone https://github.com/gvoze32/c9tui
 $ cd c9tui
 $ chmod +x scripts/install.sh
 $ sudo bash scripts/install.sh
@@ -19,7 +19,7 @@ $ sudo bash scripts/install.sh
 $ sudo bash run.sh
 ```
 
-If you have any problem in using C9IDECoreDeploy, please open new issue.
+If you have any problem in using c9tui, please open new issue.
 
 # Explanation
 
@@ -46,4 +46,4 @@ CPUS= is used to specify how much limit CPU core will be used. If limit reached,
 
 MEMORY= is used to specify how much limit ram will be used, limit ram is maximum load. If limit reached, container will be restart, and terminate all session.
 
-**This project is fork of [C9IDE-User-Maker](https://github.com/nicolasjulian/C9IDE-User-Maker) and [C9-Docker-Compose](https://github.com/nicolasjulian/C9-Docker-Compose).**
+**This project is fork of [C9IDE-User-Maker](https://github.com/nicolasjulian/C9IDE-User-Maker) and [C9-Docker-Compose](https://github.com/nicolasjulian/C9-Docker-Compose) with much more improvement and function.**
