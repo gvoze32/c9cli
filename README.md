@@ -2,6 +2,11 @@
 
 Simple bash script to create user and install C9 IDE Workspace then automatically install some required packages.
 
+# Install 
+Please choose one of the version.
+
+## TUI
+
 ### Install
 
 Make sure you have root access before doing this installation.
@@ -17,6 +22,18 @@ $ sudo bash scripts/install.sh
 
 ```
 $ sudo bash run.sh
+```
+
+## CLI
+
+### Install
+
+Make sure you have root access before doing this installation.
+
+```
+sudo wget https://raw.githubusercontent.com/gvoze32/c9tui/master/releases/c9tui.sh -O /usr/local/bin/c9tui
+sudo chmod +x /usr/local/bin/bebasid
+bebasid --help
 ```
 
 If you have any problem in using c9tui, please open new issue.
