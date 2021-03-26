@@ -487,13 +487,13 @@ fi
 }
 
 manage(){
-      case "2 in
+    case "2 in
     delete )
-    read -p "Input User : " user
+    read -p "Input User : " usercore
     sleep 10
-    sudo systemctl stop c9-$user.service
+    sudo systemctl stop c9-$usercore.service
     sleep 10
-    sudo killall -u $user
+    sudo killall -u $usercore
     sleep 10
     sudo deluser --remove-home -f $user
     ;;
@@ -502,15 +502,15 @@ manage(){
     sudo systemctl status c9-$usercore.service
     ;;
     restart )
-    read -p "Input User : " user
+    read -p "Input User : " usercore
     sudo systemctl daemon-reload
-    sudo systemctl enable c9-$user.service
-    sudo systemctl restart c9-$user.service
+    sudo systemctl enable c9-$usercore.service
+    sudo systemctl restart c9-$usercore.service
     sleep 10
-    sudo systemctl status c9-$user.service
+    sudo systemctl status c9-$usercore.service
     ;;
     schedule )
-    read -p "Input User : " user
+    read -p "Input User : " usercore
     echo " "
     echo "Format Example for Time: "
     echo " "
@@ -529,11 +529,11 @@ manage(){
     read -p "Time: " waktu
     at $waktu <<END
     sleep 10
-    sudo systemctl stop c9-$user.service
+    sudo systemctl stop c9-$usercore.service
     sleep 10
-    sudo killall -u $user
+    sudo killall -u $usercore
     sleep 10
-    sudo deluser --remove-home -f $user
+    sudo deluser --remove-home -f $usercore
 END
     ;;
     scheduled )
@@ -542,14 +542,14 @@ END
     convert )
     read -p "Input User : " user
     echo "Input user password"
-    passwd $user
+    passwd $usercore
     echo "Warning, C9 will be restart!"
-    usermod -aG sudo $user
+    usermod -aG sudo $usercore
     sudo systemctl daemon-reload
-    sudo systemctl enable c9-$user.service
-    sudo systemctl restart c9-$user.service
+    sudo systemctl enable c9-$usercore.service
+    sudo systemctl restart c9-$usercore.service
     sleep 10
-    sudo systemctl status c9-$user.service
+    sudo systemctl status c9-$usercore.service
     ;;
     * )
     echo "Command not found, type c9tui --help for help"
