@@ -481,9 +481,6 @@ else
 echo "Workspace directory not found"
 fi
     ;;
-    remove )
-
-    ;;
     * )
     echo "Command not found, type c9tui --help for help"
   esac
