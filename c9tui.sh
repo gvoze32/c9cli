@@ -111,7 +111,7 @@ dialog(){
 }
 
 create(){
-    case $2 in
+    case $1 in
     core )
 #Run as sudo or root user
 read -p "Input User : " user
@@ -484,11 +484,10 @@ fi
     * )
     echo "Command not found, type c9tui --help for help"
   esac
-  ;;
 }
 
 manage(){
-      case $2 in
+      case "2 in
     delete )
     read -p "Input User : " user
     sleep 10
