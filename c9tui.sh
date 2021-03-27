@@ -583,9 +583,6 @@ delete )
   esac
   sudo docker-compose -p $userdocker down
   ;;
-*)
-  echo "Command not found, type c9tui --help for help"
-  ;;
 list )
   docker ps
   ;;
