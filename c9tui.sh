@@ -111,10 +111,10 @@ dialog(){
 }
 
 create(){
-    case $1 in
+    case $2 in
     core )
 #Run as sudo or root user
-read -p "Input User : " user
+read -p "Username : " user
 read -p "Input Password : " password
 read -p "Input Port (Recomend Range : 1000-5000) : " port
 
@@ -260,7 +260,7 @@ sleep 10
 sudo systemctl status c9-$user.service
     ;;
     docker )
-read -p "Input User : " user
+read -p "Username : " user
 read -p "Password : " pw
 read -p "Port : " port
 cd /home/c9users
@@ -367,7 +367,7 @@ echo "Workspace directory not found"
 fi
     ;;
     dockerlimit )
-read -p "Input User : " user
+read -p "Username : " user
 read -p "Password : " pw
 read -p "Port : " portenv
 read -p "CPU Limit (Example = 1) : " cpu
@@ -487,9 +487,9 @@ fi
 }
 
 manage(){
-    case "2 in
+    case $2 in
     delete )
-    read -p "Input User : " usercore
+    read -p "Username : " usercore
     sleep 10
     sudo systemctl stop c9-$usercore.service
     sleep 10
@@ -502,7 +502,7 @@ manage(){
     sudo systemctl status c9-$usercore.service
     ;;
     restart )
-    read -p "Input User : " usercore
+    read -p "Username : " usercore
     sudo systemctl daemon-reload
     sudo systemctl enable c9-$usercore.service
     sudo systemctl restart c9-$usercore.service
@@ -510,7 +510,7 @@ manage(){
     sudo systemctl status c9-$usercore.service
     ;;
     schedule )
-    read -p "Input User : " usercore
+    read -p "Username : " usercore
     echo " "
     echo "Format Example for Time: "
     echo " "
@@ -540,8 +540,8 @@ END
     sudo atq
     ;;
     convert )
-    read -p "Input User : " user
-    echo "Input user password"
+    read -p "Username : " user
+    echo "Username password"
     passwd $usercore
     echo "Warning, C9 will be restart!"
     usermod -aG sudo $usercore
