@@ -567,8 +567,8 @@ END
   esac
   docker )
     case $3 in
-delete)
-  read -p "Input User : " user
+delete )
+  read -p "Username : " userdocker
   echo Are the file is using Docker or Docker Memory Limit?
   echo 1. Docker
   echo 2. Docker Memory Limit
@@ -581,19 +581,19 @@ delete)
     cd /home/c9usersmemlimit
     ;;
   esac
-  sudo docker-compose -p $user down
+  sudo docker-compose -p $userdocker down
   ;;
 *)
   echo "Command not found, type c9tui --help for help"
   ;;
-list)
+list )
   docker ps
   ;;
-status)
+status )
   docker stats
   ;;
-schedule)
-  read -p "Input User : " user
+schedule )
+  read -p "Username : " userdocker
   echo Are the file is using docker or dockermemlimit?
   read -r -p "Answer Y if you are using docker and answer N if you are using dockermemlimit [y/N] " response
   echo " "
@@ -616,25 +616,25 @@ schedule)
   [yY][eE][sS] | [yY])
     at $waktu <<END
 cd /home/c9users
-sudo docker-compose -p $user down
+sudo docker-compose -p $userdocker down
 END
     ;;
   *)
     at $waktu <<END
 cd /home/c9usersmemlimit
-sudo docker-compose -p $user down
+sudo docker-compose -p $userdocker down
 END
     ;;
   esac
   ;;
-scheduled)
+scheduled )
   sudo atq
   ;;
-restart)
+restart )
   docker restart $(docker ps -q)
   ;;
-configure)
-  read -p "Input User : " user
+configure )
+  read -p "Username : " userdocker
   echo 1. Stop
   echo 2. Start
   echo 3. Restart
@@ -653,7 +653,7 @@ configure)
       cd /home/c9usersmemlimit
       ;;
     esac
-    sudo docker container stop $user
+    sudo docker container stop $userdocker
     ;;
   2)
     echo Are the file is using Docker or Docker Memory Limit?
@@ -668,7 +668,7 @@ configure)
       cd /home/c9usersmemlimit
       ;;
     esac
-    sudo docker container start $user
+    sudo docker container start $userdocker
     ;;
   *)
     echo Are the file is using Docker or Docker Memory Limit?
@@ -683,14 +683,15 @@ configure)
       cd /home/c9usersmemlimit
       ;;
     esac
-    sudo docker container stop $user
-    sudo docker container start $user
+    sudo docker container stop $userdocker
+    sudo docker container start $userdocker
     ;;
   esac
   ;;
     * )
     echo "Command not found, type c9tui --help for help"
     esac
+``;;
     * )
     echo "Command not found, type c9tui --help for help"
 esac
