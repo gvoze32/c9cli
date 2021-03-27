@@ -23,24 +23,33 @@ about() {
 
 bantuan() {
     echo "How to use:"
-    echo "c9tui [command]"
+    echo "c9tui [command] [option]"
     echo
     echo "List command:"
     echo "install       : Install (Required)"
     echo "dialog        : Show dialog version of c9tui"
     echo "create"
     echo "  core        : Create a new systemctl workspace"
-    echo "  docker      : Create a new docker workspace"
-    echo "  dockerlimit : Create a new docker workspace with limited RAM and CPU"
+    echo "  docker      : Create a new docker container"
+    echo "  dockerlimit : Create a new docker container with limited RAM and CPU"
     echo "manage"
     echo "  systemctl"
-    echo "    delete    : Delete systemctl workspace"
+    echo "    delete    : Delete workspace"
     echo "    status    : Show workspace status"
     echo "    restart   : Restart workspace"
     echo "    schedule  : Schedule workspace deletion"
-    echo "    scheduled : Show scheduled Workspace deletion"
+    echo "    scheduled : Show scheduled workspace deletion"
     echo "    convert   : Convert user to superuser"
+    echo "  docker"
+    echo "    delete    : Delete docker container"
+    echo "    list      : Show docker container lists"
+    echo "    status    : Show container status"
+    echo "    schedule  : Schedule container deletion"
+    echo "    scheduled : Show scheduled container deletion"
+    echo "    configure : Stop, start or restart running container"
+    echo "    restart   : Restart (all) running containers"
     echo "--port        : Show used port lists"
+    echo "--backup      : Backup workspace data with rclone"
     echo "--help        : Show help"
     echo "--version     : Show version"
     echo
@@ -487,7 +496,9 @@ fi
 }
 
 manage(){
-    case $2 in
+case $2 in
+  systemctl )
+  case $3 in
     delete )
     read -p "Username : " usercore
     sleep 10
@@ -554,10 +565,164 @@ END
     * )
     echo "Command not found, type c9tui --help for help"
   esac
+  docker )
+    case $3 in
+delete)
+  read -p "Input User : " user
+  echo Are the file is using Docker or Docker Memory Limit?
+  echo 1. Docker
+  echo 2. Docker Memory Limit
+  read -r -p "Choose: " response
+  case "$response" in
+  1)
+    cd /home/c9users
+    ;;
+  *)
+    cd /home/c9usersmemlimit
+    ;;
+  esac
+  sudo docker-compose -p $user down
   ;;
+*)
+  echo "Command not found, type c9tui --help for help"
+  ;;
+list)
+  docker ps
+  ;;
+status)
+  docker stats
+  ;;
+schedule)
+  read -p "Input User : " user
+  echo Are the file is using docker or dockermemlimit?
+  read -r -p "Answer Y if you are using docker and answer N if you are using dockermemlimit [y/N] " response
+  echo " "
+  echo "Format Example for Time: "
+  echo " "
+  echo "10:00 AM 6/22/2015"
+  echo "10:00 AM July 25"
+  echo "10:00 AM"
+  echo "10:00 AM Sun"
+  echo "10:00 AM next month"
+  echo "10:00 AM tomorrow"
+  echo "now + 1 hour"
+  echo "now + 30 minutes"
+  echo "now + 1 week"
+  echo "now + 1 year"
+  echo "midnight"
+  echo " "
+  read -p "Time: " waktu
+  case "$response" in
+  [yY][eE][sS] | [yY])
+    at $waktu <<END
+cd /home/c9users
+sudo docker-compose -p $user down
+END
+    ;;
+  *)
+    at $waktu <<END
+cd /home/c9usersmemlimit
+sudo docker-compose -p $user down
+END
+    ;;
+  esac
+  ;;
+scheduled)
+  sudo atq
+  ;;
+restart)
+  docker restart $(docker ps -q)
+  ;;
+configure)
+  read -p "Input User : " user
+  echo 1. Stop
+  echo 2. Start
+  echo 3. Restart
+  read -r -p "Choose: " response
+  case "$restart" in
+  1)
+    echo Are the file is using Docker or Docker Memory Limit?
+    echo 1. Docker
+    echo 2. Docker Memory Limit
+    read -r -p "Choose: " response
+    case "$response" in
+    1)
+      cd /home/c9users
+      ;;
+    *)
+      cd /home/c9usersmemlimit
+      ;;
+    esac
+    sudo docker container stop $user
+    ;;
+  2)
+    echo Are the file is using Docker or Docker Memory Limit?
+    echo 1. Docker
+    echo 2. Docker Memory Limit
+    read -r -p "Choose: " response
+    case "$response" in
+    1)
+      cd /home/c9users
+      ;;
+    *)
+      cd /home/c9usersmemlimit
+      ;;
+    esac
+    sudo docker container start $user
+    ;;
+  *)
+    echo Are the file is using Docker or Docker Memory Limit?
+    echo 1. Docker
+    echo 2. Docker Memory Limit
+    read -r -p "Choose: " response
+    case "$response" in
+    1)
+      cd /home/c9users
+      ;;
+    *)
+      cd /home/c9usersmemlimit
+      ;;
+    esac
+    sudo docker container stop $user
+    sudo docker container start $user
+    ;;
+  esac
+  ;;
+    * )
+    echo "Command not found, type c9tui --help for help"
+    esac
+    * )
+    echo "Command not found, type c9tui --help for help"
+esac
 }
 
-
+"--backup" )
+echo "=Everyday Backup at 2 AM="
+echo "Make sure you has been setup a rclone config file using command: rclone config"
+echo ""
+read -p "If all has been set up correctly, then input your rclone remote name : " name
+sudo cat > /home/backup-$name.sh << EOF
+#!/bin/bash
+date=\$(date +%y-%m-%d)
+rclone mkdir $name:Backup/backup-\$date
+zip -r /root/backup-\$date.zip /home &
+cpulimit -e zip -l 10
+rclone copy /root/backup-\$date.zip $name:Backup/backup-\$date
+rm /root/backup-\$date.zip 
+EOF
+chmod +x /home/backup-$name.sh
+echo ""
+echo "Backup command created..."
+crontab -l > backup-$name
+echo "0 2 * * * /home/backup-$name.sh > /home/backup-$name.log 2>&1" >> backup-$name
+crontab backup-$name
+rm backup-$name
+echo ""
+echo "Cron job created..."
+echo ""
+echo "Make sure it's included on your cron list :"
+crontab -l
+;;
 
 "--port" )
 sudo lsof -i -P -n | grep LISTEN
