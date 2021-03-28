@@ -57,7 +57,7 @@ bantuan() {
     echo "Built with love by gvoze32"
 }
 
-install (){
+install(){
 chmod +x menu/manage.sh
 chmod +x menu/dockermenu.sh
 chmod +x menu/managesystemctl.sh
@@ -695,7 +695,7 @@ configure )
 esac
 }
 
-backup();
+backup(){
 echo "=Everyday Backup at 2 AM="
 echo "Make sure you has been setup a rclone config file using command: rclone config"
 echo ""
@@ -723,16 +723,16 @@ echo "Make sure it's included on your cron list :"
 crontab -l
 }
 
-port() {
+port(){
 sudo lsof -i -P -n | grep LISTEN
 }
 
-help() {
+help(){
 banner
 bantuan
 }
 
-version() {
+version(){
 banner
 about
 }
