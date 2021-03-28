@@ -48,10 +48,10 @@ bantuan() {
     echo "    scheduled : Show scheduled container deletion"
     echo "    configure : Stop, start or restart running container"
     echo "    restart   : Restart (all) running containers"
-    echo "--port        : Show used port lists"
-    echo "--backup      : Backup workspace data with rclone"
-    echo "--help        : Show help"
-    echo "--version     : Show version"
+    echo "port          : Show used port lists"
+    echo "backup        : Backup workspace data with rclone"
+    echo "help          : Show help"
+    echo "version       : Show version"
     echo
     echo "Copyright (c) 2021 c9tui (under MIT License)"
     echo "Built with love by gvoze32"
@@ -695,7 +695,7 @@ configure )
 esac
 }
 
-"--backup" )
+backup();
 echo "=Everyday Backup at 2 AM="
 echo "Make sure you has been setup a rclone config file using command: rclone config"
 echo ""
@@ -721,16 +721,18 @@ echo "Cron job created..."
 echo ""
 echo "Make sure it's included on your cron list :"
 crontab -l
-;;
+}
 
-"--port" )
+port() {
 sudo lsof -i -P -n | grep LISTEN
-;;
-"--help" )
+}
+
+help() {
 banner
 bantuan
-;;
-"--version" )
+}
+
+version() {
 banner
 about
-;;
+}
