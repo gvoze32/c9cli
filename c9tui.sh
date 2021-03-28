@@ -491,7 +491,7 @@ echo "Workspace directory not found"
 fi
     ;;
     * )
-    echo "Command not found, type c9tui --help for help"
+    echo "Command not found, type c9tui help for help"
   esac
 }
 
@@ -563,13 +563,13 @@ END
     sudo systemctl status c9-$usercore.service
     ;;
     * )
-    echo "Command not found, type c9tui --help for help"
+    echo "Command not found, type c9tui help for help"
   ;;
   docker )
     case $3 in
 delete )
   read -p "Username : " userdocker
-  echo Are the file is using Docker or Docker Memory Limit?
+  echo "Are the file is using Docker or Docker Memory Limit?"
   echo 1. Docker
   echo 2. Docker Memory Limit
   read -r -p "Choose: " response
@@ -591,7 +591,7 @@ status )
   ;;
 schedule )
   read -p "Username : " userdocker
-  echo Are the file is using docker or dockermemlimit?
+  echo "Are the file is using docker or dockermemlimit?"
   read -r -p "Answer Y if you are using docker and answer N if you are using dockermemlimit [y/N] " response
   echo " "
   echo "Format Example for Time: "
@@ -638,7 +638,7 @@ configure )
   read -r -p "Choose: " response
   case "$restart" in
   1)
-    echo Are the file is using Docker or Docker Memory Limit?
+    echo "Are the file is using Docker or Docker Memory Limit?"
     echo 1. Docker
     echo 2. Docker Memory Limit
     read -r -p "Choose: " response
@@ -653,7 +653,7 @@ configure )
     sudo docker container stop $userdocker
     ;;
   2)
-    echo Are the file is using Docker or Docker Memory Limit?
+    echo "Are the file is using Docker or Docker Memory Limit?"
     echo 1. Docker
     echo 2. Docker Memory Limit
     read -r -p "Choose: " response
@@ -668,7 +668,7 @@ configure )
     sudo docker container start $userdocker
     ;;
   *)
-    echo Are the file is using Docker or Docker Memory Limit?
+    echo "Are the file is using Docker or Docker Memory Limit?"
     echo 1. Docker
     echo 2. Docker Memory Limit
     read -r -p "Choose: " response
@@ -686,11 +686,11 @@ configure )
   esac
   ;;
     * )
-    echo "Command not found, type c9tui --help for help"
-    esac
+    echo "Command not found, type c9tui help for help"
+ esac
  ;;
     * )
-    echo "Command not found, type c9tui --help for help"
+    echo "Command not found, type c9tui help for help"
 esac
 ;;
 }
