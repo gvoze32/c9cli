@@ -691,8 +691,8 @@ configure )
  ;;
     * )
     echo "Command not found, type c9tui help for help"
-esac
 ;;
+esac
 }
 
 backup(){
