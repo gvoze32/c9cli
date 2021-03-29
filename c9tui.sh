@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# COMMANDS
+
 banner() {
     echo "       ___  _         _ "
     echo "  ___ / _ \| |_ _   _(_)"
@@ -57,9 +59,9 @@ bantuan() {
     echo "Built with love by gvoze32"
 }
 
-# INSTALL MENU
+# INSTALL
 
-install(){
+firstinstall(){
 chmod +x menu/manage.sh
 chmod +x menu/dockermenu.sh
 chmod +x menu/managesystemctl.sh
@@ -117,13 +119,11 @@ EOF
 php -v
 }
 
-dialog(){
+dialogs(){
     sudo bash run.sh
 }
 
-create(){
-    case $2 in
-    core )
+createnewsystemctl(){
 #Run as sudo or root user
 read -p "Username : " user
 read -p "Input Password : " password
@@ -269,8 +269,11 @@ sudo systemctl enable c9-$user.service
 sudo systemctl restart c9-$user.service
 sleep 10
 sudo systemctl status c9-$user.service
-    ;;
-    docker )
+}
+
+# CREATE SYSTEMCTL
+
+createnewdocker(){
 read -p "Username : " user
 read -p "Password : " pw
 read -p "Port : " port
@@ -376,8 +379,11 @@ cd
 else
 echo "Workspace directory not found"
 fi
-    ;;
-    dockerlimit )
+}
+
+# CREATE DOCKER
+
+createnewdockermemlimit(){
 read -p "Username : " user
 read -p "Password : " pw
 read -p "Port : " portenv
@@ -491,15 +497,9 @@ cd
 else
 echo "Workspace directory not found"
 fi
-    ;;
-    * )
-    echo "Command not found, type c9tui help for help"
-  esac
 }
 
-# COMMANDS
-
-# SYSTEMCTL
+# MANAGE SYSTEMCTL
 
 deletesystemctl(){
 read -p "Input User : " user
@@ -570,7 +570,7 @@ sleep 10
 sudo systemctl status c9-$user.service
 }
 
-# DOCKER
+# MANAGE DOCKER
 
 deletedocker(){
 read -p "Input User : " user
@@ -693,67 +693,9 @@ restartdocker(){
 docker restart $(docker ps -q)
 }
 
-# MANAGE MENU
-
-manage(){
-case $2 in
-  systemctl )
-  case $3 in
-    delete )
-      deletesystemctl
-    ;;
-    status )
-      statussystemctl
-    ;;
-    restart )
-      statussystemctl
-    ;;
-    schedule )
-      schedulesystemctl
-    ;;
-    scheduled )
-      scheduledatq
-    ;;
-    convert )
-      convertsystemctl
-    ;;
-    * )
-    echo "Command not found, type c9tui help for help"
-  esac
-      ;;
-  docker )
-  case $3 in
-    delete )
-      deletedocker
-    ;;
-    list )
-      listdocker
-    ;;
-    status )
-      statusdocker
-    ;;
-    schedule )
-      scheduledocker
-    ;;
-    scheduled )
-      scheduledatq
-    ;;
-    configure )
-      configuredocker
-    ;;
-    restart )
-      restartdocker
-    ;;
-    * )
-    echo "Command not found, type c9tui help for help"
-  esac
-  ;;
-esac
-}
-
 # BASIC MENUS
 
-backup(){
+backups(){
 echo "=Everyday Backup at 2 AM="
 echo "Make sure you has been setup a rclone config file using command: rclone config"
 echo ""
@@ -781,16 +723,110 @@ echo "Make sure it's included on your cron list :"
 crontab -l
 }
 
-port(){
+portlist(){
 sudo lsof -i -P -n | grep LISTEN
 }
 
-help(){
+helps(){
 banner
 bantuan
 }
 
-version(){
+versions(){
 banner
 about
+}
+
+# MENU
+
+menu(){
+case $1 in
+install )
+  firstinstall
+;;
+dialog )
+  dialogs
+;;
+create )
+  case $2 in
+    systemctl )
+      createnewsystemctl
+    ;;
+    docker )
+      createnewdocker
+    ;;
+    dockerlimit )
+      createnewdockermemlimit
+    ;;
+    * )
+      echo "Command not found, type c9tui help for help"
+  esac
+  ;;
+manage )
+  case $2 in
+    systemctl )
+    case $3 in
+      delete )
+        deletesystemctl
+      ;;
+      status )
+        statussystemctl
+      ;;
+      restart )
+        statussystemctl
+      ;;
+      schedule )
+        schedulesystemctl
+      ;;
+      scheduled )
+        scheduledatq
+      ;;
+      convert )
+        convertsystemctl
+      ;;
+      * )
+      echo "Command not found, type c9tui help for help"
+    esac
+        ;;
+    docker )
+    case $3 in
+      delete )
+        deletedocker
+      ;;
+      list )
+        listdocker
+      ;;
+      status )
+        statusdocker
+      ;;
+      schedule )
+        scheduledocker
+      ;;
+      scheduled )
+        scheduledatq
+      ;;
+      configure )
+        configuredocker
+      ;;
+      restart )
+        restartdocker
+      ;;
+      * )
+      echo "Command not found, type c9tui help for help"
+    esac
+  esac
+;;
+port )
+  portlist
+;;
+backup )
+  backups
+;;
+help )
+  helps
+;;
+version )
+  versions
+;;
+esac
 }
