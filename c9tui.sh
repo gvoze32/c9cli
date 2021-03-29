@@ -57,6 +57,8 @@ bantuan() {
     echo "Built with love by gvoze32"
 }
 
+# INSTALL MENU
+
 install(){
 chmod +x menu/manage.sh
 chmod +x menu/dockermenu.sh
@@ -495,206 +497,256 @@ fi
   esac
 }
 
+# COMMANDS
+
+# SYSTEMCTL
+
+deletesystemctl(){
+read -p "Input User : " user
+sleep 10
+sudo systemctl stop c9-$user.service
+sleep 10
+sudo killall -u $user
+sleep 10
+sudo deluser --remove-home -f $user
+}
+
+statussystemctl(){
+read -p "Username : " crot
+sudo systemctl status c9-$crot.service
+}
+
+restartsystemctl(){
+read -p "Input User : " user
+sudo systemctl daemon-reload
+sudo systemctl enable c9-$user.service
+sudo systemctl restart c9-$user.service
+sleep 10
+sudo systemctl status c9-$user.service
+}
+
+schedulesystemctl(){
+read -p "Input User : " user
+echo " "
+echo "Format Example for Time: "
+echo " "
+echo "10:00 AM 6/22/2015"
+echo "10:00 AM July 25"
+echo "10:00 AM"
+echo "10:00 AM Sun"
+echo "10:00 AM next month"
+echo "10:00 AM tomorrow"
+echo "now + 1 hour"
+echo "now + 30 minutes"
+echo "now + 1 week"
+echo "now + 1 year"
+echo "midnight"
+echo " "
+read -p "Time: " waktu
+at $waktu <<END
+sleep 10
+sudo systemctl stop c9-$user.service
+sleep 10
+sudo killall -u $user
+sleep 10
+sudo deluser --remove-home -f $user
+END
+}
+
+scheduledatq(){
+sudo atq
+}
+
+convertsystemctl(){
+read -p "Input User : " user
+echo "Input user password"
+passwd $user
+echo "Warning, C9 will be restart!"
+usermod -aG sudo $user
+sudo systemctl daemon-reload
+sudo systemctl enable c9-$user.service
+sudo systemctl restart c9-$user.service
+sleep 10
+sudo systemctl status c9-$user.service
+}
+
+# DOCKER
+
+deletedocker(){
+read -p "Input User : " user
+echo Are the file is using Docker or Docker Memory Limit?
+echo 1. Docker
+echo 2. Docker Memory Limit
+read -r -p "Choose: " response
+case "$response" in
+    1) 
+cd /home/c9users
+        ;;
+    *)
+cd /home/c9usersmemlimit
+        ;;
+esac
+sudo docker-compose -p $user down
+}
+
+listdocker(){
+docker ps
+}
+
+statusdocker(){
+docker stats
+}
+
+scheduledocker(){
+read -p "Input User : " user
+echo Are the file is using docker or dockermemlimit?
+read -r -p "Answer Y if you are using docker and answer N if you are using dockermemlimit [y/N] " response
+echo " "
+echo "Format Example for Time: "
+echo " "
+echo "10:00 AM 6/22/2015"
+echo "10:00 AM July 25"
+echo "10:00 AM"
+echo "10:00 AM Sun"
+echo "10:00 AM next month"
+echo "10:00 AM tomorrow"
+echo "now + 1 hour"
+echo "now + 30 minutes"
+echo "now + 1 week"
+echo "now + 1 year"
+echo "midnight"
+echo " "
+read -p "Time: " waktu
+case "$response" in
+    [yY][eE][sS]|[yY]) 
+at $waktu <<END
+cd /home/c9users
+sudo docker-compose -p $user down
+END
+        ;;
+    *)
+at $waktu <<END
+cd /home/c9usersmemlimit
+sudo docker-compose -p $user down
+END
+        ;;
+esac
+}
+
+configuredocker(){
+read -p "Input User : " user
+echo 1. Stop
+echo 2. Start
+echo 3. Restart
+read -r -p "Choose: " response
+case "$restart" in
+    1) 
+echo Are the file is using Docker or Docker Memory Limit?
+echo 1. Docker
+echo 2. Docker Memory Limit
+read -r -p "Choose: " response
+case "$response" in
+    1) 
+cd /home/c9users
+        ;;
+    *)
+cd /home/c9usersmemlimit
+        ;;
+esac
+sudo docker container stop $user
+        ;;
+    2) 
+echo Are the file is using Docker or Docker Memory Limit?
+echo 1. Docker
+echo 2. Docker Memory Limit
+read -r -p "Choose: " response
+case "$response" in
+    1) 
+cd /home/c9users
+        ;;
+    *)
+cd /home/c9usersmemlimit
+        ;;
+esac
+sudo docker container start $user
+        ;;
+    *)
+echo Are the file is using Docker or Docker Memory Limit?
+echo 1. Docker
+echo 2. Docker Memory Limit
+read -r -p "Choose: " response
+case "$response" in
+    1) 
+cd /home/c9users
+        ;;
+    *)
+cd /home/c9usersmemlimit
+        ;;
+esac
+sudo docker container stop $user
+sudo docker container start $user
+        ;;
+esac
+}
+
+restartdocker(){
+docker restart $(docker ps -q)
+}
+
+# MANAGE MENU
+
 manage(){
 case $2 in
-  systemctl )
+  systemctl
   case $3 in
     delete )
-    read -p "Username : " usercore
-    sleep 10
-    sudo systemctl stop c9-$usercore.service
-    sleep 10
-    sudo killall -u $usercore
-    sleep 10
-    sudo deluser --remove-home -f $user
+      deletesystemctl
     ;;
     status )
-    read -p "Username : " usercore
-    sudo systemctl status c9-$usercore.service
+      statussystemctl
     ;;
     restart )
-    read -p "Username : " usercore
-    sudo systemctl daemon-reload
-    sudo systemctl enable c9-$usercore.service
-    sudo systemctl restart c9-$usercore.service
-    sleep 10
-    sudo systemctl status c9-$usercore.service
+      statussystemctl
     ;;
     schedule )
-    read -p "Username : " usercore
-    echo " "
-    echo "Format Example for Time: "
-    echo " "
-    echo "10:00 AM 6/22/2015"
-    echo "10:00 AM July 25"
-    echo "10:00 AM"
-    echo "10:00 AM Sun"
-    echo "10:00 AM next month"
-    echo "10:00 AM tomorrow"
-    echo "now + 1 hour"
-    echo "now + 30 minutes"
-    echo "now + 1 week"
-    echo "now + 1 year"
-    echo "midnight"
-    echo " "
-    read -p "Time: " waktu
-    at $waktu <<END
-    sleep 10
-    sudo systemctl stop c9-$usercore.service
-    sleep 10
-    sudo killall -u $usercore
-    sleep 10
-    sudo deluser --remove-home -f $usercore
-END
+      schedulesystemctl
     ;;
     scheduled )
-    sudo atq
+      scheduledatq
     ;;
     convert )
-    read -p "Username : " user
-    echo "Username password"
-    passwd $usercore
-    echo "Warning, C9 will be restart!"
-    usermod -aG sudo $usercore
-    sudo systemctl daemon-reload
-    sudo systemctl enable c9-$usercore.service
-    sudo systemctl restart c9-$usercore.service
-    sleep 10
-    sudo systemctl status c9-$usercore.service
+      convertsystemctl
     ;;
     * )
     echo "Command not found, type c9tui help for help"
-  ;;
-      * )
-    echo "Command not found, type c9tui help for help"
- esac
-  docker )
-    case $3 in
-delete )
-  read -p "Username : " userdocker
-  echo "Are the file is using Docker or Docker Memory Limit?"
-  echo 1. Docker
-  echo 2. Docker Memory Limit
-  read -r -p "Choose: " response
-  case "$response" in
-  1)
-    cd /home/c9users
-    ;;
-  *)
-    cd /home/c9usersmemlimit
-    ;;
   esac
-  sudo docker-compose -p $userdocker down
-  ;;
-list )
-  docker ps
-  ;;
-status )
-  docker stats
-  ;;
-schedule )
-  read -p "Username : " userdocker
-  echo "Are the file is using docker or dockermemlimit?"
-  read -r -p "Answer Y if you are using docker and answer N if you are using dockermemlimit [y/N] " response
-  echo " "
-  echo "Format Example for Time: "
-  echo " "
-  echo "10:00 AM 6/22/2015"
-  echo "10:00 AM July 25"
-  echo "10:00 AM"
-  echo "10:00 AM Sun"
-  echo "10:00 AM next month"
-  echo "10:00 AM tomorrow"
-  echo "now + 1 hour"
-  echo "now + 30 minutes"
-  echo "now + 1 week"
-  echo "now + 1 year"
-  echo "midnight"
-  echo " "
-  read -p "Time: " waktu
-  case "$response" in
-  [yY][eE][sS] | [yY])
-    at $waktu <<END
-cd /home/c9users
-sudo docker-compose -p $userdocker down
-END
+      ;;
+  docker
+  case $3 in
+    delete )
+      deletedocker
     ;;
-  *)
-    at $waktu <<END
-cd /home/c9usersmemlimit
-sudo docker-compose -p $userdocker down
-END
+    list )
+      listdocker
     ;;
-  esac
-  ;;
-scheduled )
-  sudo atq
-  ;;
-restart )
-  docker restart $(docker ps -q)
-  ;;
-configure )
-  read -p "Username : " userdocker
-  echo 1. Stop
-  echo 2. Start
-  echo 3. Restart
-  read -r -p "Choose: " response
-  case "$restart" in
-  1)
-    echo "Are the file is using Docker or Docker Memory Limit?"
-    echo 1. Docker
-    echo 2. Docker Memory Limit
-    read -r -p "Choose: " response
-    case "$response" in
-    1)
-      cd /home/c9users
-      ;;
-    *)
-      cd /home/c9usersmemlimit
-      ;;
-    esac
-    sudo docker container stop $userdocker
+    status )
+      statusdocker
     ;;
-  2)
-    echo "Are the file is using Docker or Docker Memory Limit?"
-    echo 1. Docker
-    echo 2. Docker Memory Limit
-    read -r -p "Choose: " response
-    case "$response" in
-    1)
-      cd /home/c9users
-      ;;
-    *)
-      cd /home/c9usersmemlimit
-      ;;
-    esac
-    sudo docker container start $userdocker
+    schedule )
+      scheduledocker
     ;;
-  *)
-    echo "Are the file is using Docker or Docker Memory Limit?"
-    echo 1. Docker
-    echo 2. Docker Memory Limit
-    read -r -p "Choose: " response
-    case "$response" in
-    1)
-      cd /home/c9users
-      ;;
-    *)
-      cd /home/c9usersmemlimit
-      ;;
-    esac
-    sudo docker container stop $userdocker
-    sudo docker container start $userdocker
+    scheduled )
+      scheduledatq
     ;;
-  esac
-  ;;
+    configure )
+      configuredocker
+    ;;
+    restart )
+      restartdocker
+    ;;
     * )
     echo "Command not found, type c9tui help for help"
- esac
- ;;
-    * )
-    echo "Command not found, type c9tui help for help"
-;;
+  esac
 esac
 }
 
