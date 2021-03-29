@@ -18,7 +18,7 @@ $ chmod +x scripts/install.sh
 $ sudo bash scripts/install.sh
 ```
 
-### Deploy
+### Run
 
 ```
 $ sudo bash run.sh
