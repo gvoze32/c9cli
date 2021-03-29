@@ -697,7 +697,7 @@ docker restart $(docker ps -q)
 
 manage(){
 case $2 in
-  systemctl
+  systemctl )
   case $3 in
     delete )
       deletesystemctl
@@ -721,7 +721,7 @@ case $2 in
     echo "Command not found, type c9tui help for help"
   esac
       ;;
-  docker
+  docker )
   case $3 in
     delete )
       deletedocker
@@ -749,6 +749,8 @@ case $2 in
   esac
 esac
 }
+
+# BASIC MENUS
 
 backup(){
 echo "=Everyday Backup at 2 AM="
