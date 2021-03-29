@@ -739,7 +739,6 @@ about
 
 # MENU
 
-menu(){
 case $1 in
 install )
   firstinstall
@@ -829,4 +828,3 @@ version )
   versions
 ;;
 esac
-}
