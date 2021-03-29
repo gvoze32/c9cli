@@ -17,7 +17,7 @@ about() {
     echo "Version       : v2.0 [Sanget - Kulonuwun] Linux Version"
     echo "Built         : 2021.4 [Tumbas]"
     echo "Tested on     :"
-    echo "    - Debian    : Ubuntu"
+    echo "    - Debian  : Ubuntu"
     echo
     echo "Built with love by gvoze32"
 }
