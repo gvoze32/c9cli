@@ -740,91 +740,93 @@ about
 # MENU
 
 case $1 in
-install )
+install)
   firstinstall
 ;;
-dialog )
+dialog)
   dialogs
 ;;
-create )
+create)
   case $2 in
-    systemctl )
+    systemctl)
       createnewsystemctl
     ;;
-    docker )
+    docker)
       createnewdocker
     ;;
-    dockerlimit )
+    dockerlimit)
       createnewdockermemlimit
     ;;
-    * )
+    *)
       echo "Command not found, type c9tui help for help"
   esac
   ;;
-manage )
+manage)
   case $2 in
-    systemctl )
+    systemctl)
     case $3 in
-      delete )
+      delete)
         deletesystemctl
       ;;
-      status )
+      status)
         statussystemctl
       ;;
-      restart )
+      restart)
         statussystemctl
       ;;
-      schedule )
+      schedule)
         schedulesystemctl
       ;;
-      scheduled )
+      scheduled)
         scheduledatq
       ;;
-      convert )
+      convert)
         convertsystemctl
       ;;
-      * )
+      *)
       echo "Command not found, type c9tui help for help"
     esac
         ;;
-    docker )
+    docker)
     case $3 in
-      delete )
+      delete)
         deletedocker
       ;;
-      list )
+      list)
         listdocker
       ;;
-      status )
+      status)
         statusdocker
       ;;
-      schedule )
+      schedule)
         scheduledocker
       ;;
-      scheduled )
+      scheduled)
         scheduledatq
       ;;
-      configure )
+      configure)
         configuredocker
       ;;
-      restart )
+      restart)
         restartdocker
       ;;
-      * )
+      *)
       echo "Command not found, type c9tui help for help"
     esac
   esac
 ;;
-port )
+port)
   portlist
 ;;
-backup )
+backup)
   backups
 ;;
-help )
+help)
   helps
 ;;
-version )
+version)
   versions
 ;;
+*)
+echo "Command not found, type c9tui help for help"
 esac
