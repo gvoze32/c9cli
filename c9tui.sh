@@ -14,8 +14,8 @@ banner() {
 }
 about() {
     echo "Name of File  : c9tui.sh"
-    echo "Version       : v1.0 [Edan - Nggih] Linux Version"
-    echo "Built         : 2021.3 [Gendeng]"
+    echo "Version       : v2.0 [Sanget - Kulonuwun] Linux Version"
+    echo "Built         : 2021.4 [Tumbas]"
     echo "Tested on     :"
     echo "    - Debian    : Ubuntu"
     echo
@@ -25,7 +25,7 @@ about() {
 
 bantuan() {
     echo "How to use:"
-    echo "c9tui [command] [option]"
+    echo "c9tui [command] [option] [additional]"
     echo
     echo "List command:"
     echo "install       : Install (Required)"
