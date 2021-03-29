@@ -31,7 +31,7 @@ bantuan() {
     echo "install       : Install (Required)"
     echo "dialog        : Show dialog version of c9tui"
     echo "create"
-    echo "  core        : Create a new systemctl workspace"
+    echo "  systemctl        : Create a new systemctl workspace"
     echo "  docker      : Create a new docker container"
     echo "  dockerlimit : Create a new docker container with limited RAM and CPU"
     echo "manage"
