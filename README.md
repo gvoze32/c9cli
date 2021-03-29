@@ -1,6 +1,6 @@
 # c9tui
 
-Simple bash script to create user and install C9 IDE Workspace then automatically install some required packages.
+Simple Cloud9 IDE bash script to create and manage users.
 
 # Install 
 Please choose one of the version.
