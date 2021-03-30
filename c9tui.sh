@@ -123,6 +123,8 @@ dialogs(){
     sudo bash run.sh
 }
 
+# CREATE SYSTEMCTL
+
 createnewsystemctl(){
 #Run as sudo or root user
 read -p "Username : " user
@@ -271,7 +273,7 @@ sleep 10
 sudo systemctl status c9-$user.service
 }
 
-# CREATE SYSTEMCTL
+# CREATE DOCKER
 
 createnewdocker(){
 read -p "Username : " user
@@ -381,7 +383,7 @@ echo "Workspace directory not found"
 fi
 }
 
-# CREATE DOCKER
+# CREATE DOCKERLIMIT
 
 createnewdockermemlimit(){
 read -p "Username : " user

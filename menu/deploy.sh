@@ -3,8 +3,8 @@
 HEIGHT=15
 WIDTH=90
 CHOICE_HEIGHT=13
-BACKTITLE="Deploy with."
-TITLE="C9IDECoreDeploy"
+BACKTITLE="Create user with."
+TITLE="c9tui"
 MENU="Choose one of the following options:"
 
 OPTIONS=(1 "Systemctl"

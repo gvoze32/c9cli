@@ -4,10 +4,10 @@ HEIGHT=15
 WIDTH=90
 CHOICE_HEIGHT=13
 BACKTITLE="Simple bash script to create user and install C9 IDE Workspace."
-TITLE="C9IDECoreDeploy"
+TITLE="c9tui"
 MENU="Choose one of the following options:"
 
-OPTIONS=(1 "Deploy"
+OPTIONS=(1 "Create"
 		 2 "Manage")
 
 CHOICE=$(dialog --clear \

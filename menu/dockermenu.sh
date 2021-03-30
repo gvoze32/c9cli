@@ -4,7 +4,7 @@ HEIGHT=15
 WIDTH=90
 CHOICE_HEIGHT=13
 BACKTITLE="Docker menu."
-TITLE="C9IDECoreDeploy"
+TITLE="c9tui"
 MENU="Choose one of the following options:"
 
 OPTIONS=(1 "Docker"
