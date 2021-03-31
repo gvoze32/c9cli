@@ -63,4 +63,4 @@ CPUS= is used to specify how much limit CPU core will be used. If limit reached,
 
 MEMORY= is used to specify how much limit ram will be used, limit ram is maximum load. If limit reached, container will be restart, and terminate all session.
 
-**This project is fork of [C9IDE-User-Maker](https://github.com/nicolasjulian/C9IDE-User-Maker) and [C9-Docker-Compose](https://github.com/nicolasjulian/C9-Docker-Compose) with much more improvement and function.**
+**This project is fork of [C9IDE-User-Maker](https://github.com/nicolasjulian/C9IDE-User-Maker) and [C9-Docker-Compose](https://github.com/nicolasjulian/C9-Docker-Compose) with lots of improvement and function.**
