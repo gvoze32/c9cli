@@ -52,6 +52,7 @@ bantuan() {
     echo "    restart   : Restart (all) running containers"
     echo "port          : Show used port lists"
     echo "backup        : Backup workspace data with rclone"
+    echo "daemon        : Increase docker network limit"
     echo "help          : Show help"
     echo "version       : Show version"
     echo
@@ -695,8 +696,6 @@ restartdocker(){
 docker restart $(docker ps -q)
 }
 
-# BASIC MENUS
-
 backups(){
 echo "=Everyday Backup at 2 AM="
 echo "Make sure you has been setup a rclone config file using command: rclone config"
@@ -725,9 +724,17 @@ echo "Make sure it's included on your cron list :"
 crontab -l
 }
 
+dockerdaemon(){
+sudo wget https://raw.githubusercontent.com/gvoze32/c9tui/master/misc/docker-daemon/daemon.json -O /etc/docker/daemon.json
+service docker restart
+docker network inspect bridge | grep Subnet
+}
+
 portlist(){
 sudo lsof -i -P -n | grep LISTEN
 }
+
+# BASIC MENUS
 
 helps(){
 banner
@@ -822,6 +829,9 @@ port)
 ;;
 backup)
   backups
+;;
+daemon)
+  dockerdaemon
 ;;
 help)
   helps
