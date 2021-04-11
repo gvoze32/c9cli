@@ -511,7 +511,7 @@ sudo systemctl stop c9-$user.service
 sleep 3
 sudo killall -u $user
 sleep 3
-sudo deluser $user
+sudo userdel $user
 }
 
 statussystemctl(){
@@ -547,12 +547,12 @@ echo "midnight"
 echo " "
 read -p "Time: " waktu
 at $waktu <<END
-sleep 10
+sleep 3
 sudo systemctl stop c9-$user.service
-sleep 10
+sleep 3
 sudo killall -u $user
-sleep 10
-sudo deluser --remove-home -f $user
+sleep 3
+sudo userdel $user
 END
 }
 
