@@ -10,7 +10,8 @@ MENU="Choose one of the following options:"
 OPTIONS=(1 "Systemctl"
 		 2 "Docker"
 		 3 "Backup"
-		 4 "< Back")
+		 4 "Backup Lite"
+		 5 "< Back")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
@@ -31,7 +32,10 @@ case $CHOICE in
         3)
 			sudo bash scripts/rclone.sh
             ;;
-		4)
+        4)
+			sudo bash scripts/rclonelite.sh
+            ;;
+		5)
 			sudo bash run.sh
             ;;
 esac
