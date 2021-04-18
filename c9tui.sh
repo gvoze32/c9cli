@@ -693,6 +693,7 @@ echo "Cron job created..."
 echo ""
 echo "Make sure it's included on your cron list :"
 crontab -l
+}
 
 dockerdaemon(){
 sudo wget https://raw.githubusercontent.com/gvoze32/c9tui/master/misc/docker-daemon/daemon.json -O /etc/docker/daemon.json
