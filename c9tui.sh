@@ -63,23 +63,6 @@ bantuan() {
 # INSTALL
 
 firstinstall(){
-chmod +x menu/manage.sh
-chmod +x menu/dockermenu.sh
-chmod +x menu/managesystemctl.sh
-chmod +x menu/managedocker.sh
-chmod +x menu/install.sh
-chmod +x scripts/c9-maker.sh
-chmod +x scripts/ioncubesc.sh
-chmod +x scripts/c9-deluser.sh
-chmod +x scripts/c9-maker-docker.sh
-chmod +x scripts/c9-deluser-docker.sh
-chmod +x scripts/c9-status.sh
-chmod +x scripts/c9-restart.sh
-chmod +x scripts/schedule.sh
-chmod +x scripts/firstinstall.sh
-chmod +x scripts/rclone.sh
-chmod +x scripts/c9-maker-dockermemlimit.sh
-chmod +x run.sh
 sudo apt update -y
 sudo apt upgrade -y
 sudo apt update -y
