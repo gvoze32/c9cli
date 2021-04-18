@@ -13,9 +13,7 @@ Make sure you have root access before doing this installation.
 
 ```
 $ git clone https://github.com/gvoze32/c9tui
-$ cd c9tui
-$ chmod +x scripts/install.sh
-$ sudo bash scripts/install.sh
+$ wget -qO- https://raw.githubusercontent.com/gvoze32/c9tui/master/scripts/install.sh | sudo bash
 ```
 
 ### Run
@@ -31,8 +29,13 @@ $ sudo bash run.sh
 Make sure you have root access before doing this installation.
 
 ```
-$ sudo wget https://raw.githubusercontent.com/gvoze32/c9tui/master/c9tui.sh -O /usr/local/bin/c9tui
-$ sudo chmod +x /usr/local/bin/c9tui
+$ wget -qO- https://raw.githubusercontent.com/gvoze32/c9tui/master/scripts/install.sh | sudo bash
+$ sudo wget https://raw.githubusercontent.com/gvoze32/c9tui/master/c9tui.sh -O /usr/local/bin/c9tui | sudo chmod +x /usr/local/bin/c9tui
+```
+
+### Run
+
+```
 $ c9tui help
 ```
 
