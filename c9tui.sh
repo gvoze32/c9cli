@@ -9,7 +9,7 @@ banner() {
     echo "| (__ \__, | |_| |_| | |"
     echo " \___|  /_/ \__|\__,_|_|"
     echo
-    echo "=====  CLOUD9 IDE CREATOR  ====="
+    echo "=====  CLOUD9 MANAGER  ====="
     echo
 }
 about() {
