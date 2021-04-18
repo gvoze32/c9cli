@@ -1,4 +1,5 @@
 #!/bin/bash
+# BETA: ONLY SUPPORT DOCKERMEMLIMIT
 echo "=Everyday Backup at 2 AM="
 echo "Make sure you has been setup a rclone config file using command: rclone config"
 echo ""
@@ -7,9 +8,10 @@ sudo cat > /home/backup-$name.sh << EOF
 #!/bin/bash
 date=\$(date +%y-%m-%d)
 rclone mkdir $name:Backup/backup-\$date
+cd c9usersmemlimit
 for i in */; do zip -r "\${i%/}.zip" "\$i"; done
-mkdir backup
-mv *.zip backup
+mkdir root/backup
+mv *.zip /root/backup
 rclone copy /root/backup $name:Backup/backup-\$date
 rm -rf /root/backup
 EOF
