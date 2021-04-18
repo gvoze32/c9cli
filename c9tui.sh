@@ -28,8 +28,7 @@ bantuan() {
     echo "c9tui [command] [option] [additional]"
     echo
     echo "List command:"
-    echo "install       : Install (Required)"
-    echo "dialog        : Show dialog version of c9tui"
+    echo "dialog        : Show TUI version of c9tui"
     echo "create"
     echo "  systemctl   : Create a new systemctl workspace"
     echo "  docker      : Create a new docker container"
@@ -52,7 +51,7 @@ bantuan() {
     echo "    restart   : Restart (all) running containers"
     echo "port          : Show used port lists"
     echo "backup        : Backup workspace data with rclone in one archive"
-    echo "backuplite    : Backup workspace data with rclone, with each workspace zipped"
+    echo "backuplite    : Backup workspace data with rclone, with each workspace folder zipped"
     echo "daemon        : Increase docker network limit"
     echo "help          : Show help"
     echo "version       : Show version"
