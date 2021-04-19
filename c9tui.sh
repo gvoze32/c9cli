@@ -674,12 +674,12 @@ sudo cat > /home/backup-$name.sh << EOF
 #!/bin/bash
 date=\$(date +%y-%m-%d)
 rclone mkdir $name:Backup/backup-\$date
-cd c9usersmemlimit
+cd /home/c9usersmemlimit
 for i in */; do zip -r "\${i%/}.zip" "\$i"; done
-mkdir root/backup
-mv *.zip /root/backup
-rclone copy /root/backup $name:Backup/backup-\$date
-rm -rf /root/backup
+mkdir backup
+mv *.zip backup
+rclone copy backup $name:Backup/backup-\$date
+rm -rf backup
 EOF
 chmod +x /home/backup-$name.sh
 echo ""
