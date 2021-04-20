@@ -8,7 +8,7 @@ sudo cat > /home/backup-$name.sh << EOF
 date=\$(date +%y-%m-%d)
 rclone mkdir $name:Backup/backup-\$date
 cd /home
-for i in */; do if ! [[ $i =~ ^(c9users|c9usersmemlimit)$ ]]; then zip -r "${i%/}.zip" "$i"; fi done
+for i in */; do if ! [[ $i =~ ^(c9users/|c9usersmemlimit/)$ ]]; then zip -r "${i%/}.zip" "$i"; fi done
 cd /home/c9users
 for i in */; do zip -r "\${i%/}.zip" "\$i"; done
 cd /home/c9usersmemlimit
