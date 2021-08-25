@@ -12,94 +12,43 @@ EOF
 sudo docker-compose -p $user up -d
 if [ -d "/home/c9users/$user" ]; then
 cd /home/c9users/$user
-mkdir bonus-instagram
-cd bonus-instagram
-mkdir hypervote-v3.1-official
-cd hypervote-v3.1-official
-wget https://raw.githubusercontent.com/gvoze32/c9tui/master/resources/i9wX.zip
-unzip i9wX.zip
-rm i9wX.zip
-cd ..
-wget https://raw.githubusercontent.com/gvoze32/c9tui/master/resources/i-5g.zip
-unzip i-5g.zip
-rm i-5g.zip
-cd auto_view_story
+
+### Your custom default bundling files goes here, it's recommended to put it on resources directory
+### START
+curl -O https://raw.githubusercontent.com/gvoze32/c9tui/master/scripts/firstinstall.sh
+sudo cat > README.TXT << EOF
+Sebelum memulai, sangat disarankan untuk menginstall PHP, IonCube dan Node.js secara otomatis dengan perintah:
+bash firstinstall.sh
+
+1. Apa spesifikasi workspace yang saya dapat?
+Workspace C9 dibuat menggunakan docker dengan image Debian dengan beberapa konfigurasi limit agar tidak terjadi overload pada server utama
+
+2. Apakah saya dapat user root?
+Mendapatkan user root, kalian dapat menginstall atau merubah konfigurasi sesuka hati
+
+3. Apa yang harus saya lakukan ketika baru mendapatkan workspace?
+Silahkan lakukan update dan upgrade base system kamu agar saling terintegrasi dengan cara menjalankan perintah "apt update" dan "apt upgrade"
+
+4. Bagaimana cara menginstall package?
+Gunakan perintah "apt" atau "apt-get" dilanjutkan dengan nama package yang akan diinstall
+
+5. Bagaimana cara menjalankan program?
+Tergantung menggunakan bahasa apa program tersebut, contohnya:
+
+PHP: php namafile.php
+Node.js: node namafile.js
+Python: python namafile.py
+
+6. Membuka via Android?
+Silahkan gunakan keyboard tambahan Hacker Keyboard atau BeHe Keyboard
+
+7. Bagaimana cara mengatasi error bot WhatsApp?
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+apt install ./google-chrome-stable_current_amd64.deb
 npm install
-cd ..
-git clone https://github.com/auliaahmad165/igfeedliker
-git clone https://github.com/areltiyan/igfirstcomment
-cd igfirstcomment
-npm install
-cd ..
-git clone https://github.com/sandrocods/instagram-views
-git clone https://github.com/1F1R5T/storyloop
-git clone https://github.com/officialputuid/toolsig
-cd toolsig
-npm install
-cd ..
-git clone https://github.com/sanjidtk/masslooker
-git clone https://github.com/gvoze32/massseen
-git clone https://github.com/verssache/igviewstory
-git clone https://github.com/corrykalam/InstagramAPI
-mkdir hypervote-v3.2.1-nulled
-cd hypervote-v3.2.1-nulled
-wget https://raw.githubusercontent.com/gvoze32/c9tui/master/resources/it8C.zip
-unzip -P sgbteam it8C.zip
-rm it8C.zip
-cd ..
-mkdir hypervote-v3.2.5-nulled
-cd hypervote-v3.2.5-nulled
-wget https://raw.githubusercontent.com/gvoze32/c9tui/master/resources/iwuh.zip
-unzip -P sgbteambos iwuh.zip
-rm iwuh.zip
-cd ..
-mkdir hypervote-v3.3.2-nulled
-cd hypervote-v3.3.2-nulled
-wget https://raw.githubusercontent.com/gvoze32/c9tui/master/resources/hjas.zip 
-unzip hjas.zip
-rm hjas.zip
-cd ..
-mkdir hypervote-v3.3.5-nulled
-cd hypervote-v3.3.5-nulled
-wget https://raw.githubusercontent.com/gvoze32/c9tui/master/resources/jkjf.zip 
-unzip -P sgbshare jkjf.zip
-rm jkjf.zip
-cd ..
-mkdir hypervote-v3.4.5-nulled
-cd hypervote-v3.4.5-nulled
-wget https://raw.githubusercontent.com/gvoze32/c9tui/master/resources/g8Cl.zip
-unzip -P sgbsharenow g8Cl.zip
-rm g8Cl.zip
-cd ..
-mkdir hypervote-v3.6-nulled
-cd hypervote-v3.6-nulled
-wget https://raw.githubusercontent.com/gvoze32/c9tui/master/resources/mo8N.zip
-unzip -P sgbteam mo8N.zip
-rm mo8N.zip
-cd ..
-mkdir hypervote-v3.6.2-nulled
-cd hypervote-v3.6.2-nulled
-wget https://raw.githubusercontent.com/gvoze32/c9tui/master/resources/IUs9.zip
-unzip -P sgbhypervoting IUs9.zip
-rm IUs9.zip
-cd ..
-mkdir hypervote-v3.8-nulled
-cd hypervote-v3.8-nulled
-wget https://raw.githubusercontent.com/gvoze32/c9tui/master/resources/sfrf.zip
-unzip sfrf.zip
-rm sfrf.zip
-cd ..
-mkdir hypervote-v3.8.1-nulled
-cd hypervote-v3.8.1-nulled
-wget https://raw.githubusercontent.com/gvoze32/c9tui/master/resources/fgdh.zip
-unzip fgdh.zip
-rm fgdh.zip
-cd ..
-mkdir hypervote-v3.7.9-nulled
-cd hypervote-v3.7.9-nulled
-wget https://raw.githubusercontent.com/gvoze32/c9tui/master/resources/skdf.zip
-unzip skdf.zip
-rm skdf.zip
+EOF
+### END
+
 cd
 else
 echo "Workspace directory not found"
