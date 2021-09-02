@@ -14,8 +14,7 @@ OPTIONS=(1 "Delete Docker Container"
 		 5 "See Scheduled Docker Containers Deletion"
 		 6 "Restart All Running Containers"
 		 7 "Stop, Start or Restart Running Containers"
-		 8 "Increase Docker Network Limit"
-		 9 "< Back")
+		 8 "< Back")
 
 CHOICE=$(dialog --clear \
                 --backtitle "$BACKTITLE" \
@@ -48,10 +47,7 @@ case $CHOICE in
 	    7)
             sudo bash scripts/restartdocker.sh
             ;;
-        8)
-            sudo bash scripts/dockerdaemon.sh
-            ;;
-	    9)
+	    8)
 			sudo bash menu/manage.sh
             ;;
 esac

@@ -43,16 +43,15 @@ bantuan() {
     echo "    convert   : Convert user to superuser"
     echo "  docker"
     echo "    delete    : Delete docker container"
-    echo "    list      : Show docker container lists"
     echo "    status    : Show container status"
+    echo "    restart   : Restart (all) running containers"
     echo "    schedule  : Schedule container deletion"
     echo "    scheduled : Show scheduled container deletion"
+    echo "    list      : Show docker container lists"
     echo "    configure : Stop, start or restart running container"
-    echo "    restart   : Restart (all) running containers"
     echo "port          : Show used port lists"
     echo "backup        : Backup workspace data with rclone in one archive"
     echo "backuplite    : Backup workspace data with rclone, with each workspace folder zipped"
-    echo "daemon        : Increase docker network limit"
     echo "help          : Show help"
     echo "version       : Show version"
     echo
@@ -545,12 +544,6 @@ echo "Cron job created..."
 echo ""
 echo "Make sure it's included on your cron list :"
 crontab -l
-}
-
-dockerdaemon(){
-sudo wget https://raw.githubusercontent.com/gvoze32/c9tui/master/misc/docker-daemon/daemon.json -O /etc/docker/daemon.json
-service docker restart
-docker network inspect bridge | grep Subnet
 }
 
 portlist(){
