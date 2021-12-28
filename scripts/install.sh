@@ -20,7 +20,7 @@ sudo apt update -y
 sudo apt upgrade -y
 sudo apt update -y
 curl https://rclone.org/install.sh | sudo bash
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 source ~/.profile
 nvm install node
 nvm install --lts
