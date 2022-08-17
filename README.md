@@ -1,6 +1,6 @@
 # c9tui
 
-Simple Cloud9 IDE bash script to create and manage users.
+Cloud9 IDE bash script to safely create and manage private users using Docker or SystemD service.
 
 # Install 
 Please choose one of the version.
@@ -22,7 +22,7 @@ $ wget -qO- https://raw.githubusercontent.com/gvoze32/c9tui/master/scripts/insta
 $ sudo bash run.sh
 ```
 
-## CLI
+## CLI (Recommended)
 
 ### Install
 
