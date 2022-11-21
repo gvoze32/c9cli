@@ -36,7 +36,7 @@ cat > /etc/php/${php_version}/cli/conf.d/00-ioncube-loader.ini << EOF
 zend_extension=ioncube_loader_lin_${php_version}.so
 EOF
 php -v
-read -r -p "Increase docker network limit to more than 30 containers? [y/N] (Default = n): " response
+read -r -p 'Increase docker network limit to more than 30 containers? [y/N] (Default = n): ' response
 case "${response}" in
     [yY][eE][sS]|[yY])
         echo "Adding daemon service rule.."
