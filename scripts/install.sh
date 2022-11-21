@@ -26,9 +26,12 @@ if whiptail --yesno "Increase docker network limit to more than 30 containers? [
     sudo docker network inspect bridge | grep Subnet
     echo "Done."
 else
+    echo ""
     echo "============================="
     echo "Default docker version is set"
     echo "============================="
+    echo ""
+    echo ""
 fi
 curl -O https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
 tar -xvzf ioncube_loaders_lin_x86-64.tar.gz
