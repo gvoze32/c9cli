@@ -86,7 +86,6 @@ cd /home/$user/my-projects
 
 ### Your custom default bundling files goes here, it's recommended to put it on resources directory
 ### START
-curl -O https://raw.githubusercontent.com/gvoze32/c9cli/master/scripts/install.sh
 
 ### END
 
@@ -152,7 +151,6 @@ cd /home/c9users/$user
 
 ### Your custom default bundling files goes here, it's recommended to put it on resources directory
 ### START
-curl -O https://raw.githubusercontent.com/gvoze32/c9cli/master/scripts/install.sh
 
 ### END
 
@@ -189,7 +187,6 @@ cd /home/c9usersmemlimit/$user
 
 ### Your custom default bundling files goes here, it's recommended to put it on resources directory
 ### START
-curl -O https://raw.githubusercontent.com/gvoze32/c9cli/master/scripts/install.sh
 
 ### END
 
