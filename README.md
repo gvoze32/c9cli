@@ -1,43 +1,21 @@
-# c9tui
+# c9cli
 
 Cloud9 IDE bash script to safely create and manage private users using Docker or SystemD service.
 
 # Install 
-Please choose one of the version.
-
-## TUI
-
-### Install
 
 Make sure you have root access before doing this installation.
 
 ```
-$ git clone https://github.com/gvoze32/c9tui
-$ wget -qO- https://raw.githubusercontent.com/gvoze32/c9tui/master/scripts/install.sh | sudo bash
+$ sudo wget https://raw.githubusercontent.com/gvoze32/c9cli/master/c9cli.sh -O /usr/local/bin/c9cli
+$ sudo chmod +x /usr/local/bin/c9cli
+$ wget -qO- https://raw.githubusercontent.com/gvoze32/c9cli/master/scripts/install.sh | sudo bash
 ```
 
-### Run
+## Run
 
 ```
-$ sudo bash run.sh
+$ c9cli help
 ```
 
-## CLI (Recommended)
-
-### Install
-
-Make sure you have root access before doing this installation.
-
-```
-$ sudo wget https://raw.githubusercontent.com/gvoze32/c9tui/master/c9tui.sh -O /usr/local/bin/c9tui
-$ sudo chmod +x /usr/local/bin/c9tui
-$ wget -qO- https://raw.githubusercontent.com/gvoze32/c9tui/master/scripts/install.sh | sudo bash
-```
-
-### Run
-
-```
-$ c9tui help
-```
-
-If you have any problem in using c9tui, please open new issue.
+If you have any problem in using c9cli, please open new issue.

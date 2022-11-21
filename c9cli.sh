@@ -3,32 +3,32 @@
 # COMMANDS
 
 banner() {
-    echo "       ___  _         _ "
-    echo "  ___ / _ \| |_ _   _(_)"
-    echo " / __| (_) | __| | | | |"
-    echo "| (__ \__, | |_| |_| | |"
-    echo " \___|  /_/ \__|\__,_|_|"
+    echo "        ___       _ _ "
+    echo "   ___ / _ \  ___| (_)"
+    echo "  / __| (_) |/ __| | |"
+    echo " | (__ \__, | (__| | |"
+    echo "  \___|  /_/ \___|_|_|"
     echo
-    echo "=====  CLOUD9 MANAGER  ====="
+    echo "=====  CLOUD9 CLI MANAGER  ====="
     echo
 }
 about() {
-    echo "Name of File  : c9tui.sh"
-    echo "Version       : v2.0 [Sanget - Kulonuwun] Linux Version"
-    echo "Built         : 2021.4 [Tumbas]"
+    echo "Name of File  : c9cli.sh"
+    echo "Version       : v3.0 [Sampun - Nggih] Linux Version"
+    echo "Built         : 2022.11 [Payu]"
     echo "Tested on     :"
     echo "    - Debian  : Ubuntu"
     echo
-    echo "Built with love by gvoze32"
+    echo "Built with love♡ by gvoze32"
 }
 # =========== DON'T CHANGE THE ORDER OF THIS FUNCTION =========== #
 
 bantuan() {
     echo "How to use:"
-    echo "c9tui [command] [option] [additional]"
+    echo "c9cli [command] [option] [additional]"
     echo
     echo "List command:"
-    echo "dialog        : Show TUI version of c9tui"
+    echo "dialog        : Show TUI version of c9cli"
     echo "create"
     echo "  systemctl   : Create a new systemctl workspace"
     echo "  docker      : Create a new docker container"
@@ -49,14 +49,15 @@ bantuan() {
     echo "    scheduled : Show scheduled container deletion"
     echo "    list      : Show docker container lists"
     echo "    configure : Stop, start or restart running container"
+    echo "    start     : Start docker daemon service"
     echo "port          : Show used port lists"
     echo "backup        : Backup workspace data with rclone in one archive"
     echo "backuplite    : Backup workspace data with rclone, with each workspace folder zipped"
     echo "help          : Show help"
     echo "version       : Show version"
     echo
-    echo "Copyright (c) 2021 c9tui (under MIT License)"
-    echo "Built with love by gvoze32"
+    echo "Copyright (c) 2022 c9cli (under MIT License)"
+    echo "Built with love♡ by gvoze32"
 }
 
 dialogs(){
@@ -85,7 +86,7 @@ cd /home/$user/my-projects
 
 ### Your custom default bundling files goes here, it's recommended to put it on resources directory
 ### START
-curl -O https://raw.githubusercontent.com/gvoze32/c9tui/master/scripts/firstinstall.sh
+curl -O https://raw.githubusercontent.com/gvoze32/c9cli/master/scripts/install.sh
 
 ### END
 
@@ -151,7 +152,7 @@ cd /home/c9users/$user
 
 ### Your custom default bundling files goes here, it's recommended to put it on resources directory
 ### START
-curl -O https://raw.githubusercontent.com/gvoze32/c9tui/master/scripts/firstinstall.sh
+curl -O https://raw.githubusercontent.com/gvoze32/c9cli/master/scripts/install.sh
 
 ### END
 
@@ -188,7 +189,7 @@ cd /home/c9usersmemlimit/$user
 
 ### Your custom default bundling files goes here, it's recommended to put it on resources directory
 ### START
-curl -O https://raw.githubusercontent.com/gvoze32/c9tui/master/scripts/firstinstall.sh
+curl -O https://raw.githubusercontent.com/gvoze32/c9cli/master/scripts/install.sh
 
 ### END
 
@@ -392,6 +393,10 @@ restartdocker(){
 docker restart $(docker ps -q)
 }
 
+startdocker(){
+sudo service docker start
+}
+
 backups(){
 echo "=Everyday Backup at 2 AM="
 echo "Make sure you has been setup a rclone config file using command: rclone config"
@@ -490,7 +495,7 @@ create)
       createnewdockermemlimit
     ;;
     *)
-      echo "Command not found, type c9tui help for help"
+      echo "Command not found, type c9cli help for help"
   esac
   ;;
 manage)
@@ -516,7 +521,7 @@ manage)
         convertsystemctl
       ;;
       *)
-      echo "Command not found, type c9tui help for help"
+      echo "Command not found, type c9cli help for help"
     esac
         ;;
     docker)
@@ -542,8 +547,11 @@ manage)
       restart)
         restartdocker
       ;;
+      start)
+        startdocker
+      ;;
       *)
-      echo "Command not found, type c9tui help for help"
+      echo "Command not found, type c9cli help for help"
     esac
   esac
 ;;
@@ -566,5 +574,5 @@ version)
   versions
 ;;
 *)
-echo "Command not found, type c9tui help for help"
+echo "Command not found, type c9cli help for help"
 esac
