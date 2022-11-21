@@ -19,16 +19,17 @@ sudo adduser --disabled-password --gecos "" c9usersmemlimit
 sudo wget https://raw.githubusercontent.com/gvoze32/c9cli/master/scripts/misc/dockeryml-memlimit/docker-compose.yml -O /home/c9usersmemlimit/docker-compose.yml
 echo "blank" >> /home/c9users/.env
 echo "blank" >> /home/c9usersmemlimit/.env
-
 if whiptail --yesno "Increase docker network limit to more than 30 containers? [y/N] (Default = n): " 20 60 ;then
     echo "Setting docker daemon service rule.."
     sudo wget https://raw.githubusercontent.com/gvoze32/c9cli/master/scripts/misc/docker-daemon/daemon.json -O /etc/docker/daemon.json
     service docker restart
     sudo docker network inspect bridge | grep Subnet
+    echo "Done."
 else
-    echo "default docker version set"
+    echo "============================="
+    echo "Default docker version is set"
+    echo "============================="
 fi
-
 curl -O https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
 tar -xvzf ioncube_loaders_lin_x86-64.tar.gz
 rm ioncube_loaders_lin_x86-64.tar.gz
