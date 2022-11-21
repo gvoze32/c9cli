@@ -36,8 +36,8 @@ cat > /etc/php/${php_version}/cli/conf.d/00-ioncube-loader.ini << EOF
 zend_extension=ioncube_loader_lin_${php_version}.so
 EOF
 php -v
-read -r -p "Increase docker network limit to more than 30 containers? [y/N] (Default = n): " response
-case "$response" in
+read -r -p 'Increase docker network limit to more than 30 containers? [y/N] (Default = n): ' response
+case "${response}" in
     [yY][eE][sS]|[yY]) 
         sudo wget https://raw.githubusercontent.com/gvoze32/c9cli/master/scripts/misc/docker-daemon/daemon.json -O /etc/docker/daemon.json
         service docker restart
