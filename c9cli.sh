@@ -28,7 +28,6 @@ bantuan() {
     echo "c9cli [command] [option] [additional]"
     echo
     echo "List command:"
-    echo "dialog        : Show TUI version of c9cli"
     echo "create"
     echo "  systemctl   : Create a new systemctl workspace"
     echo "  docker      : Create a new docker container"
@@ -58,10 +57,6 @@ bantuan() {
     echo
     echo "Copyright (c) 2022 c9cli (under MIT License)"
     echo "Built with love♡ by gvoze32"
-}
-
-dialogs(){
-    sudo bash run.sh
 }
 
 # CREATE SYSTEMCTL
@@ -477,9 +472,6 @@ about
 # MENU
 
 case $1 in
-dialog)
-  dialogs
-;;
 create)
   case $2 in
     systemctl)
