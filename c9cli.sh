@@ -25,9 +25,9 @@ about() {
 
 bantuan() {
     echo "How to use:"
-    echo "c9cli [command] [option] [additional]"
+    echo "c9cli [command] [argument] [argument]"
     echo
-    echo "List command:"
+    echo "Commands List:"
     echo "create"
     echo "  systemctl   : Create a new systemctl workspace"
     echo "  docker      : Create a new docker container"
