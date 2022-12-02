@@ -30,13 +30,13 @@ services:
   cloud9:
     image: sapk/cloud9:latest
     volumes:
-      - /home/c9users/${NAMA_PELANGGAN}:/workspace
+      - /home/c9users/\${NAMA_PELANGGAN}:/workspace
     restart: always
     ports:
-      - "${PORT}:${PORT}"
+      - "\${PORT}:\${PORT}"
     command:
-      - --auth=${NAMA_PELANGGAN}:${PASSWORD_PELANGGAN}
-      - --port=${PORT}
+      - --auth=\${NAMA_PELANGGAN}:\${PASSWORD_PELANGGAN}
+      - --port=\${PORT}
 EOF
 
 # Add docker compose memlimit
@@ -47,16 +47,16 @@ services:
   cloud9:
     image: sapk/cloud9:latest
     volumes:
-      - /home/c9usersmemlimit/${NAMA_PELANGGAN}:/workspace
+      - /home/c9usersmemlimit/\${NAMA_PELANGGAN}:/workspace
     restart: always
     ports:
-      - "${PORT}:${PORT}"
+      - "\${PORT}:\${PORT}"
     command:
-      - --auth=${NAMA_PELANGGAN}:${PASSWORD_PELANGGAN}
-      - --port=${PORT}
+      - --auth=\${NAMA_PELANGGAN}:\${PASSWORD_PELANGGAN}
+      - --port=\${PORT}
 # This rule is optional, uncomment if you need to use it.
-    mem_limit: ${MEMORY}
-    cpus: ${CPUS}
+    mem_limit: \${MEMORY}
+    cpus: \${CPUS}
 EOF
 
 # Create blank .env files
