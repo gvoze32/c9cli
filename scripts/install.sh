@@ -10,7 +10,7 @@ curl https://rclone.org/install.sh | sudo bash
 
 # Install nvm-nodejs
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash
-source ~/.profile
+source ~/.bashrc
 nvm install node
 
 # Install dependencies
