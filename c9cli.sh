@@ -449,7 +449,7 @@ crontab -l
 esac
 echo "Backup rule successfully added"
         ;;
-    *)
+esac
 }
 
 backuplites(){
@@ -528,7 +528,7 @@ crontab -l
 esac
 echo "Backup rule successfully added"
         ;;
-    *)
+esac
 }
 
 portlist(){
