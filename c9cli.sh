@@ -15,7 +15,7 @@ banner() {
 about() {
     echo "Name of File  : c9cli.sh"
     echo "Version       : v3.0 [Sampun - Nggih] Linux Version"
-    echo "Built         : 2022.11 [Payu]"
+    echo "Built         : 2022.12 [Serep]"
     echo "Tested on     :"
     echo "    - Debian  : Ubuntu 18.04"
     echo
@@ -51,7 +51,6 @@ bantuan() {
     echo "    start     : Start docker daemon service"
     echo "port          : Show used port lists"
     echo "backup        : Backup workspace data with rclone in one archive"
-    echo "backuplite    : Backup workspace data with rclone, with each workspace folder zipped"
     echo "help          : Show help"
     echo "version       : Show version"
     echo
@@ -405,67 +404,6 @@ sudo cat > /home/backup-$name.sh << EOF
 #!/bin/bash
 date=\$(date +%y-%m-%d)
 rclone mkdir $name:Backup/backup-\$date
-zip -r /root/backup-\$date.zip /home &
-cpulimit -e zip -l 10
-rclone copy /root/backup-\$date.zip $name:Backup/backup-\$date
-rm /root/backup-\$date.zip 
-EOF
-chmod +x /home/backup-$name.sh
-echo ""
-echo "Backup command created..."
-crontab -l > backup-$name
-echo "0 2 * * * /home/backup-$name.sh > /home/backup-$name.log 2>&1" >> backup-$name
-crontab backup-$name
-rm backup-$name
-echo ""
-echo "Cron job created..."
-echo ""
-echo "Make sure it's included on your cron list :"
-crontab -l
-        ;;
-    *)
-sudo cat > /home/backup-$name.sh << EOF
-#!/bin/bash
-date=\$(date +%y-%m-%d)
-rclone mkdir $name:backup-\$date
-zip -r /root/backup-\$date.zip /home &
-cpulimit -e zip -l 10
-rclone copy /root/backup-\$date.zip $name:backup-\$date
-rm /root/backup-\$date.zip 
-EOF
-chmod +x /home/backup-$name.sh
-echo ""
-echo "Backup command created..."
-crontab -l > backup-$name
-echo "0 2 * * * /home/backup-$name.sh > /home/backup-$name.log 2>&1" >> backup-$name
-crontab backup-$name
-rm backup-$name
-echo ""
-echo "Cron job created..."
-echo ""
-echo "Make sure it's included on your cron list :"
-crontab -l
-        ;;
-esac
-echo "Backup rule successfully added"
-}
-
-backuplites(){
-echo "=Everyday Backup at 2 AM="
-echo "Make sure you has been setup a rclone config file using command: rclone config"
-echo ""
-read -p "If all has been set up correctly, then input your rclone remote name : " name
-echo ""
-echo "Choose the backup service provider"
-echo "1. Google Drive"
-echo "2. Storj"
-read -r -p "Choose: " response
-case "$response" in
-    1) 
-sudo cat > /home/backup-$name.sh << EOF
-#!/bin/bash
-date=\$(date +%y-%m-%d)
-rclone mkdir $name:Backup/backup-\$date
 cd /home
 for i in */; do if ! [[ \$i =~ ^(c9users/|c9usersmemlimit/)$ ]]; then zip -r "\${i%/}.zip" "\$i"; fi done
 cd /home/c9users
@@ -509,6 +447,8 @@ mv /home/c9users/*.zip /home/backup/
 mv /home/c9usersmemlimit/*.zip /home/backup/
 rclone copy /home/backup/ $name:backup-\$date/
 rm -rf /home/backup
+oldbak=\$(rclone lsf c9: 2>&1 | head -n 1)
+rclone purge $name:\$oldbak
 EOF
 chmod +x /home/backup-$name.sh
 echo ""
@@ -623,9 +563,6 @@ port)
 ;;
 backup)
   backups
-;;
-backuplite)
-  backuplites
 ;;
 daemon)
   dockerdaemon
