@@ -416,6 +416,14 @@ mv /home/c9users/*.zip /home/backup
 mv /home/c9usersmemlimit/*.zip /home/backup
 rclone copy /home/backup $name:Backup/backup-\$date
 rm -rf /home/backup
+lines=\$(rclone lsf $name: 2>&1 | wc -l)
+if [ \$lines -gt 1 ]
+then
+    oldbak=\$(rclone lsf $name: 2>&1 | head -n 1)
+    rclone purge "$name:\$oldbak"
+else
+    echo "Old backup not detected, not executing remove command"
+fi
 EOF
 chmod +x /home/backup-$name.sh
 echo ""
@@ -447,8 +455,14 @@ mv /home/c9users/*.zip /home/backup/
 mv /home/c9usersmemlimit/*.zip /home/backup/
 rclone copy /home/backup/ $name:backup-\$date/
 rm -rf /home/backup
-oldbak=\$(rclone lsf c9: 2>&1 | head -n 1)
-rclone purge $name:\$oldbak
+lines=\$(rclone lsf $name: 2>&1 | wc -l)
+if [ \$lines -gt 1 ]
+then
+    oldbak=\$(rclone lsf $name: 2>&1 | head -n 1)
+    rclone purge "$name:\$oldbak"
+else
+    echo "Old backup not detected, not executing remove command"
+fi
 EOF
 chmod +x /home/backup-$name.sh
 echo ""

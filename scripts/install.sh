@@ -14,13 +14,13 @@ source ~/.bashrc
 nvm install node
 
 # Install dependencies
-sudo apt install -y dialog curl at git mc cpulimit npm build-essential php php-exif php-gd php-mbstring php-curl php-mysqli php-json php-dom php-fpm python python2.7 python3-pip zip unzip unp unrar unrar-free unar p7zip dos2unix
+sudo apt install -y dialog curl at git npm build-essential php php-exif php-gd php-mbstring php-curl php-mysqli php-json php-dom php-fpm python python2.7 python3-pip dos2unix
 curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
 sudo python2 get-pip.py
 pip3 install requests selenium colorama bs4 wget pyfiglet
 pip2 install requests selenium colorama bs4 wget pyfiglet
 systemctl start atd
-sudo apt install -y pythonpy apt-transport-https ca-certificates curl gnupg-agent software-properties-common docker docker.io docker-compose
+sudo apt install -y pythonpy apt-transport-https ca-certificates gnupg-agent software-properties-common docker docker.io docker-compose
 
 # Add docker compose
 sudo adduser --disabled-password --gecos "" c9users
