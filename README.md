@@ -1,6 +1,6 @@
 # c9cli
 
-Cloud9 IDE bash script to safely create and manage private users using Docker or SystemD service.
+Bash script to safely create and manage Cloud9 IDE private users using Docker or SystemD service. 
 
 # Install 
 
