@@ -2,7 +2,12 @@
 
 Bash script to safely create and manage Cloud9 IDE private users using Docker or SystemD service. 
 
-# Install 
+## Requirements
+
+- Ubuntu 18.04
+- Dependency Packages (Included)
+
+## Install 
 
 Make sure you have root access before doing this installation.
 
