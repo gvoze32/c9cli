@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Set noninteractive frontend to avoid prompts
+export DEBIAN_FRONTEND=noninteractive
+export NEEDRESTART_SUSPEND=1
+export NEEDRESTART_MODE=l
+
 # Update packages
 sudo apt update -y
 sudo apt upgrade -y
@@ -64,7 +69,8 @@ EOF
 > /home/c9usersmemlimit/.env
 
 # Custom docker daemon service option
-if whiptail --yesno "Increase docker network limit to more than 30 containers? [y/N] (Default = n): " 20 60 ;then
+read -p "Increase docker network limit to more than 30 containers? [y/N] (Default = n): " choice
+if [[ $choice == [yY] || $choice == [yY][eE][sS] ]]; then
     echo "Setting docker daemon service rule.."
     sudo cat > /etc/docker/daemon.json << EOF
 {
@@ -76,7 +82,7 @@ if whiptail --yesno "Increase docker network limit to more than 30 containers? [
     ]
 }
 EOF
-    service docker restart
+    sudo service docker restart
     sudo docker network inspect bridge | grep Subnet
     echo "Done."
 else
