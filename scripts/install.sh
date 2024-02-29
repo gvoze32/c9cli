@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# Set noninteractive frontend to avoid prompts
-export DEBIAN_FRONTEND=noninteractive
+# Set NEEDRESTART frontend to avoid prompts
 export NEEDRESTART_SUSPEND=1
 export NEEDRESTART_MODE=l
 
