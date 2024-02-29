@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Set noninteractive frontend to avoid prompts
+export DEBIAN_FRONTEND=noninteractive
+export NEEDRESTART_SUSPEND=1
+export NEEDRESTART_MODE=l
+
 # Update packages
 sudo apt update -y
 sudo apt upgrade -y
