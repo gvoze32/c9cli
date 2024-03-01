@@ -14,10 +14,10 @@ banner() {
 }
 about() {
     echo "Name of File  : c9cli.sh"
-    echo "Version       : v3.0 [Sampun - Nggih] Linux Version"
-    echo "Built         : 2022.12 [Serep]"
+    echo "Version       : v4.0 [Yanto - Kecilik] Linux Version"
+    echo "Built         : 2024.3 [Kepleset]"
     echo "Tested on     :"
-    echo "    - Debian  : Ubuntu 18.04"
+    echo "    - Debian  : Ubuntu 22.04"
     echo
     echo "Built with love♡ by gvoze32"
 }
@@ -25,6 +25,7 @@ about() {
 
 bantuan() {
     echo "How to use:"
+    echo "Please use sudo!"
     echo "c9cli [command] [argument] [argument]"
     echo
     echo "Commands List:"
