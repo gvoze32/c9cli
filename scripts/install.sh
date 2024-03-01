@@ -38,40 +38,40 @@ case $ubuntu_version in
 
         # Add docker compose
         sudo adduser --disabled-password --gecos "" c9users
-        sudo cat > /home/c9users/docker-compose.yml <<-EOF
-        version: '2.2'
-        services:
-          cloud9:
-            image: sapk/cloud9:latest
-            volumes:
-              - /home/c9users/\${NAMA_PELANGGAN}:/workspace
-            restart: always
-            ports:
-              - "\${PORT}:\${PORT}"
-            command:
-              - --auth=\${NAMA_PELANGGAN}:\${PASSWORD_PELANGGAN}
-              - --port=\${PORT}
-        EOF
+        sudo cat > /home/c9users/docker-compose.yml << EOF
+version: '2.2'
+services:
+  cloud9:
+    image: sapk/cloud9:latest
+    volumes:
+      - /home/c9users/\${NAMA_PELANGGAN}:/workspace
+    restart: always
+    ports:
+      - "\${PORT}:\${PORT}"
+    command:
+      - --auth=\${NAMA_PELANGGAN}:\${PASSWORD_PELANGGAN}
+      - --port=\${PORT}
+EOF
 
         # Add docker compose memlimit
         sudo adduser --disabled-password --gecos "" c9usersmemlimit
-        sudo cat > /home/c9usersmemlimit/docker-compose.yml <<-EOF
-        version: '2.2'
-        services:
-          cloud9:
-            image: sapk/cloud9:latest
-            volumes:
-              - /home/c9usersmemlimit/\${NAMA_PELANGGAN}:/workspace
-            restart: always
-            ports:
-              - "\${PORT}:\${PORT}"
-            command:
-              - --auth=\${NAMA_PELANGGAN}:\${PASSWORD_PELANGGAN}
-              - --port=\${PORT}
-        # This rule is optional, uncomment if you need to use it.
-            mem_limit: \${MEMORY}
-            cpus: \${CPUS}
-        EOF
+        sudo cat > /home/c9usersmemlimit/docker-compose.yml << EOF
+version: '2.2'
+services:
+  cloud9:
+    image: sapk/cloud9:latest
+    volumes:
+      - /home/c9usersmemlimit/\${NAMA_PELANGGAN}:/workspace
+    restart: always
+    ports:
+      - "\${PORT}:\${PORT}"
+    command:
+      - --auth=\${NAMA_PELANGGAN}:\${PASSWORD_PELANGGAN}
+      - --port=\${PORT}
+# This rule is optional, uncomment if you need to use it.
+    mem_limit: \${MEMORY}
+    cpus: \${CPUS}
+EOF
 
         # Create blank .env files
         > /home/c9users/.env
@@ -81,16 +81,16 @@ case $ubuntu_version in
         read -p "Increase docker network limit to more than 30 containers? [y/N] (Default = n): " choice
         if [[ $choice == [yY] || $choice == [yY][eE][sS] ]]; then
             echo "Setting docker daemon service rule.."
-            sudo cat > /etc/docker/daemon.json <<-EOF
+            sudo cat > /etc/docker/daemon.json << EOF
+{
+    "default-address-pools": [
         {
-            "default-address-pools": [
-                {
-                    "base": "10.10.0.0/16",
-                    "size": 24
-                }
-            ]
+            "base": "10.10.0.0/16",
+            "size": 24
         }
-        EOF
+    ]
+}
+EOF
             sudo service docker restart
             sudo docker network inspect bridge | grep Subnet
             echo "Done."
@@ -117,9 +117,9 @@ case $ubuntu_version in
         cp ioncube_loader_lin_${php_version}.so /usr/lib/php/${php_ext_dir}
         cd ..
         rm -rf ioncube
-        cat > /etc/php/${php_version}/cli/conf.d/00-ioncube-loader.ini <<-EOF
-        zend_extension=ioncube_loader_lin_${php_version}.so
-        EOF
+        cat > /etc/php/${php_version}/cli/conf.d/00-ioncube-loader.ini << EOF
+zend_extension=ioncube_loader_lin_${php_version}.so
+EOF
         php -v
 
         #Cleanup
@@ -158,40 +158,40 @@ case $ubuntu_version in
 
         # Add docker compose
         sudo adduser --disabled-password --gecos "" c9users
-        sudo cat > /home/c9users/docker-compose.yml <<-EOF
-        version: '2.2'
-        services:
-          cloud9:
-            image: sapk/cloud9:latest
-            volumes:
-              - /home/c9users/\${NAMA_PELANGGAN}:/workspace
-            restart: always
-            ports:
-              - "\${PORT}:\${PORT}"
-            command:
-              - --auth=\${NAMA_PELANGGAN}:\${PASSWORD_PELANGGAN}
-              - --port=\${PORT}
-        EOF
+        sudo cat > /home/c9users/docker-compose.yml << EOF
+version: '2.2'
+services:
+  cloud9:
+    image: sapk/cloud9:latest
+    volumes:
+      - /home/c9users/\${NAMA_PELANGGAN}:/workspace
+    restart: always
+    ports:
+      - "\${PORT}:\${PORT}"
+    command:
+      - --auth=\${NAMA_PELANGGAN}:\${PASSWORD_PELANGGAN}
+      - --port=\${PORT}
+EOF
 
         # Add docker compose memlimit
         sudo adduser --disabled-password --gecos "" c9usersmemlimit
-        sudo cat > /home/c9usersmemlimit/docker-compose.yml <<-EOF
-        version: '2.2'
-        services:
-          cloud9:
-            image: sapk/cloud9:latest
-            volumes:
-              - /home/c9usersmemlimit/\${NAMA_PELANGGAN}:/workspace
-            restart: always
-            ports:
-              - "\${PORT}:\${PORT}"
-            command:
-              - --auth=\${NAMA_PELANGGAN}:\${PASSWORD_PELANGGAN}
-              - --port=\${PORT}
-        # This rule is optional, uncomment if you need to use it.
-            mem_limit: \${MEMORY}
-            cpus: \${CPUS}
-        EOF
+        sudo cat > /home/c9usersmemlimit/docker-compose.yml << EOF
+version: '2.2'
+services:
+  cloud9:
+    image: sapk/cloud9:latest
+    volumes:
+      - /home/c9usersmemlimit/\${NAMA_PELANGGAN}:/workspace
+    restart: always
+    ports:
+      - "\${PORT}:\${PORT}"
+    command:
+      - --auth=\${NAMA_PELANGGAN}:\${PASSWORD_PELANGGAN}
+      - --port=\${PORT}
+# This rule is optional, uncomment if you need to use it.
+    mem_limit: \${MEMORY}
+    cpus: \${CPUS}
+EOF
 
         # Create blank .env files
         > /home/c9users/.env
@@ -201,16 +201,16 @@ case $ubuntu_version in
         read -p "Increase docker network limit to more than 30 containers? [y/N] (Default = n): " choice
         if [[ $choice == [yY] || $choice == [yY][eE][sS] ]]; then
             echo "Setting docker daemon service rule.."
-            sudo cat > /etc/docker/daemon.json <<-EOF
+            sudo cat > /etc/docker/daemon.json << EOF
+{
+    "default-address-pools": [
         {
-            "default-address-pools": [
-                {
-                    "base": "10.10.0.0/16",
-                    "size": 24
-                }
-            ]
+            "base": "10.10.0.0/16",
+            "size": 24
         }
-        EOF
+    ]
+}
+EOF
             sudo service docker restart
             sudo docker network inspect bridge | grep Subnet
             echo "Done."
@@ -237,9 +237,9 @@ case $ubuntu_version in
         cp ioncube_loader_lin_${php_version}.so /usr/lib/php/${php_ext_dir}
         cd ..
         rm -rf ioncube
-        cat > /etc/php/${php_version}/cli/conf.d/00-ioncube-loader.ini <<-EOF
-        zend_extension=ioncube_loader_lin_${php_version}.so
-        EOF
+        cat > /etc/php/${php_version}/cli/conf.d/00-ioncube-loader.ini << EOF
+zend_extension=ioncube_loader_lin_${php_version}.so
+EOF
         php -v
 
         #Cleanup
@@ -270,40 +270,40 @@ case $ubuntu_version in
 
         # Add docker compose
         sudo adduser --disabled-password --gecos "" c9users
-        sudo cat > /home/c9users/docker-compose.yml <<-EOF
-        version: '2.2'
-        services:
-          cloud9:
-            image: sapk/cloud9:latest
-            volumes:
-              - /home/c9users/\${NAMA_PELANGGAN}:/workspace
-            restart: always
-            ports:
-              - "\${PORT}:\${PORT}"
-            command:
-              - --auth=\${NAMA_PELANGGAN}:\${PASSWORD_PELANGGAN}
-              - --port=\${PORT}
-        EOF
+        sudo cat > /home/c9users/docker-compose.yml << EOF
+version: '2.2'
+services:
+  cloud9:
+    image: sapk/cloud9:latest
+    volumes:
+      - /home/c9users/\${NAMA_PELANGGAN}:/workspace
+    restart: always
+    ports:
+      - "\${PORT}:\${PORT}"
+    command:
+      - --auth=\${NAMA_PELANGGAN}:\${PASSWORD_PELANGGAN}
+      - --port=\${PORT}
+EOF
 
         # Add docker compose memlimit
         sudo adduser --disabled-password --gecos "" c9usersmemlimit
-        sudo cat > /home/c9usersmemlimit/docker-compose.yml <<-EOF
-        version: '2.2'
-        services:
-          cloud9:
-            image: sapk/cloud9:latest
-            volumes:
-              - /home/c9usersmemlimit/\${NAMA_PELANGGAN}:/workspace
-            restart: always
-            ports:
-              - "\${PORT}:\${PORT}"
-            command:
-              - --auth=\${NAMA_PELANGGAN}:\${PASSWORD_PELANGGAN}
-              - --port=\${PORT}
-        # This rule is optional, uncomment if you need to use it.
-            mem_limit: \${MEMORY}
-            cpus: \${CPUS}
-        EOF
+        sudo cat > /home/c9usersmemlimit/docker-compose.yml << EOF
+version: '2.2'
+services:
+  cloud9:
+    image: sapk/cloud9:latest
+    volumes:
+      - /home/c9usersmemlimit/\${NAMA_PELANGGAN}:/workspace
+    restart: always
+    ports:
+      - "\${PORT}:\${PORT}"
+    command:
+      - --auth=\${NAMA_PELANGGAN}:\${PASSWORD_PELANGGAN}
+      - --port=\${PORT}
+# This rule is optional, uncomment if you need to use it.
+    mem_limit: \${MEMORY}
+    cpus: \${CPUS}
+EOF
 
         # Create blank .env files
         > /home/c9users/.env
@@ -313,16 +313,16 @@ case $ubuntu_version in
         read -p "Increase docker network limit to more than 30 containers? [y/N] (Default = n): " choice
         if [[ $choice == [yY] || $choice == [yY][eE][sS] ]]; then
             echo "Setting docker daemon service rule.."
-            sudo cat > /etc/docker/daemon.json <<-EOF
+            sudo cat > /etc/docker/daemon.json << EOF
+{
+    "default-address-pools": [
         {
-            "default-address-pools": [
-                {
-                    "base": "10.10.0.0/16",
-                    "size": 24
-                }
-            ]
+            "base": "10.10.0.0/16",
+            "size": 24
         }
-        EOF
+    ]
+}
+EOF
             sudo service docker restart
             sudo docker network inspect bridge | grep Subnet
             echo "Done."
@@ -349,9 +349,9 @@ case $ubuntu_version in
         cp ioncube_loader_lin_${php_version}.so /usr/lib/php/${php_ext_dir}
         cd ..
         rm -rf ioncube
-        cat > /etc/php/${php_version}/cli/conf.d/00-ioncube-loader.ini <<-EOF
-        zend_extension=ioncube_loader_lin_${php_version}.so
-        EOF
+        cat > /etc/php/${php_version}/cli/conf.d/00-ioncube-loader.ini << EOF
+zend_extension=ioncube_loader_lin_${php_version}.so
+EOF
         php -v
 
         #Cleanup
