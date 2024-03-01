@@ -153,7 +153,7 @@ EOF
         sudo apt install -y at git npm build-essential php7.4-cli php-gd php-mbstring php-curl php-mysqli php-json php-dom php-fpm python2 python3 python3-pip zip unzip dos2unix
         curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
         sudo python2 get-pip.py
-        pip3 install requests selenium colorama bs4 wget pyfiglet
+        python3 -m pip install requests selenium colorama bs4 wget pyfiglet chardet urllib3
         pip2 install requests selenium colorama bs4 wget pyfiglet
         systemctl start atd
         sudo apt install -y pythonpy apt-transport-https ca-certificates gnupg-agent software-properties-common docker docker.io docker-compose
