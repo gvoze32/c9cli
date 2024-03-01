@@ -260,11 +260,12 @@ EOF
 
         # Install nvm-nodejs
         curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-        source ~/.bashrc
+        export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
         nvm install node
 
         # Install dependencies
-        sudo apt install -y curl at git npm build-essential php php-exif php-gd php-mbstring php-curl php-mysqli php-json php-dom php-fpm python python2.7 python3-pip zip unzip dos2unix
+        sudo apt install -y curl at git npm build-essential php php7.2-common php-gd php-mbstring php-curl php7.2-mysql php-json php7.2-xml php-fpm python python2.7 python3-pip zip unzip dos2unix
         curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
         sudo python2 get-pip.py
         pip3 install requests selenium colorama bs4 wget pyfiglet
