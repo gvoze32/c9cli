@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Set NEEDRESTART frontend to avoid prompts
+export DEBIAN_FRONTEND=noninteractive
 export NEEDRESTART_SUSPEND=1
 export NEEDRESTART_MODE=l
 
@@ -18,7 +19,7 @@ source ~/.bashrc
 nvm install node
 
 # Install dependencies
-sudo apt install -y whiptail dialog curl at git npm build-essential php php-exif php-gd php-mbstring php-curl php-mysqli php-json php-dom php-fpm python3 python3-pip zip unzip dos2unix
+sudo apt install -y at git npm build-essential php php8.1-common php-gd php-mbstring php-curl php8.1-mysql php-json php8.1-xml php-fpm python3 python3-pip zip unzip dos2unix
 pip3 install requests selenium colorama bs4 wget pyfiglet
 systemctl start atd
 sudo apt install -y pythonpy apt-transport-https ca-certificates gnupg-agent software-properties-common docker docker.io docker-compose
