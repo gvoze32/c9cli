@@ -1,10 +1,10 @@
 # c9cli
 
-Bash script to safely create and manage Cloud9 IDE private users using Docker or SystemD service. 
+Create and manage secure Cloud9 IDE private users using Docker or SystemD services.
 
 ## Requirements
 
-- Ubuntu 18.04
+- Minimum Ubuntu 20.04 or latest
 - Dependency Packages (Included)
 
 ## Install 
@@ -12,9 +12,7 @@ Bash script to safely create and manage Cloud9 IDE private users using Docker or
 Make sure you have root access before doing this installation.
 
 ```
-$ sudo wget https://raw.githubusercontent.com/gvoze32/c9cli/master/c9cli.sh -O /usr/local/bin/c9cli
-$ sudo chmod +x /usr/local/bin/c9cli
-$ wget -qO- https://raw.githubusercontent.com/gvoze32/c9cli/master/scripts/install.sh | sudo bash
+sudo wget https://raw.githubusercontent.com/gvoze32/c9cli/master/c9cli.sh -O /usr/local/bin/c9cli && sudo wget https://raw.githubusercontent.com/gvoze32/c9cli/master/scripts/install.sh && sudo chmod +x /usr/local/bin/c9cli && sudo chmod +x install.sh && sudo ./install.sh
 ```
 
 ## Run
