@@ -13,6 +13,8 @@ case $ubuntu_version in
         export NEEDRESTART_SUSPEND=1
         export NEEDRESTART_MODE=l
 
+        echo "Setting up Ubuntu $ubuntu_version.."
+
         # Update packages
         sudo apt update -y
         sudo apt upgrade -y
@@ -131,6 +133,8 @@ EOF
         export NEEDRESTART_SUSPEND=1
         export NEEDRESTART_MODE=l
 
+        echo "Setting up Ubuntu $ubuntu_version.."
+
         # Update packages
         sudo apt update -y
         sudo apt upgrade -y
@@ -146,7 +150,7 @@ EOF
         nvm install node
 
         # Install dependencies
-        sudo apt install -y at git npm build-essential php php8.1-common php-gd php-mbstring php-curl php8.1-mysql php-json php8.1-xml php-fpm python2 python3 python3-pip zip unzip dos2unix
+        sudo apt install -y at git npm build-essential php7.4-cli php-gd php-mbstring php-curl php-mysqli php-json php-dom php-fpm python2 python3 python3-pip zip unzip dos2unix
         curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
         sudo python2 get-pip.py
         pip3 install requests selenium colorama bs4 wget pyfiglet
@@ -244,6 +248,8 @@ EOF
         rm get-pip.py install.sh
         ;;
     18.04)
+        echo "Setting up Ubuntu $ubuntu_version.."
+
         # Update packages
         sudo apt update -y
         sudo apt upgrade -y
