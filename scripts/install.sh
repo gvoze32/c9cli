@@ -20,8 +20,11 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 nvm install node
 
 # Install dependencies
-sudo apt install -y at git npm build-essential php php8.1-common php-gd php-mbstring php-curl php8.1-mysql php-json php8.1-xml php-fpm python3 python3-pip zip unzip dos2unix
+sudo apt install -y at git npm build-essential php php8.1-common php-gd php-mbstring php-curl php8.1-mysql php-json php8.1-xml php-fpm python2 python3 python3-pip zip unzip dos2unix
+curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
+sudo python2 get-pip.py
 pip3 install requests selenium colorama bs4 wget pyfiglet
+pip2 install requests selenium colorama bs4 wget pyfiglet
 systemctl start atd
 sudo apt install -y pythonpy apt-transport-https ca-certificates gnupg-agent software-properties-common docker docker.io docker-compose
 
@@ -110,3 +113,6 @@ cat > /etc/php/${php_version}/cli/conf.d/00-ioncube-loader.ini << EOF
 zend_extension=ioncube_loader_lin_${php_version}.so
 EOF
 php -v
+
+#Cleanup
+rm get-pip.py
