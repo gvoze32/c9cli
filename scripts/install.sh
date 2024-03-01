@@ -6,6 +6,8 @@ echo "Ubuntu version is $ubuntu_version"
 
 case $ubuntu_version in
     22.04)
+        #!/bin/bash
+
         # Set NEEDRESTART frontend to avoid prompts
         sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
         sed -i "s/#\$nrconf{kernelhints} = -1;/\$nrconf{kernelhints} = -1;/g" /etc/needrestart/needrestart.conf
@@ -126,6 +128,8 @@ case $ubuntu_version in
         rm get-pip.py install.sh
         ;;
     20.04)
+        #!/bin/bash
+
         # Set NEEDRESTART frontend to avoid prompts
         sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
         sed -i "s/#\$nrconf{kernelhints} = -1;/\$nrconf{kernelhints} = -1;/g" /etc/needrestart/needrestart.conf
@@ -246,6 +250,8 @@ case $ubuntu_version in
         rm get-pip.py install.sh
         ;;
     18.04)
+        #!/bin/bash
+
         # Update packages
         sudo apt update -y
         sudo apt upgrade -y
