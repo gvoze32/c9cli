@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Set NEEDRESTART frontend to avoid prompts
+sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
 export DEBIAN_FRONTEND=noninteractive
 export NEEDRESTART_SUSPEND=1
 export NEEDRESTART_MODE=l
