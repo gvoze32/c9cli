@@ -6,8 +6,6 @@ echo "Ubuntu version is $ubuntu_version"
 
 case $ubuntu_version in
     22.04)
-        #!/bin/bash
-
         # Set NEEDRESTART frontend to avoid prompts
         sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
         sed -i "s/#\$nrconf{kernelhints} = -1;/\$nrconf{kernelhints} = -1;/g" /etc/needrestart/needrestart.conf
@@ -40,7 +38,7 @@ case $ubuntu_version in
 
         # Add docker compose
         sudo adduser --disabled-password --gecos "" c9users
-        sudo cat > /home/c9users/docker-compose.yml << EOF
+        sudo cat > /home/c9users/docker-compose.yml <<EOF
         version: '2.2'
         services:
           cloud9:
@@ -57,7 +55,7 @@ case $ubuntu_version in
 
         # Add docker compose memlimit
         sudo adduser --disabled-password --gecos "" c9usersmemlimit
-        sudo cat > /home/c9usersmemlimit/docker-compose.yml << EOF
+        sudo cat > /home/c9usersmemlimit/docker-compose.yml <<EOF
         version: '2.2'
         services:
           cloud9:
@@ -83,7 +81,7 @@ case $ubuntu_version in
         read -p "Increase docker network limit to more than 30 containers? [y/N] (Default = n): " choice
         if [[ $choice == [yY] || $choice == [yY][eE][sS] ]]; then
             echo "Setting docker daemon service rule.."
-            sudo cat > /etc/docker/daemon.json << EOF
+            sudo cat > /etc/docker/daemon.json <<EOF
         {
             "default-address-pools": [
                 {
@@ -119,7 +117,7 @@ case $ubuntu_version in
         cp ioncube_loader_lin_${php_version}.so /usr/lib/php/${php_ext_dir}
         cd ..
         rm -rf ioncube
-        cat > /etc/php/${php_version}/cli/conf.d/00-ioncube-loader.ini << EOF
+        cat > /etc/php/${php_version}/cli/conf.d/00-ioncube-loader.ini <<EOF
         zend_extension=ioncube_loader_lin_${php_version}.so
         EOF
         php -v
@@ -128,8 +126,6 @@ case $ubuntu_version in
         rm get-pip.py install.sh
         ;;
     20.04)
-        #!/bin/bash
-
         # Set NEEDRESTART frontend to avoid prompts
         sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
         sed -i "s/#\$nrconf{kernelhints} = -1;/\$nrconf{kernelhints} = -1;/g" /etc/needrestart/needrestart.conf
@@ -162,7 +158,7 @@ case $ubuntu_version in
 
         # Add docker compose
         sudo adduser --disabled-password --gecos "" c9users
-        sudo cat > /home/c9users/docker-compose.yml << EOF
+        sudo cat > /home/c9users/docker-compose.yml <<EOF
         version: '2.2'
         services:
           cloud9:
@@ -179,7 +175,7 @@ case $ubuntu_version in
 
         # Add docker compose memlimit
         sudo adduser --disabled-password --gecos "" c9usersmemlimit
-        sudo cat > /home/c9usersmemlimit/docker-compose.yml << EOF
+        sudo cat > /home/c9usersmemlimit/docker-compose.yml <<EOF
         version: '2.2'
         services:
           cloud9:
@@ -205,7 +201,7 @@ case $ubuntu_version in
         read -p "Increase docker network limit to more than 30 containers? [y/N] (Default = n): " choice
         if [[ $choice == [yY] || $choice == [yY][eE][sS] ]]; then
             echo "Setting docker daemon service rule.."
-            sudo cat > /etc/docker/daemon.json << EOF
+            sudo cat > /etc/docker/daemon.json <<EOF
         {
             "default-address-pools": [
                 {
@@ -241,7 +237,7 @@ case $ubuntu_version in
         cp ioncube_loader_lin_${php_version}.so /usr/lib/php/${php_ext_dir}
         cd ..
         rm -rf ioncube
-        cat > /etc/php/${php_version}/cli/conf.d/00-ioncube-loader.ini << EOF
+        cat > /etc/php/${php_version}/cli/conf.d/00-ioncube-loader.ini <<EOF
         zend_extension=ioncube_loader_lin_${php_version}.so
         EOF
         php -v
@@ -250,8 +246,6 @@ case $ubuntu_version in
         rm get-pip.py install.sh
         ;;
     18.04)
-        #!/bin/bash
-
         # Update packages
         sudo apt update -y
         sudo apt upgrade -y
@@ -276,7 +270,7 @@ case $ubuntu_version in
 
         # Add docker compose
         sudo adduser --disabled-password --gecos "" c9users
-        sudo cat > /home/c9users/docker-compose.yml << EOF
+        sudo cat > /home/c9users/docker-compose.yml <<EOF
         version: '2.2'
         services:
           cloud9:
@@ -293,7 +287,7 @@ case $ubuntu_version in
 
         # Add docker compose memlimit
         sudo adduser --disabled-password --gecos "" c9usersmemlimit
-        sudo cat > /home/c9usersmemlimit/docker-compose.yml << EOF
+        sudo cat > /home/c9usersmemlimit/docker-compose.yml <<EOF
         version: '2.2'
         services:
           cloud9:
@@ -319,7 +313,7 @@ case $ubuntu_version in
         read -p "Increase docker network limit to more than 30 containers? [y/N] (Default = n): " choice
         if [[ $choice == [yY] || $choice == [yY][eE][sS] ]]; then
             echo "Setting docker daemon service rule.."
-            sudo cat > /etc/docker/daemon.json << EOF
+            sudo cat > /etc/docker/daemon.json <<EOF
         {
             "default-address-pools": [
                 {
@@ -355,7 +349,7 @@ case $ubuntu_version in
         cp ioncube_loader_lin_${php_version}.so /usr/lib/php/${php_ext_dir}
         cd ..
         rm -rf ioncube
-        cat > /etc/php/${php_version}/cli/conf.d/00-ioncube-loader.ini << EOF
+        cat > /etc/php/${php_version}/cli/conf.d/00-ioncube-loader.ini <<EOF
         zend_extension=ioncube_loader_lin_${php_version}.so
         EOF
         php -v
