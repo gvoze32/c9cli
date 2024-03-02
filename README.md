@@ -21,4 +21,8 @@ sudo wget https://raw.githubusercontent.com/gvoze32/c9cli/master/c9cli.sh -O /us
 $ c9cli help
 ```
 
+## To do
+- [ ] Change password feature
+- [ ] Change Docker image
+
 If you have any problem in using c9cli, please open new issue.
