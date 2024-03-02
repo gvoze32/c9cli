@@ -4,7 +4,7 @@ Create and manage secure Cloud9 IDE private users using Docker or SystemD servic
 
 ## Requirements
 
-- Minimum Ubuntu 20.04 or latest
+- Minimum Ubuntu 18.04 or latest LTS's
 - Dependency Packages (Included)
 
 ## Install 
