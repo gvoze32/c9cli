@@ -38,6 +38,7 @@ bantuan() {
     echo "    delete    : Delete workspace"
     echo "    status    : Show workspace status"
     echo "    restart   : Restart workspace"
+    echo "    password  : Change user password"
     echo "    schedule  : Schedule workspace deletion"
     echo "    scheduled : Show scheduled workspace deletion"
     echo "    convert   : Convert user to superuser"
@@ -45,6 +46,7 @@ bantuan() {
     echo "    delete    : Delete docker container"
     echo "    status    : Show container status"
     echo "    restart   : Restart (all) running containers"
+    echo "    password  : Change user password"
     echo "    schedule  : Schedule container deletion"
     echo "    scheduled : Show scheduled container deletion"
     echo "    list      : Show docker container lists"
@@ -204,14 +206,25 @@ sudo userdel $user
 }
 
 statussystemctl(){
-read -p "Username : " crot
-sudo systemctl status c9-$crot.service
+read -p "Input User : " user
+sudo systemctl status c9-$user.service
 }
 
 restartsystemctl(){
 read -p "Input User : " user
 sudo systemctl daemon-reload
 sudo systemctl enable c9-$user.service
+sudo systemctl restart c9-$user.service
+sleep 10
+sudo systemctl status c9-$user.service
+}
+
+changepasswordsystemctl() {
+read -p "Input User :" user
+read -p "Input New Password :" password
+
+sudo sed -i "s/-a $user:.*/-a $user:$password/" /lib/systemd/system/c9-$user.service
+sudo systemctl daemon-reload
 sudo systemctl restart c9-$user.service
 sleep 10
 sudo systemctl status c9-$user.service
@@ -287,6 +300,37 @@ docker ps
 
 statusdocker(){
 docker stats
+}
+
+changepassworddocker(){
+read -p "Username : " user
+read -p "New Password : " newpw
+read -p "Answer 1 if user are using docker and answer 2 if you are using dockermemlimit [1/2] : " option
+
+case $option in
+  1)
+    base_dir="/home/c9users"
+    ;;
+  2)
+    base_dir="/home/c9usersmemlimit"
+    ;;
+  *)
+    echo "Invalid option"
+    return
+    ;;
+esac
+
+cd "$base_dir"
+
+if [ -f "$base_dir/$user/.env" ]; then
+  sed -i "s/PASSWORD_PELANGGAN=.*/PASSWORD_PELANGGAN=$newpw/" "$base_dir/$user/.env"
+  echo "Password changed successfully for user $user"
+  sudo docker-compose -p $user down
+  sudo docker-compose -p $user up -d
+  echo "Docker container restarted for user $user"
+else
+  echo "User $user does not exist or .env file not found"
+fi
 }
 
 scheduledocker(){
@@ -529,6 +573,9 @@ manage)
       restart)
         statussystemctl
       ;;
+      password)
+        changepasswordsystemctl
+      ;;
       schedule)
         schedulesystemctl
       ;;
@@ -552,6 +599,9 @@ manage)
       ;;
       status)
         statusdocker
+      ;;
+      password)
+        changepassworddocker
       ;;
       schedule)
         scheduledocker
