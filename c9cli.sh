@@ -46,7 +46,7 @@ bantuan() {
     echo "    delete    : Delete docker container"
     echo "    status    : Show container status"
     echo "    restart   : Restart (all) running containers"
-    echo "    password  : Change user password, update limited RAM and CPU for dockerlimit"
+    echo "    password  : Change user password, port & update limited RAM and CPU for dockerlimit"
     echo "    schedule  : Schedule container deletion"
     echo "    scheduled : Show scheduled container deletion"
     echo "    list      : Show docker container lists"
@@ -305,6 +305,7 @@ docker stats
 changepassworddocker() {
   read -p "Username : " user
   read -p "New Password : " newpw
+  read -p "Port: " port
   read -p "Answer 1 if user are using docker and answer 2 if user using dockermemlimit [1/2] : " option
   
   case $option in
