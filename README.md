@@ -22,7 +22,7 @@ $ c9cli help
 ```
 
 ## To do
-- [ ] Change password feature
+- [x] Change password feature
 - [ ] Change Docker image
 
 If you have any problem in using c9cli, please open new issue.
