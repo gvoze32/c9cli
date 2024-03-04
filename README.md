@@ -24,5 +24,6 @@ $ c9cli help
 ## To do
 - [x] Change password feature
 - [ ] Change Docker image
+- [ ] Delete workspace dir when user is deleted
 
 If you have any problem in using c9cli, please open new issue.
