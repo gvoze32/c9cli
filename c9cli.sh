@@ -203,6 +203,7 @@ sleep 3
 sudo killall -u $user
 sleep 3
 sudo userdel $user
+rm -rf /home/$user
 }
 
 statussystemctl(){
@@ -292,6 +293,7 @@ cd /home/c9usersmemlimit
         ;;
 esac
 sudo docker-compose -p $user down
+rm -rf $user
 }
 
 listdocker(){
