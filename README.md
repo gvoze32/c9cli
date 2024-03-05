@@ -7,7 +7,7 @@ Create and manage secure Cloud9 IDE private users using Docker or SystemD servic
 - Minimum Ubuntu 18.04 or latest LTS's
 - Dependency Packages (Included)
 
-## Install 
+## Install
 
 Make sure you have root access before doing this installation.
 
@@ -22,8 +22,9 @@ $ c9cli help
 ```
 
 ## To do
+
 - [x] Change password feature
 - [ ] Change Docker image
-- [ ] Delete workspace dir when user is deleted
+- [x] Delete workspace dir when user is deleted
 
 If you have any problem in using c9cli, please open new issue.
