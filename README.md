@@ -24,7 +24,10 @@ $ c9cli help
 ## To do
 
 - [x] Change password feature
-- [ ] Change Docker image
+- [ ] Add custom Docker image
+  - [x] 1. Debian Bullseye or latest
+  - [ ] 2. Alpine 3.12 or latest
+  - [ ] 3. Ubuntu 18.04 or latest
 - [x] Delete workspace dir when user is deleted
 
 If you have any problem in using c9cli, please open new issue.
