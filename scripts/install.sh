@@ -44,7 +44,7 @@ case $ubuntu_version in
 version: '2.2'
 services:
   cloud9:
-    image: sapk/cloud9:latest
+    image: gvoze32/cloud9:bullseye
     volumes:
       - /home/c9users/\${NAMA_PELANGGAN}:/workspace
     restart: always
@@ -61,7 +61,7 @@ EOF
 version: '2.2'
 services:
   cloud9:
-    image: sapk/cloud9:latest
+    image: gvoze32/cloud9:bullseye
     volumes:
       - /home/c9usersmemlimit/\${NAMA_PELANGGAN}:/workspace
     restart: always
