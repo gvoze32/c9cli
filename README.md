@@ -18,8 +18,10 @@ sudo wget https://raw.githubusercontent.com/gvoze32/c9cli/master/c9cli.sh -O /us
 ## Run
 
 ```
-$ c9cli help
+c9cli help
 ```
+
+🔴 Docker service is under maintenance, please use SystemD for creating new users.
 
 ## To do
 
