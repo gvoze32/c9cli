@@ -52,7 +52,11 @@ bantuan() {
 # CREATE SYSTEMD
 
 createnewsystemd(){
-#Run as sudo or root user
+if [ "$(id -u)" != "0" ]; then
+    echo "This script must be run as root" 1>&2
+    return 1
+fi
+
 read -p "Username : " user
 read -p "Input Password : " password
 read -p "Input Port (Recomend Range : 1000-5000) : " port
@@ -61,10 +65,8 @@ sudo apt-get update -y
 sudo apt-get upgrade -y
 sudo apt-get update -y
 
-#Create User
 sudo adduser --disabled-password --gecos "" $user
 
-#echo "$password" | passwd --stdin $user
 sudo echo -e "$password\n$password" | passwd $user
 mkdir -p /home/$user/my-projects
 cd /home/$user/my-projects
@@ -76,7 +78,6 @@ cd /home/$user/my-projects
 
 cd
 
-#Get script to user directory
 git clone https://github.com/c9/core.git /home/$user/c9sdk
 sudo chown $user.$user /home/$user -R
 sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
@@ -118,41 +119,34 @@ sudo systemctl status c9-$user.service
 }
 
 createnewsystemdlimit(){
-    # Pastikan skrip dijalankan sebagai root
-    if [ "$(id -u)" != "0" ]; then
-       echo "This script must be run as root" 1>&2
-       return 1
-    fi
+if [ "$(id -u)" != "0" ]; then
+    echo "This script must be run as root" 1>&2
+    return 1
+fi
 
-    read -p "Username : " user
-    read -s -p "Input Password : " password
-    echo
-    read -p "Memory Limit (Example = 1024M) : " mem
-    read -p "Input Port (Recommend Range : 1000-5000) : " port
+read -p "Username : " user
+read -s -p "Input Password : " password
+echo
+read -p "Memory Limit (Example = 1G) : " mem
+read -p "Input Port (Recommend Range : 1000-5000) : " port
 
-    apt-get update -y
-    apt-get upgrade -y
+apt-get update -y
+apt-get upgrade -y
 
-    # Create User
-    adduser --disabled-password --gecos "" $user
-    echo "$user:$password" | chpasswd
+adduser --disabled-password --gecos "" $user
+echo "$user:$password" | chpasswd
 
-    # Create directories and set permissions
-    mkdir -p /home/$user/my-projects
-    mkdir -p /home/$user/c9sdk
-    chown -R $user:$user /home/$user
+mkdir -p /home/$user/my-projects
+mkdir -p /home/$user/c9sdk
+chown -R $user:$user /home/$user
 
-    # Clone C9 SDK
-    sudo -u $user git clone https://github.com/c9/core.git /home/$user/c9sdk
-    
-    # Install SDK
-    sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
+sudo -u $user git clone https://github.com/c9/core.git /home/$user/c9sdk
 
-    # Set proper permissions
-    chmod 700 /home/$user
+sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
 
-    # Create systemd service file
-    cat > /lib/systemd/system/c9-$user.service << EOF
+chmod 700 /home/$user
+
+cat > /lib/systemd/system/c9-$user.service << EOF
 [Unit]
 Description=c9 for $user
 After=network.target
@@ -175,12 +169,11 @@ SyslogIdentifier=c9-$user
 WantedBy=multi-user.target
 EOF
 
-    # Reload systemd, enable and start the service
-    systemctl daemon-reload
-    systemctl enable c9-$user.service
-    systemctl start c9-$user.service
-    sleep 10
-    systemctl status c9-$user.service
+systemctl daemon-reload
+systemctl enable c9-$user.service
+systemctl start c9-$user.service
+sleep 10
+systemctl status c9-$user.service
 }
 
 # MANAGE SYSTEMD
