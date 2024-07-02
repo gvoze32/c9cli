@@ -58,77 +58,9 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 read -p "Username : " user
-read -p "Input Password : " password
-read -p "Input Port (Recomend Range : 1000-5000) : " port
-
-sudo apt-get update -y
-sudo apt-get upgrade -y
-sudo apt-get update -y
-
-sudo adduser --disabled-password --gecos "" $user
-
-sudo echo -e "$password\n$password" | passwd $user
-mkdir -p /home/$user/my-projects
-cd /home/$user/my-projects
-
-### Your custom default bundling files goes here, it's recommended to put it on resources directory
-### START
-
-### END
-
-cd
-
-git clone https://github.com/c9/core.git /home/$user/c9sdk
-sudo chown $user.$user /home/$user -R
-sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
-sudo chown $user.$user /home/$user/ -R
-sudo chmod 700 /home/$user/ -R
-sudo cat > /lib/systemd/system/c9-$user.service << EOF
-
-# Run:
-# - systemctl enable c9
-# - systemctl {start,stop,restart} c9
-#
-[Unit]
-Description=c9
-After=syslog.target network.target
-
-[Service]
-Type=simple
-ExecStart=/usr/bin/node /home/${user}/c9sdk/server.js -a $user:$password --listen 0.0.0.0 -w /home/$user/my-projects
-Environment=NODE_ENV=production PORT=$port
-User=$user
-Group=$user
-UMask=0002
-Restart=on-failure
-
-StandardOutput=syslog
-StandardError=syslog
-SyslogIdentifier=c9
-
-[Install]
-WantedBy=multi-user.target
-#End
-EOF
-
-sudo systemctl daemon-reload
-sudo systemctl enable c9-$user.service
-sudo systemctl restart c9-$user.service
-sleep 10
-sudo systemctl status c9-$user.service
-}
-
-createnewsystemdlimit(){
-if [ "$(id -u)" != "0" ]; then
-    echo "This script must be run as root" 1>&2
-    return 1
-fi
-
-read -p "Username : " user
-read -s -p "Input Password : " password
+read -s -p "Password : " password
 echo
-read -p "Memory Limit (Example = 1G) : " mem
-read -p "Input Port (Recommend Range : 1000-5000) : " port
+read -p "Port : " port
 
 apt-get update -y
 apt-get upgrade -y
@@ -149,7 +81,63 @@ chmod 700 /home/$user
 cat > /lib/systemd/system/c9-$user.service << EOF
 [Unit]
 Description=c9 for $user
-After=network.target
+After=syslog.target network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/node /home/${user}/c9sdk/server.js -a $user:$password --listen 0.0.0.0 -w /home/$user/my-projects
+Environment=NODE_ENV=production PORT=$port
+User=$user
+Group=$user
+UMask=0002
+Restart=on-failure
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=c9-$user
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable c9-$user.service
+systemctl restart c9-$user.service
+sleep 10
+systemctl status c9-$user.service
+}
+
+createnewsystemdlimit(){
+if [ "$(id -u)" != "0" ]; then
+    echo "This script must be run as root" 1>&2
+    return 1
+fi
+
+read -p "Username : " user
+read -s -p "Password : " password
+echo
+read -p "Memory Limit (Example = 1G) : " mem
+read -p "Port : " port
+
+apt-get update -y
+apt-get upgrade -y
+
+adduser --disabled-password --gecos "" $user
+echo "$user:$password" | chpasswd
+
+mkdir -p /home/$user/my-projects
+mkdir -p /home/$user/c9sdk
+chown -R $user:$user /home/$user
+
+sudo -u $user git clone https://github.com/c9/core.git /home/$user/c9sdk
+
+sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
+
+chmod 700 /home/$user
+
+cat > /lib/systemd/system/c9-$user.service << EOF
+[Unit]
+Description=c9 for $user
+After=syslog.target network.target
 
 [Service]
 Type=simple
@@ -161,8 +149,8 @@ UMask=0002
 MemoryLimit=$mem
 MemoryMax=$mem
 Restart=on-failure
-StandardOutput=journal
-StandardError=journal
+StandardOutput=syslog
+StandardError=syslog
 SyslogIdentifier=c9-$user
 
 [Install]
@@ -171,7 +159,7 @@ EOF
 
 systemctl daemon-reload
 systemctl enable c9-$user.service
-systemctl start c9-$user.service
+systemctl restart c9-$user.service
 sleep 10
 systemctl status c9-$user.service
 }
