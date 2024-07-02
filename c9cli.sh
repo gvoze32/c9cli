@@ -118,46 +118,44 @@ sudo systemctl status c9-$user.service
 }
 
 createnewsystemdlimit(){
-#Run as sudo or root user
-read -p "Username : " user
-read -p "Input Password : " password
-read -p "Memory Limit (Example = 1024m) : " mem
-read -p "Input Port (Recomend Range : 1000-5000) : " port
+    # Pastikan skrip dijalankan sebagai root
+    if [ "$(id -u)" != "0" ]; then
+       echo "This script must be run as root" 1>&2
+       return 1
+    fi
 
-sudo apt-get update -y
-sudo apt-get upgrade -y
-sudo apt-get update -y
+    read -p "Username : " user
+    read -s -p "Input Password : " password
+    echo
+    read -p "Memory Limit (Example = 1024M) : " mem
+    read -p "Input Port (Recommend Range : 1000-5000) : " port
 
-#Create User
-sudo adduser --disabled-password --gecos "" $user
+    apt-get update -y
+    apt-get upgrade -y
 
-#echo "$password" | passwd --stdin $user
-sudo echo -e "$password\n$password" | passwd $user
-mkdir -p /home/$user/my-projects
-cd /home/$user/my-projects
+    # Create User
+    adduser --disabled-password --gecos "" $user
+    echo "$user:$password" | chpasswd
 
-### Your custom default bundling files goes here, it's recommended to put it on resources directory
-### START
+    # Create directories and set permissions
+    mkdir -p /home/$user/my-projects
+    mkdir -p /home/$user/c9sdk
+    chown -R $user:$user /home/$user
 
-### END
+    # Clone C9 SDK
+    sudo -u $user git clone https://github.com/c9/core.git /home/$user/c9sdk
+    
+    # Install SDK
+    sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
 
-cd
+    # Set proper permissions
+    chmod 700 /home/$user
 
-#Get script to user directory
-git clone https://github.com/c9/core.git /home/$user/c9sdk
-sudo chown $user.$user /home/$user -R
-sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
-sudo chown $user.$user /home/$user/ -R
-sudo chmod 700 /home/$user/ -R
-sudo cat > /lib/systemd/system/c9-$user.service << EOF
-
-# Run:
-# - systemctl enable c9
-# - systemctl {start,stop,restart} c9
-#
+    # Create systemd service file
+    cat > /lib/systemd/system/c9-$user.service << EOF
 [Unit]
-Description=c9
-After=syslog.target network.target
+Description=c9 for $user
+After=network.target
 
 [Service]
 Type=simple
@@ -169,21 +167,20 @@ UMask=0002
 MemoryLimit=$mem
 MemoryMax=$mem
 Restart=on-failure
-
-StandardOutput=syslog
-StandardError=syslog
-SyslogIdentifier=c9
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=c9-$user
 
 [Install]
 WantedBy=multi-user.target
-#End
 EOF
 
-sudo systemctl daemon-reload
-sudo systemctl enable c9-$user.service
-sudo systemctl restart c9-$user.service
-sleep 10
-sudo systemctl status c9-$user.service
+    # Reload systemd, enable and start the service
+    systemctl daemon-reload
+    systemctl enable c9-$user.service
+    systemctl start c9-$user.service
+    sleep 10
+    systemctl status c9-$user.service
 }
 
 # MANAGE SYSTEMD

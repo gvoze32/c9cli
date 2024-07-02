@@ -223,6 +223,7 @@ EOF
         php -v
 
         #Cleanup
+        cd
         rm get-pip.py install.sh Python-2.7.18.tgz
         rm -rf Python-2.7.18
         ;;
