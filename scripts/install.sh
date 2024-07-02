@@ -187,7 +187,7 @@ EOF
         nvm install node
 
         # Install dependencies
-        sudo apt install -y at git npm build-essential php php8.1-common php-gd php-mbstring php-curl php8.1-mysql php-json php8.1-xml php-fpm python2 python3 python3-pip zip unzip dos2unix
+        sudo apt install -y at git npm build-essential php8.3 libapache2-mod-php php8.3-common php8.3-cli php8.3-mbstring php8.3-bcmath php8.3-fpm php8.3-mysql php8.3-zip php8.3-gd php8.3-curl php8.3-xml -y python2 python3 python3-pip zip unzip dos2unix
         curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
         sudo python2 get-pip.py
         pip3 install requests selenium colorama bs4 wget pyfiglet
