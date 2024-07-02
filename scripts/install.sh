@@ -187,9 +187,17 @@ EOF
         nvm install node
 
         # Install dependencies
-        sudo apt install -y at git npm build-essential php8.3 libapache2-mod-php php8.3-common php8.3-cli php8.3-mbstring php8.3-bcmath php8.3-fpm php8.3-mysql php8.3-zip php8.3-gd php8.3-curl php8.3-xml -y python2 python3 python3-pip zip unzip dos2unix
-        curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
-        sudo python2 get-pip.py
+        sudo apt install -y at git npm build-essential php8.3 libapache2-mod-php php8.3-common php8.3-cli php8.3-mbstring php8.3-bcmath php8.3-fpm php8.3-mysql php8.3-zip php8.3-gd php8.3-curl php8.3-xml python3 python3-pip zip unzip dos2unix checkinstall libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev
+        wget https://www.python.org/ftp/python/2.7.18/Python-2.7.18.tgz
+        tar -xvf Python-2.7.18.tgz
+        cd Python-2.7.18
+        ./configure --enable-optimizations
+        make
+        sudo make install
+        python -V
+        curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py
+        sudo python2.7 get-pip.py
+        pip2.7 --version
         pip3 install requests selenium colorama bs4 wget pyfiglet
         pip2 install requests selenium colorama bs4 wget pyfiglet
         systemctl start atd
@@ -215,7 +223,8 @@ EOF
         php -v
 
         #Cleanup
-        rm get-pip.py install.sh
+        rm get-pip.py install.sh Python-2.7.18.tgz
+        rm -rf Python-2.7.18
         ;;
     *)
         echo "Versi Ubuntu tidak didukung"
