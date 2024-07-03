@@ -10,7 +10,7 @@ USER_HOME=$(eval echo ~$USER)
 
 #Functions
 install_fnm() {
-        curl -fsSL https://fnm.vercel.app/install | bash
+        curl -fsSL https://fnm.vercel.app/install | bash -s -- --install-dir "./.fnm" --skip-shell
         source $USER_HOME/.bashrc
         source /root/.bashrc
         export PATH="/root/.local/share/fnm:$PATH"
