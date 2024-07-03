@@ -74,7 +74,7 @@ chown -R $user:$user /home/$user
 
 sudo -u $user git clone https://github.com/c9/core.git /home/$user/c9sdk
 
-sudo -u $user curl -O https://github.com/senchalabs/connect/archive/refs/tags/2.12.0.tar.gz /home/$user/c9sdk/node_modules/connect
+sudo -u $user curl -OL https://github.com/senchalabs/connect/archive/refs/tags/2.12.0.tar.gz /home/$user/c9sdk/node_modules/connect
 
 sudo -u $user tar -xvzf /home/$user/c9sdk/node_modules/connect/2.12.0.tar.gz
 
@@ -134,7 +134,7 @@ chown -R $user:$user /home/$user
 
 sudo -u $user git clone https://github.com/c9/core.git /home/$user/c9sdk
 
-sudo -u $user curl -O https://github.com/senchalabs/connect/archive/refs/tags/2.12.0.tar.gz /home/$user/c9sdk/node_modules/connect
+sudo -u $user curl -OL https://github.com/senchalabs/connect/archive/refs/tags/2.12.0.tar.gz /home/$user/c9sdk/node_modules/connect
 
 sudo -u $user tar -xvzf /home/$user/c9sdk/node_modules/connect/2.12.0.tar.gz
 
