@@ -13,6 +13,8 @@ install_fnm() {
         curl -fsSL https://fnm.vercel.app/install | bash
         source $USER_HOME/.bashrc
         source /root/.bashrc
+        export PATH="/root/.local/share/fnm:$PATH"
+        eval "$(fnm env)"
         fnm use --install-if-missing 20
         node -v
         npm -v
