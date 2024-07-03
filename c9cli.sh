@@ -72,7 +72,7 @@ mkdir -p /home/$user/my-projects
 mkdir -p /home/$user/c9sdk
 chown -R $user:$user /home/$user
 
-sudo -u $user git clone https://github.com/c9/core.git /home/$user/c9sdk
+sudo -u $user git clone --depth=5 https://github.com/c9/core.git /home/$user/c9sdk
 
 sudo -u $user git clone --depth 1 --branch 2.12.0 https://github.com/senchalabs/connect /home/$user/c9sdk/node_modules/connect
 sudo -u $user git clone --depth 1 --branch 1.0.1 https://github.com/tj/node-cookie-signature /home/$user/c9sdk/node_modules/cookie-signature
@@ -132,7 +132,7 @@ mkdir -p /home/$user/my-projects
 mkdir -p /home/$user/c9sdk
 chown -R $user:$user /home/$user
 
-sudo -u $user git clone https://github.com/c9/core.git /home/$user/c9sdk
+sudo -u $user git clone --depth=5 https://github.com/c9/core.git /home/$user/c9sdk
 
 sudo -u $user git clone --depth 1 --branch 2.12.0 https://github.com/senchalabs/connect /home/$user/c9sdk/node_modules/connect
 sudo -u $user git clone --depth 1 --branch 1.0.1 https://github.com/tj/node-cookie-signature /home/$user/c9sdk/node_modules/cookie-signature
