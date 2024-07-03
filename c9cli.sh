@@ -87,7 +87,7 @@ chmod 700 /home/$user
 cat > /lib/systemd/system/c9-$user.service << EOF
 [Unit]
 Description=c9 for $user
-After=syslog.target network.target
+After=network.target
 
 [Service]
 Type=simple
@@ -97,8 +97,8 @@ User=$user
 Group=$user
 UMask=0002
 Restart=on-failure
-StandardOutput=syslog
-StandardError=syslog
+StandardOutput=journal
+StandardError=journal
 SyslogIdentifier=c9-$user
 
 [Install]
@@ -149,7 +149,7 @@ chmod 700 /home/$user
 cat > /lib/systemd/system/c9-$user.service << EOF
 [Unit]
 Description=c9 for $user
-After=syslog.target network.target
+After=network.target
 
 [Service]
 Type=simple
@@ -158,11 +158,11 @@ Environment=NODE_ENV=production PORT=$port
 User=$user
 Group=$user
 UMask=0002
-MemoryLimit=$mem
+# MemoryLimit=$mem
 MemoryMax=$mem
 Restart=on-failure
-StandardOutput=syslog
-StandardError=syslog
+StandardOutput=journal
+StandardError=journal
 SyslogIdentifier=c9-$user
 
 [Install]
