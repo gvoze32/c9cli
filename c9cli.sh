@@ -74,7 +74,7 @@ chown -R $user:$user /home/$user
 
 sudo -u $user git clone https://github.com/c9/core.git /home/$user/c9sdk
 
-sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
+sudo -u $user bash -c "cd /home/$user/c9sdk && rm -rf node_modules && npm install && scripts/install-sdk.sh"
 
 chmod 700 /home/$user
 
@@ -130,7 +130,7 @@ chown -R $user:$user /home/$user
 
 sudo -u $user git clone https://github.com/c9/core.git /home/$user/c9sdk
 
-sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
+sudo -u $user bash -c "cd /home/$user/c9sdk && rm -rf node_modules && npm install && scripts/install-sdk.sh"
 
 chmod 700 /home/$user
 
