@@ -74,11 +74,9 @@ chown -R $user:$user /home/$user
 
 sudo -u $user git clone https://github.com/c9/core.git /home/$user/c9sdk
 
-sudo -u $user rm /home/$user/c9sdk/scripts/install-sdk.sh
+sudo -u $user rm -rf /home/$user/c9sdk/node_modules
 
-sudo -u $user wget https://raw.githubusercontent.com/gvoze32/install/master/install-sdk.sh -O /home/$user/c9sdk/scripts/install-sdk.sh
-
-sudo -u $user chmod +x /home/$user/c9sdk/scripts/install-sdk.sh
+sudo -u $user -H sh -c "cd /home/$user/c9sdk; npm install"
 
 sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
 
@@ -136,11 +134,9 @@ chown -R $user:$user /home/$user
 
 sudo -u $user git clone https://github.com/c9/core.git /home/$user/c9sdk
 
-sudo -u $user rm /home/$user/c9sdk/scripts/install-sdk.sh
+sudo -u $user rm -rf /home/$user/c9sdk/node_modules
 
-sudo -u $user wget https://raw.githubusercontent.com/gvoze32/install/master/install-sdk.sh -O /home/$user/c9sdk/scripts/install-sdk.sh
-
-sudo -u $user chmod +x /home/$user/c9sdk/scripts/install-sdk.sh
+sudo -u $user -H sh -c "cd /home/$user/c9sdk; npm install"
 
 sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
 
