@@ -26,7 +26,7 @@ case $ubuntu_version in
 
         # Install fnm
         curl -fsSL https://fnm.vercel.app/install | bash
-        source ~/.bashrc
+        source /$USER/.bashrc
         fnm use --install-if-missing 20
         node -v
         npm -v
@@ -80,7 +80,7 @@ EOF
 
         # Install fnm
         curl -fsSL https://fnm.vercel.app/install | bash
-        source ~/.bashrc
+        source /$USER/.bashrc
         fnm use --install-if-missing 20
         node -v
         npm -v
@@ -129,7 +129,7 @@ EOF
         
         # Install fnm
         curl -fsSL https://fnm.vercel.app/install | bash
-        source ~/.bashrc
+        source /$USER/.bashrc
         fnm use --install-if-missing 20
         node -v
         npm -v
@@ -185,7 +185,7 @@ EOF
 
         # Install fnm
         curl -fsSL https://fnm.vercel.app/install | bash
-        source ~/.bashrc
+        source /$USER/.bashrc
         fnm use --install-if-missing 20
         node -v
         npm -v
