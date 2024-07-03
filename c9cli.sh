@@ -74,6 +74,10 @@ chown -R $user:$user /home/$user
 
 sudo -u $user git clone https://github.com/c9/core.git /home/$user/c9sdk
 
+sudo -u $user curl -O https://github.com/senchalabs/connect/archive/refs/tags/2.12.0.tar.gz /home/$user/c9sdk/node_modules/connect
+
+sudo -u $user tar -xvzf /home/$user/c9sdk/node_modules/connect/2.12.0.tar.gz
+
 sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
 
 chmod 700 /home/$user
@@ -129,6 +133,10 @@ mkdir -p /home/$user/c9sdk
 chown -R $user:$user /home/$user
 
 sudo -u $user git clone https://github.com/c9/core.git /home/$user/c9sdk
+
+sudo -u $user curl -O https://github.com/senchalabs/connect/archive/refs/tags/2.12.0.tar.gz /home/$user/c9sdk/node_modules/connect
+
+sudo -u $user tar -xvzf /home/$user/c9sdk/node_modules/connect/2.12.0.tar.gz
 
 sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
 
