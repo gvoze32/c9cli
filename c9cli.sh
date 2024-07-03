@@ -80,7 +80,7 @@ sudo -u $user wget https://raw.githubusercontent.com/gvoze32/install/master/inst
 
 sudo -u $user chmod +x /home/$user/c9sdk/scripts/install-sdk.sh
 
-sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
+sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
 
 chmod 700 /home/$user
 
@@ -142,7 +142,7 @@ sudo -u $user wget https://raw.githubusercontent.com/gvoze32/install/master/inst
 
 sudo -u $user chmod +x /home/$user/c9sdk/scripts/install-sdk.sh
 
-sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
+sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
 
 chmod 700 /home/$user
 
