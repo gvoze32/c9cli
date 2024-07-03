@@ -76,6 +76,8 @@ sudo -u $user git clone https://github.com/c9/core.git /home/$user/c9sdk
 
 sudo -u $user git clone --depth 1 --branch 2.12.0 https://github.com/senchalabs/connect /home/$user/c9sdk/node_modules/connect
 
+sudo -u $user git clone --depth 1 --branch 1.0.1 https://github.com/tj/node-cookie-signature /home/$user/c9sdk/node_modules/cookie-signature
+
 sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
 
 chmod 700 /home/$user
@@ -133,6 +135,8 @@ chown -R $user:$user /home/$user
 sudo -u $user git clone https://github.com/c9/core.git /home/$user/c9sdk
 
 sudo -u $user git clone --depth 1 --branch 2.12.0 https://github.com/senchalabs/connect /home/$user/c9sdk/node_modules/connect
+
+sudo -u $user git clone --depth 1 --branch 1.0.1 https://github.com/tj/node-cookie-signature /home/$user/c9sdk/node_modules/cookie-signature
 
 sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
 
