@@ -74,11 +74,16 @@ chown -R $user:$user /home/$user
 
 sudo -u $user git clone --depth=5 https://github.com/c9/core.git /home/$user/c9sdk
 
-sudo -u $user git clone --depth 1 --branch 2.12.0 https://github.com/senchalabs/connect /home/$user/c9sdk/node_modules/connect
-sudo -u $user git clone --depth 1 --branch 1.0.1 https://github.com/tj/node-cookie-signature /home/$user/c9sdk/node_modules/cookie-signature
-sudo -u $user git clone --depth 1 --branch 0.2.1 https://github.com/visionmedia/bytes.js /home/$user/c9sdk/node_modules/bytes
-sudo -u $user git clone --depth 1 --branch 0.1.4 https://github.com/pillarjs/send /home/$user/c9sdk/node_modules/send
-sudo -u $user git clone https://github.com/c9/node-netutil /home/$user/c9sdk/node_modules/netutil
+# sudo -u $user git clone --depth 1 --branch 2.12.0 https://github.com/senchalabs/connect /home/$user/c9sdk/node_modules/connect
+# sudo -u $user git clone --depth 1 --branch 1.0.1 https://github.com/tj/node-cookie-signature /home/$user/c9sdk/node_modules/cookie-signature
+# sudo -u $user git clone --depth 1 --branch 0.2.1 https://github.com/visionmedia/bytes.js /home/$user/c9sdk/node_modules/bytes
+# sudo -u $user git clone --depth 1 --branch 0.1.4 https://github.com/pillarjs/send /home/$user/c9sdk/node_modules/send
+# sudo -u $user git clone https://github.com/c9/node-netutil /home/$user/c9sdk/node_modules/netutil
+
+sudo -u $user mv /home/$user/c9sdk/node_modules /home/$user/c9sdk/node_modules_bak
+sudo -u $user rm package.json
+sudo -u $user -H sh -c "cd /home/$user/c9sdk; npm install connect@2.12.0"
+sudo -u $user mv /home/$user/c9sdk/node_modules_bak/* /home/$user/c9sdk/node_modules
 
 sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
 
@@ -136,11 +141,10 @@ chown -R $user:$user /home/$user
 
 sudo -u $user git clone --depth=5 https://github.com/c9/core.git /home/$user/c9sdk
 
-sudo -u $user git clone --depth 1 --branch 2.12.0 https://github.com/senchalabs/connect /home/$user/c9sdk/node_modules/connect
-sudo -u $user git clone --depth 1 --branch 1.0.1 https://github.com/tj/node-cookie-signature /home/$user/c9sdk/node_modules/cookie-signature
-sudo -u $user git clone --depth 1 --branch 0.2.1 https://github.com/visionmedia/bytes.js /home/$user/c9sdk/node_modules/bytes
-sudo -u $user git clone --depth 1 --branch 0.1.4 https://github.com/pillarjs/send /home/$user/c9sdk/node_modules/send
-sudo -u $user git clone https://github.com/c9/node-netutil /home/$user/c9sdk/node_modules/netutil
+sudo -u $user mv /home/$user/c9sdk/node_modules /home/$user/c9sdk/node_modules_bak
+sudo -u $user rm package.json
+sudo -u $user -H sh -c "cd /home/$user/c9sdk; npm install connect@2.12.0"
+sudo -u $user mv /home/$user/c9sdk/node_modules_bak/* /home/$user/c9sdk/node_modules
 
 sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
 
