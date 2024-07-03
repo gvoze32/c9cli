@@ -74,7 +74,7 @@ chown -R $user:$user /home/$user
 
 sudo -u $user git clone https://github.com/c9/core.git /home/$user/c9sdk
 
-sudo -u $user bash -c "cd /home/$user/c9sdk && wget https://raw.githubusercontent.com/gvoze32/install/master/install-sdk.sh -O /scripts/install-sdk.sh && scripts/install-sdk.sh"
+sudo -u $user bash -c "cd /home/$user/c9sdk && wget https://raw.githubusercontent.com/gvoze32/install/master/install-sdk.sh -O scripts/install-sdk.sh && scripts/install-sdk.sh"
 
 chmod 700 /home/$user
 
@@ -130,7 +130,7 @@ chown -R $user:$user /home/$user
 
 sudo -u $user git clone https://github.com/c9/core.git /home/$user/c9sdk
 
-sudo -u $user bash -c "cd /home/$user/c9sdk && wget https://raw.githubusercontent.com/gvoze32/install/master/install-sdk.sh -O /scripts/install-sdk.sh && scripts/install-sdk.sh"
+sudo -u $user bash -c "cd /home/$user/c9sdk && wget https://raw.githubusercontent.com/gvoze32/install/master/install-sdk.sh -O scripts/install-sdk.sh && scripts/install-sdk.sh"
 
 chmod 700 /home/$user
 
