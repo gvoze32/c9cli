@@ -16,7 +16,7 @@ install_fnm() {
         export PATH="/root/.local/share/fnm:$PATH"
         source ~/.bashrc
         eval "$(fnm env)"
-        fnm use --install-if-missing 20
+        fnm use --install-if-missing 8
         node -v
         npm -v
 }
