@@ -13,7 +13,6 @@ install_fnm() {
         curl -fsSL https://fnm.vercel.app/install | bash
         source $USER_HOME/.bashrc
         source /root/.bashrc
-        source ~/.bashrc
         fnm use --install-if-missing 20
         node -v
         npm -v
@@ -55,9 +54,6 @@ case $ubuntu_version in
         sudo apt upgrade -y
         sudo apt update -y
 
-        # Install rclone
-        curl https://rclone.org/install.sh | sudo bash
-
         # Install fnm
         install_fnm
 
@@ -70,6 +66,9 @@ case $ubuntu_version in
         systemctl start atd
         sudo apt install -y pythonpy apt-transport-https ca-certificates gnupg-agent software-properties-common
 
+        # Install rclone
+        curl https://rclone.org/install.sh | sudo bash
+        
         # Install ioncube
         install_ioncube
 
@@ -89,9 +88,6 @@ case $ubuntu_version in
         sudo apt upgrade -y
         sudo apt update -y
 
-        # Install rclone
-        curl https://rclone.org/install.sh | sudo bash
-
         # Install fnm
         install_fnm
 
@@ -104,6 +100,9 @@ case $ubuntu_version in
         systemctl start atd
         sudo apt install -y pythonpy apt-transport-https ca-certificates gnupg-agent software-properties-common
 
+        # Install rclone
+        curl https://rclone.org/install.sh | sudo bash
+        
         # Install ioncube
         install_ioncube
 
@@ -117,9 +116,6 @@ case $ubuntu_version in
         sudo apt update -y
         sudo apt upgrade -y
         sudo apt update -y
-
-        # Install rclone
-        curl https://rclone.org/install.sh | sudo bash
         
         # Install fnm
         install_fnm
@@ -133,6 +129,9 @@ case $ubuntu_version in
         systemctl start atd
         sudo apt install -y pythonpy apt-transport-https ca-certificates gnupg-agent software-properties-common
 
+        # Install rclone
+        curl https://rclone.org/install.sh | sudo bash
+        
         # Install ioncube
         install_ioncube
 
@@ -154,9 +153,6 @@ case $ubuntu_version in
         sudo apt upgrade -y
         sudo apt update -y
 
-        # Install rclone
-        curl https://rclone.org/install.sh | sudo bash
-
         # Install fnm
         install_fnm
 
@@ -177,6 +173,9 @@ case $ubuntu_version in
         systemctl start atd
         sudo apt install -y pythonpy apt-transport-https ca-certificates gnupg-agent software-properties-common
 
+        # Install rclone
+        curl https://rclone.org/install.sh | sudo bash
+        
         # Install ioncube
         install_ioncube
 
