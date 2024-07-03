@@ -11,9 +11,11 @@ USER_HOME=$(eval echo ~$USER)
 #Functions
 install_fnm() {
         curl -fsSL https://fnm.vercel.app/install | bash
-        echo "source $USER_HOME/.bashrc && fnm use --install-if-missing 20" > run_fnm.sh
-        chmod +x run_fnm.sh
-        ./run_fnm.sh
+        source $USER_HOME/.bashrc
+        source /root/.bashrc
+        source ~/.bashrc
+        exec bash
+        fnm use --install-if-missing 20
         node -v
         npm -v
 }
