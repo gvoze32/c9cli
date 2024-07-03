@@ -78,7 +78,7 @@ sudo -u $user rm -rf /home/$user/c9sdk/node_modules
 
 sudo -u $user -H sh -c "cd /home/$user/c9sdk; npm install"
 
-sudo -u $user -H sh -c "cd /home/$user/c9sdk; npm install amd-loader"
+sudo -u $user -H sh -c "cd /home/$user/c9sdk; npm install amd-loader architect c9 connect-architect frontdoor kaefer msgpack-js smith treehugger"
 
 sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
 
