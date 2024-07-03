@@ -14,7 +14,6 @@ install_fnm() {
         source $USER_HOME/.bashrc
         source /root/.bashrc
         source ~/.bashrc
-        exec bash
         fnm use --install-if-missing 20
         node -v
         npm -v
