@@ -4,7 +4,7 @@ Create and manage secure Cloud9 IDE private users using SystemD services.
 
 ## Requirements
 
-- Ubuntu 18.04 or latest LTS's
+- Ubuntu 18.04
 - Dependency Packages (Included)
 
 ## Install
