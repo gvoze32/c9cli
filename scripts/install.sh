@@ -115,13 +115,20 @@ EOF
 }
 
 update_packages() {
-    sudo apt update -y
-    sudo apt upgrade -y
-    sudo apt update -y
+        sudo apt update -y
+        sudo apt upgrade -y
+        sudo apt update -y
 }
 
 second_dep() {
-    sudo apt install -y pythonpy apt-transport-https ca-certificates gnupg-agent software-properties-common
+        sudo apt install -y pythonpy apt-transport-https ca-certificates gnupg-agent software-properties-common
+}
+
+pip_dep() {
+        python3 -m pip install requests selenium colorama bs4 wget pyfiglet
+        curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
+        sudo python2 get-pip.py
+        python2 -m pip install requests selenium colorama bs4 wget pyfiglet
 }
 
 case $ubuntu_version in
@@ -140,8 +147,7 @@ case $ubuntu_version in
 
         # Install dependencies
         sudo apt install -y at git nodejs npm build-essential php php8.1-common php-gd php-mbstring php-curl php8.1-mysql php-json php8.1-xml php-fpm python2 python3 python3-pip zip unzip dos2unix
-        pip3 install requests selenium colorama bs4 wget pyfiglet
-        pip2 install requests selenium colorama bs4 wget pyfiglet
+        pip_dep
         systemctl start atd
         second_dep
 
@@ -173,8 +179,7 @@ case $ubuntu_version in
 
         # Install dependencies
         sudo apt install -y at git nodejs npm build-essential php7.4-cli php-gd php-mbstring php-curl php-mysqli php-json php-dom php-fpm python2 python3 python3-pip zip unzip dos2unix
-        python3 -m pip install requests selenium colorama bs4 wget pyfiglet chardet urllib3
-        pip2 install requests selenium colorama bs4 wget pyfiglet
+        pip_dep
         systemctl start atd
         second_dep
 
@@ -201,8 +206,7 @@ case $ubuntu_version in
 
         # Install dependencies
         sudo apt install -y curl at git nodejs npm build-essential php php7.2-common php-gd php-mbstring php-curl php7.2-mysql php-json php7.2-xml php-fpm python2-minimal python3 python3-pip zip unzip dos2unix
-        pip3 install requests selenium colorama bs4 wget pyfiglet
-        pip2 install requests selenium colorama bs4 wget pyfiglet
+        pip_dep
         systemctl start atd
         second_dep
 
