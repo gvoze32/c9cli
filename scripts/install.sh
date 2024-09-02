@@ -34,7 +34,7 @@ services:
     volumes:
       - /home/c9users/\${NAMA_PELANGGAN}:/workspace
     ports:
-      - \${PORT}:\${PORT}
+      - \${PORT}:8000
     restart: always
 EOF
 }
@@ -53,7 +53,7 @@ services:
     volumes:
       - /home/c9usersmemlimit/\${NAMA_PELANGGAN}:/workspace
     ports:
-      - \${PORT}:\${PORT}
+      - \${PORT}:8000
     restart: always
     deploy:
       resources:
