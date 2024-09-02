@@ -95,35 +95,27 @@ esac
 mkdir -p /home/$user/my-projects
 mkdir -p /home/$user/c9sdk
 
+case $ubuntu_version in
+    22.04 | 20.04)
+        sudo chown -R $user:$user /home/$user
+    ;;
+    18.04)
+        sudo chown $user.$user /home/$user -R
+    ;;
+esac
+
+sudo chmod 700 /home/$user
+
 sudo -u $user git clone --depth=5 https://github.com/c9/core.git /home/$user/c9sdk
 
 case $ubuntu_version in
     22.04 | 20.04)
-        sudo chown -R $user:$user /home/$user
         sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
     ;;
     18.04)
-        sudo chown $user.$user /home/$user -R
         sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
     ;;
 esac
-
-# adduser --disabled-password --gecos "" $user
-# echo "$user:$password" | chpasswd
-
-# mkdir -p /home/$user/my-projects
-# mkdir -p /home/$user/c9sdk
-# chown -R $user:$user /home/$user
-
-# sudo -u $user git clone --depth=5 https://github.com/c9/core.git /home/$user/c9sdk
-
-# sudo -u $user mv /home/$user/c9sdk/node_modules /home/$user/c9sdk/node_modules_bak
-# sudo -u $user -H sh -c "cd /home/$user/c9sdk; npm install connect@2.12.0"
-# sudo -u $user mv /home/$user/c9sdk/node_modules_bak/* /home/$user/c9sdk/node_modules
-
-# sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
-
-sudo chmod 700 /home/$user
 
 cat > /lib/systemd/system/c9-$user.service << EOF
 [Unit]
@@ -177,37 +169,28 @@ esac
 
 mkdir -p /home/$user/my-projects
 mkdir -p /home/$user/c9sdk
-sudo chown -R $user:$user /home/$user
+
+case $ubuntu_version in
+    22.04 | 20.04)
+        sudo chown -R $user:$user /home/$user
+    ;;
+    18.04)
+        sudo chown $user.$user /home/$user -R
+    ;;
+esac
+
+sudo chmod 700 /home/$user
 
 sudo -u $user git clone --depth=5 https://github.com/c9/core.git /home/$user/c9sdk
 
 case $ubuntu_version in
     22.04 | 20.04)
-        sudo chown -R $user:$user /home/$user
         sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
     ;;
     18.04)
-        sudo chown $user.$user /home/$user -R
         sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
     ;;
 esac
-
-# adduser --disabled-password --gecos "" $user
-# echo "$user:$password" | chpasswd
-
-# mkdir -p /home/$user/my-projects
-# mkdir -p /home/$user/c9sdk
-# chown -R $user:$user /home/$user
-
-# sudo -u $user git clone --depth=5 https://github.com/c9/core.git /home/$user/c9sdk
-
-# sudo -u $user mv /home/$user/c9sdk/node_modules /home/$user/c9sdk/node_modules_bak
-# sudo -u $user -H sh -c "cd /home/$user/c9sdk; npm install connect@2.12.0"
-# sudo -u $user mv /home/$user/c9sdk/node_modules_bak/* /home/$user/c9sdk/node_modules
-
-# sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
-
-sudo chmod 700 /home/$user
 
 cat > /lib/systemd/system/c9-$user.service << EOF
 [Unit]
