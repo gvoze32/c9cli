@@ -1,14 +1,10 @@
 #!/bin/bash
 
 # Check Ubuntu Version
-# Recommended for Ubuntu 24.04 (Noble Numbat) and above.
 ubuntu_version=$(lsb_release -r | awk '{print $2}')
 echo "Checking Ubuntu Version.."
 echo "Ubuntu version is $ubuntu_version"
 echo "Installing dependencies.."
-
-#Variables
-USER_HOME=$(eval echo ~$USER)
 
 install_docker_app() {
         sudo install -m 0755 -d /etc/apt/keyrings
@@ -118,23 +114,103 @@ EOF
         php -v
 }
 
+update_packages() {
+    sudo apt update -y
+    sudo apt upgrade -y
+    sudo apt update -y
+}
+
+python2_dep() {
+    curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
+    sudo python2 get-pip.py
+    pip2 install requests selenium colorama bs4 wget pyfiglet
+}
+
+second_dep() {
+    sudo apt install -y pythonpy apt-transport-https ca-certificates gnupg-agent software-properties-common
+}
+
 case $ubuntu_version in
+    22.04)
+        # Set NEEDRESTART frontend to avoid prompts
+        sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
+        sed -i "s/#\$nrconf{kernelhints} = -1;/\$nrconf{kernelhints} = -1;/g" /etc/needrestart/needrestart.conf
+        export DEBIAN_FRONTEND=noninteractive
+        export NEEDRESTART_SUSPEND=1
+        export NEEDRESTART_MODE=l
+
+        echo "Setting up Ubuntu $ubuntu_version.."
+
+        # Update packages
+        update_packages
+
+        # Install dependencies
+        sudo apt install -y at git nodejs npm build-essential php php8.1-common php-gd php-mbstring php-curl php8.1-mysql php-json php8.1-xml php-fpm python3 python3-pip zip unzip dos2unix
+        pip3 install requests selenium colorama bs4 wget pyfiglet
+        python2_dep
+        systemctl start atd
+        second_dep
+
+        # Install rclone
+        curl https://rclone.org/install.sh | sudo bash
+
+        install_docker_app
+        install_docker
+        install_docker_memlimit
+        blank_env
+        custom_docker_size
+        
+        # Install ioncube
+        install_ioncube
+
+        #Cleanup
+        rm get-pip.py install.sh
+        ;;
+    20.04)
+        # Set NEEDRESTART frontend to avoid prompts
+        export DEBIAN_FRONTEND=noninteractive
+        export NEEDRESTART_SUSPEND=1
+        export NEEDRESTART_MODE=l
+
+        echo "Setting up Ubuntu $ubuntu_version.."
+
+        # Update packages
+        update_packages
+
+        # Install dependencies
+        sudo apt install -y at git nodejs npm build-essential php7.4-cli php-gd php-mbstring php-curl php-mysqli php-json php-dom php-fpm python3 python3-pip zip unzip dos2unix
+        python3 -m pip install requests selenium colorama bs4 wget pyfiglet chardet urllib3
+        python2_dep
+        systemctl start atd
+        second_dep
+
+        # Install rclone
+        curl https://rclone.org/install.sh | sudo bash
+
+        install_docker_app
+        install_docker
+        install_docker_memlimit
+        blank_env
+        custom_docker_size
+        
+        # Install ioncube
+        install_ioncube
+
+        #Cleanup
+        rm get-pip.py install.sh
+        ;;
     18.04)
         echo "Setting up Ubuntu $ubuntu_version.."
 
         # Update packages
-        sudo apt update -y
-        sudo apt upgrade -y
-        sudo apt update -y
+        update_packages
 
         # Install dependencies
-        sudo apt install -y curl at git nodejs npm build-essential php php7.2-common php-gd php-mbstring php-curl php7.2-mysql php-json php7.2-xml php-fpm python python2.7 python3-pip zip unzip dos2unix
-        curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
-        sudo python2 get-pip.py
+        sudo apt install -y curl at git nodejs npm build-essential php php7.2-common php-gd php-mbstring php-curl php7.2-mysql php-json php7.2-xml php-fpm python3 python3-pip zip unzip dos2unix
         pip3 install requests selenium colorama bs4 wget pyfiglet
-        pip2 install requests selenium colorama bs4 wget pyfiglet
+        python2_dep
         systemctl start atd
-        sudo apt install -y pythonpy apt-transport-https ca-certificates gnupg-agent software-properties-common
+        second_dep
 
         # Install rclone
         curl https://rclone.org/install.sh | sudo bash
