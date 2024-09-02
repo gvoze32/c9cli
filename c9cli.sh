@@ -5,6 +5,8 @@ if [ "$(id -u)" != "0" ]; then
     exit 1
 fi
 
+ubuntu_version=$(lsb_release -r | awk '{print $2}')
+
 # COMMANDS
 
 banner() {
@@ -83,11 +85,19 @@ echo "$user:$password" | chpasswd
 
 mkdir -p /home/$user/my-projects
 mkdir -p /home/$user/c9sdk
-sudo chown -R $user:$user /home/$user
 
 sudo -u $user git clone --depth=5 https://github.com/c9/core.git /home/$user/c9sdk
 
-sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
+case $ubuntu_version in
+    22.04 | 20.04)
+        sudo chown -R $user:$user /home/$user
+        sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
+    ;;
+    18.04)
+        sudo chown $user.$user /home/$user -R
+        sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
+    ;;
+esac
 
 # adduser --disabled-password --gecos "" $user
 # echo "$user:$password" | chpasswd
@@ -153,7 +163,16 @@ sudo chown -R $user:$user /home/$user
 
 sudo -u $user git clone --depth=5 https://github.com/c9/core.git /home/$user/c9sdk
 
-sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
+case $ubuntu_version in
+    22.04 | 20.04)
+        sudo chown -R $user:$user /home/$user
+        sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
+    ;;
+    18.04)
+        sudo chown $user.$user /home/$user -R
+        sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
+    ;;
+esac
 
 # adduser --disabled-password --gecos "" $user
 # echo "$user:$password" | chpasswd
