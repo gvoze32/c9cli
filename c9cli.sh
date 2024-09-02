@@ -83,7 +83,7 @@ echo "$user:$password" | chpasswd
 
 mkdir -p /home/$user/my-projects
 mkdir -p /home/$user/c9sdk
-chown -R $user:$user /home/$user
+sudo chown -R $user:$user /home/$user
 
 sudo -u $user git clone --depth=5 https://github.com/c9/core.git /home/$user/c9sdk
 
@@ -104,7 +104,7 @@ sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
 
 # sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
 
-chmod 700 /home/$user
+sudo chmod 700 /home/$user
 
 cat > /lib/systemd/system/c9-$user.service << EOF
 [Unit]
@@ -149,7 +149,7 @@ echo "$user:$password" | chpasswd
 
 mkdir -p /home/$user/my-projects
 mkdir -p /home/$user/c9sdk
-chown -R $user:$user /home/$user
+sudo chown -R $user:$user /home/$user
 
 sudo -u $user git clone --depth=5 https://github.com/c9/core.git /home/$user/c9sdk
 
@@ -170,7 +170,7 @@ sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
 
 # sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
 
-chmod 700 /home/$user
+sudo chmod 700 /home/$user
 
 cat > /lib/systemd/system/c9-$user.service << EOF
 [Unit]
