@@ -85,7 +85,7 @@ mkdir -p /home/$user/my-projects
 mkdir -p /home/$user/c9sdk
 chown -R $user:$user /home/$user
 
-sudo -u $user git clone --depth=5 https://github.com/c9/core.git /home/$user/c9sdk
+sudo -u $user git clone https://github.com/c9/core.git /home/$user/c9sdk
 
 sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
 
@@ -151,7 +151,7 @@ mkdir -p /home/$user/my-projects
 mkdir -p /home/$user/c9sdk
 chown -R $user:$user /home/$user
 
-sudo -u $user git clone --depth=5 https://github.com/c9/core.git /home/$user/c9sdk
+sudo -u $user git clone https://github.com/c9/core.git /home/$user/c9sdk
 
 sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
 
