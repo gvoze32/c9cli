@@ -77,11 +77,20 @@ read -s -p "Password : " password
 echo
 read -p "Port : " port
 
-apt-get update -y
-apt-get upgrade -y
+sudo apt-get update -y
+sudo apt-get upgrade -y
+sudo apt-get update -y
 
-adduser --disabled-password --gecos "" $user
-echo "$user:$password" | chpasswd
+sudo adduser --disabled-password --gecos "" $user
+
+case $ubuntu_version in
+    22.04 | 20.04)
+        echo "$user:$password" | chpasswd
+    ;;
+    18.04)
+        sudo echo -e "$password\n$password" | passwd $user
+    ;;
+esac
 
 mkdir -p /home/$user/my-projects
 mkdir -p /home/$user/c9sdk
@@ -151,11 +160,20 @@ echo
 read -p "Memory Limit (Example = 1G) : " mem
 read -p "Port : " port
 
-apt-get update -y
-apt-get upgrade -y
+sudo apt-get update -y
+sudo apt-get upgrade -y
+sudo apt-get update -y
 
 adduser --disabled-password --gecos "" $user
-echo "$user:$password" | chpasswd
+
+case $ubuntu_version in
+    22.04 | 20.04)
+        echo "$user:$password" | chpasswd
+    ;;
+    18.04)
+        sudo echo -e "$password\n$password" | passwd $user
+    ;;
+esac
 
 mkdir -p /home/$user/my-projects
 mkdir -p /home/$user/c9sdk
