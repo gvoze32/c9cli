@@ -77,43 +77,28 @@ read -s -p "Password : " password
 echo
 read -p "Port : " port
 
-sudo apt-get update -y
-sudo apt-get upgrade -y
-sudo apt-get update -y
+apt-get update -y
+apt-get upgrade -y
+apt-get update -y
 
-sudo adduser --disabled-password --gecos "" $user
-
-case $ubuntu_version in
-    22.04 | 20.04)
-        echo "$user:$password" | chpasswd
-    ;;
-    18.04)
-        sudo echo -e "$password\n$password" | passwd $user
-    ;;
-esac
-
-mkdir -p /home/$user/my-projects
-mkdir -p /home/$user/c9sdk
+adduser --disabled-password --gecos "" $user
 
 case $ubuntu_version in
-    22.04 | 20.04)
-        sudo chown -R $user:$user /home/$user
+  22.04 | 20.04)
+    echo "$user:$password" | chpasswd
+    mkdir -p /home/$user/my-projects /home/$user/c9sdk
+    chown -R $user:$user /home/$user
+    chmod 700 /home/$user
+    sudo -u $user git clone --depth=5 https://github.com/c9/core.git /home/$user/c9sdk
+    sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
     ;;
-    18.04)
-        sudo chown $user.$user /home/$user -R
-    ;;
-esac
-
-sudo chmod 700 /home/$user
-
-sudo -u $user git clone --depth=5 https://github.com/c9/core.git /home/$user/c9sdk
-
-case $ubuntu_version in
-    22.04 | 20.04)
-        sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
-    ;;
-    18.04)
-        sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
+  18.04)
+    echo -e "$password\n$password" | passwd $user
+    mkdir -p /home/$user/my-projects /home/$user/c9sdk
+    chown $user.$user /home/$user -R
+    chmod 700 /home/$user
+    sudo -u $user git clone --depth=5 https://github.com/c9/core.git /home/$user/c9sdk
+    sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
     ;;
 esac
 
@@ -152,43 +137,28 @@ echo
 read -p "Memory Limit (Example = 1G) : " mem
 read -p "Port : " port
 
-sudo apt-get update -y
-sudo apt-get upgrade -y
-sudo apt-get update -y
+apt-get update -y
+apt-get upgrade -y
+apt-get update -y
 
 adduser --disabled-password --gecos "" $user
 
 case $ubuntu_version in
-    22.04 | 20.04)
-        echo "$user:$password" | chpasswd
+  22.04 | 20.04)
+    echo "$user:$password" | chpasswd
+    mkdir -p /home/$user/my-projects /home/$user/c9sdk
+    chown -R $user:$user /home/$user
+    chmod 700 /home/$user
+    sudo -u $user git clone --depth=5 https://github.com/c9/core.git /home/$user/c9sdk
+    sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
     ;;
-    18.04)
-        sudo echo -e "$password\n$password" | passwd $user
-    ;;
-esac
-
-mkdir -p /home/$user/my-projects
-mkdir -p /home/$user/c9sdk
-
-case $ubuntu_version in
-    22.04 | 20.04)
-        sudo chown -R $user:$user /home/$user
-    ;;
-    18.04)
-        sudo chown $user.$user /home/$user -R
-    ;;
-esac
-
-sudo chmod 700 /home/$user
-
-sudo -u $user git clone --depth=5 https://github.com/c9/core.git /home/$user/c9sdk
-
-case $ubuntu_version in
-    22.04 | 20.04)
-        sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
-    ;;
-    18.04)
-        sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
+  18.04)
+    echo -e "$password\n$password" | passwd $user
+    mkdir -p /home/$user/my-projects /home/$user/c9sdk
+    chown $user.$user /home/$user -R
+    chmod 700 /home/$user
+    sudo -u $user git clone --depth=5 https://github.com/c9/core.git /home/$user/c9sdk
+    sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
     ;;
 esac
 
@@ -229,12 +199,12 @@ echo
 read -p "Port : " port
 cd /home/c9users
 rm .env
-sudo cat > /home/c9users/.env << EOF
+cat > /home/c9users/.env << EOF
 PORT=$port
 NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$pw
 EOF
-sudo docker compose -p $user up -d
+docker compose -p $user up -d
 if [ -d "/home/c9users/$user/workspace" ]; then
 cd /home/c9users/$user/workspace
 
@@ -259,7 +229,7 @@ read -p "Port : " portenv
 read -p "Memory Limit (Example = 1024m) : " mem
 cd /home/c9usersmemlimit
 rm .env
-sudo cat > /home/c9usersmemlimit/.env << EOF
+cat > /home/c9usersmemlimit/.env << EOF
 PORT=$portenv
 NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$pw
@@ -267,7 +237,7 @@ MEMORY=$mem
 EOF
 sed -i '$ d' /home/c9usersmemlimit/docker-compose.yml
 echo "          memory: $mem" >> /home/c9usersmemlimit/docker-compose.yml
-sudo docker compose -p $user up -d
+docker compose -p $user up -d
 if [ -d "/home/c9usersmemlimit/$user/workspace" ]; then
 cd /home/c9usersmemlimit/$user/workspace
 
@@ -287,37 +257,37 @@ fi
 deletesystemd(){
 read -p "Input User : " user
 sleep 3
-sudo systemctl stop c9-$user.service
+systemctl stop c9-$user.service
 sleep 3
-sudo killall -u $user
+killall -u $user
 sleep 3
-sudo userdel $user
+userdel $user
 rm -rf /home/$user
 }
 
 statussystemd(){
 read -p "Input User : " user
-sudo systemctl status c9-$user.service
+systemctl status c9-$user.service
 }
 
 restartsystemd(){
 read -p "Input User : " user
-sudo systemctl daemon-reload
-sudo systemctl enable c9-$user.service
-sudo systemctl restart c9-$user.service
+systemctl daemon-reload
+systemctl enable c9-$user.service
+systemctl restart c9-$user.service
 sleep 10
-sudo systemctl status c9-$user.service
+systemctl status c9-$user.service
 }
 
 changepasswordsystemd() {
 read -p "Input User :" user
 read -p "Input New Password :" password
 
-sudo sed -i "s/-a $user:.*/-a $user:$password/" /lib/systemd/system/c9-$user.service
-sudo systemctl daemon-reload
-sudo systemctl restart c9-$user.service
+sed -i "s/-a $user:.*/-a $user:$password/" /lib/systemd/system/c9-$user.service
+systemctl daemon-reload
+systemctl restart c9-$user.service
 sleep 10
-sudo systemctl status c9-$user.service
+systemctl status c9-$user.service
 }
 
 schedulesystemd(){
@@ -340,16 +310,16 @@ echo " "
 read -p "Time: " waktu
 at $waktu <<END
 sleep 3
-sudo systemctl stop c9-$user.service
+systemctl stop c9-$user.service
 sleep 3
-sudo killall -u $user
+killall -u $user
 sleep 3
-sudo userdel $user
+userdel $user
 END
 }
 
 scheduledatq(){
-sudo atq
+atq
 }
 
 convertsystemd(){
@@ -358,11 +328,11 @@ echo "Input user password"
 passwd $user
 echo "Warning, C9 will be restart!"
 usermod -aG sudo $user
-sudo systemctl daemon-reload
-sudo systemctl enable c9-$user.service
-sudo systemctl restart c9-$user.service
+systemctl daemon-reload
+systemctl enable c9-$user.service
+systemctl restart c9-$user.service
 sleep 10
-sudo systemctl status c9-$user.service
+systemctl status c9-$user.service
 }
 
 # MANAGE DOCKER
@@ -381,7 +351,7 @@ cd /home/c9users
 cd /home/c9usersmemlimit
         ;;
 esac
-sudo docker compose -p $user down
+docker compose -p $user down
 rm -rf $user
 }
 
@@ -416,15 +386,15 @@ changepassworddocker() {
   cd "$base_dir/$user"
   
   if [ -d "$base_dir/$user" ]; then
-    sudo cat > .env << EOF
+    cat > .env << EOF
 PORT=$port
 NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$newpw
 EOF
     echo "Password changed successfully for user $user"
     
-    sudo docker compose -p $user down
-    sudo docker compose -p $user up -d
+    docker compose -p $user down
+    docker compose -p $user up -d
     echo "Docker container restarted for user $user"
     
     if [ "$option" = "2" ]; then
@@ -461,13 +431,13 @@ case "$response" in
     [yY][eE][sS]|[yY]) 
 at $waktu <<END
 cd /home/c9users
-sudo docker compose -p $user down
+docker compose -p $user down
 END
         ;;
     *)
 at $waktu <<END
 cd /home/c9usersmemlimit
-sudo docker compose -p $user down
+docker compose -p $user down
 END
         ;;
 esac
@@ -493,7 +463,7 @@ cd /home/c9users
 cd /home/c9usersmemlimit
         ;;
 esac
-sudo docker container stop $user
+docker container stop $user
         ;;
     2) 
 echo Are the file is using Docker or Docker Memory Limit?
@@ -508,7 +478,7 @@ cd /home/c9users
 cd /home/c9usersmemlimit
         ;;
 esac
-sudo docker container start $user
+docker container start $user
         ;;
     *)
 echo Are the file is using Docker or Docker Memory Limit?
@@ -523,8 +493,8 @@ cd /home/c9users
 cd /home/c9usersmemlimit
         ;;
 esac
-sudo docker container stop $user
-sudo docker container start $user
+docker container stop $user
+docker container start $user
         ;;
 esac
 }
@@ -534,7 +504,7 @@ docker restart $(docker ps -q)
 }
 
 startdocker(){
-sudo service docker start
+service docker start
 }
 
 backups(){
@@ -549,7 +519,7 @@ echo "2. Storj"
 read -r -p "Choose: " response
 case "$response" in
     1) 
-sudo cat > /home/backup-$name.sh << EOF
+cat > /home/backup-$name.sh << EOF
 #!/bin/bash
 date=\$(date +%y-%m-%d)
 rclone mkdir $name:Backup/backup-\$date
@@ -584,7 +554,7 @@ echo "Make sure it's included on your cron list :"
 crontab -l
         ;;
     *)
-sudo cat > /home/backup-$name.sh << EOF
+cat > /home/backup-$name.sh << EOF
 #!/bin/bash
 date=\$(date +%y-%m-%d)
 rclone mkdir $name:backup-\$date
@@ -623,7 +593,7 @@ echo "Backup rule successfully added"
 }
 
 portlist(){
-sudo lsof -i -P -n | grep LISTEN
+lsof -i -P -n | grep LISTEN
 }
 
 # BASIC MENUS
