@@ -24,9 +24,9 @@ install_docker() {
         sudo adduser --disabled-password --gecos "" c9users
         sudo cat > /home/c9users/docker-compose.yml << EOF
 services:
-  code-server:
+  cloud9:
     image: lscr.io/linuxserver/cloud9:latest
-    container_name: code-\${NAMA_PELANGGAN}
+    container_name: c9-\${NAMA_PELANGGAN}
     environment:
       - TZ=Asia/Jakarta
       - USERNAME=\${NAMA_PELANGGAN}
@@ -43,9 +43,9 @@ install_docker_memlimit() {
         sudo adduser --disabled-password --gecos "" c9usersmemlimit
         sudo cat > /home/c9usersmemlimit/docker-compose.yml << EOF
 services:
-  code-server:
+  cloud9:
     image: lscr.io/linuxserver/cloud9:latest
-    container_name: code-\${NAMA_PELANGGAN}
+    container_name: c9-\${NAMA_PELANGGAN}
     environment:
       - TZ=Asia/Jakarta
       - USERNAME=\${NAMA_PELANGGAN}
