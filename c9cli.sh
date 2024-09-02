@@ -24,7 +24,7 @@ about() {
     echo "Version       : v4.2 [Warung - Bekicot] Linux Version"
     echo "Built         : 2024.8 [Magetan]"
     echo "Tested on     :"
-    echo "    - Debian  : Ubuntu 18.04"
+    echo "    - Debian  : Ubuntu 18.04, 20.04, 22.04"
     echo
     echo "Built with love♡ by gvoze32"
 }
