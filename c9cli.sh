@@ -553,16 +553,18 @@ echo "Removing local backup files" >> /home/backup-$name.log
 rm -rf /home/backup >> /home/backup-$name.log 2>&1
 
 echo "Checking for old backups" >> /home/backup-$name.log
-old_backups=\$(rclone lsf $name:$list_path 2>&1 | grep '^backup-')
-if [ -n "\$old_backups" ]; then
-    echo "Found old backups: \${old_backups}" >> /home/backup-$name.log
-    echo "\$old_backups" | sort | head -n -1 | while read -r oldbak; do
+old_backups=\$(rclone lsf $name:$list_path 2>&1 | grep '^backup-' | sort)
+backup_count=\$(echo "\$old_backups" | wc -l)
+
+if [ "\$backup_count" -gt 1 ]; then
+    echo "Found \$((backup_count - 1)) old backups:" >> /home/backup-$name.log
+    echo "\$old_backups" | head -n -1 | while read -r oldbak; do
         full_path="\${list_path:+\$list_path/}\$oldbak"
         echo "Removing old backup: $name:\$full_path" >> /home/backup-$name.log
         rclone purge "$name:\$full_path" >> /home/backup-$name.log 2>&1
     done
 else
-    echo "No old backups detected, not executing remove command" >> /home/backup-$name.log
+    echo "No old backups detected (only one backup present), not executing remove command" >> /home/backup-$name.log
 fi
 EOF
 
