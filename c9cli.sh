@@ -524,7 +524,7 @@ backups(){
     case "$response" in
         1) backup_path="Backup/backup-\$date" ;;
         2) backup_path="backup-\$date" ;;
-        3) backup_path="backup-\$date" ;; 
+        3) backup_path="backup-\$date" ;;
         4) backup_path="Backup/backup-\$date" ;;
         5) backup_path="Backup/backup-\$date" ;;
         *) echo "Invalid option"; exit 1 ;;
@@ -580,23 +580,6 @@ EOF
     echo "Make sure it's included in your cron list:"
     crontab -l
     echo "Backup rule successfully added"
-}
-
-chmod +x /home/backup-$name.sh
-echo ""
-echo "Backup command created..."
-
-crontab -l > current_cron
-echo "0 2 * * * /home/backup-$name.sh > /home/backup-$name.log 2>&1" >> current_cron
-crontab current_cron
-rm current_cron
-
-echo ""
-echo "Cron job created..."
-echo ""
-echo "Make sure it's included in your cron list:"
-crontab -l
-echo "Backup rule successfully added"
 }
 
 portlist(){
