@@ -522,11 +522,11 @@ backups(){
     echo "5. Jottacloud"
     read -r -p "Choose: " response
     case "$response" in
-        1) backup_path="Backup/backup-\$date" ;;
-        2) backup_path="backup-\$date" ;;
-        3) backup_path="backup-\$date" ;;
-        4) backup_path="Backup/backup-\$date" ;;
-        5) backup_path="Backup/backup-\$date" ;;
+        1) backup_path="Backup/backup-\$date"; list_path="Backup" ;;
+        2) backup_path="backup-\$date"; list_path="" ;;
+        3) backup_path="backup-\$date"; list_path="" ;;
+        4) backup_path="Backup/backup-\$date"; list_path="Backup" ;;
+        5) backup_path="Backup/backup-\$date"; list_path="Backup" ;;
         *) echo "Invalid option"; exit 1 ;;
     esac
 
@@ -553,12 +553,13 @@ echo "Removing local backup files" >> /home/backup-$name.log
 rm -rf /home/backup >> /home/backup-$name.log 2>&1
 
 echo "Checking for old backups" >> /home/backup-$name.log
-old_backups=\$(rclone lsf $name:$backup_path 2>&1)
+old_backups=\$(rclone lsf $name:$list_path 2>&1 | grep '^backup-')
 if [ -n "\$old_backups" ]; then
     echo "Found old backups: \${old_backups}" >> /home/backup-$name.log
     echo "\$old_backups" | sort | head -n -1 | while read -r oldbak; do
-        echo "Removing old backup: $name:\$oldbak" >> /home/backup-$name.log
-        rclone purge "$name:\$oldbak" >> /home/backup-$name.log 2>&1
+        full_path="\${list_path:+\$list_path/}\$oldbak"
+        echo "Removing old backup: $name:\$full_path" >> /home/backup-$name.log
+        rclone purge "$name:\$full_path" >> /home/backup-$name.log 2>&1
     done
 else
     echo "No old backups detected, not executing remove command" >> /home/backup-$name.log
