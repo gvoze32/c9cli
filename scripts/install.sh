@@ -32,7 +32,7 @@ services:
       - USERNAME=\${NAMA_PELANGGAN}
       - PASSWORD=\${PASSWORD_PELANGGAN}
     volumes:
-      - /home/c9users/\${NAMA_PELANGGAN}:/workspace
+      - /home/c9users/\${NAMA_PELANGGAN}:/code
     ports:
       - \${PORT}:8000
     restart: always
@@ -51,7 +51,7 @@ services:
       - USERNAME=\${NAMA_PELANGGAN}
       - PASSWORD=\${PASSWORD_PELANGGAN}
     volumes:
-      - /home/c9usersmemlimit/\${NAMA_PELANGGAN}:/workspace
+      - /home/c9usersmemlimit/\${NAMA_PELANGGAN}:/code
     ports:
       - \${PORT}:8000
     restart: always
