@@ -522,8 +522,8 @@ echo "5. Jottacloud"
 read -r -p "Choose: " response
 case "$response" in
     1) backup_path="Backup/backup-\$date" ;;
-    2) backup_path="bucket:Backup/backup-\$date" ;;
-    3) backup_path="bucket:Backup/backup-\$date" ;; 
+    2) backup_path="backup-\$date" ;;
+    3) backup_path="backup-\$date" ;; 
     4) backup_path="Backup/backup-\$date" ;;
     5) backup_path="Backup/backup-\$date" ;; 
     *) echo "Invalid option"; exit 1 ;;
