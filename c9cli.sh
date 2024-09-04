@@ -516,79 +516,55 @@ echo ""
 echo "Choose the backup service provider"
 echo "1. Google Drive"
 echo "2. Storj"
+echo "3. Backblaze B2"
+echo "4. pCloud"
+echo "5. Jottacloud"
 read -r -p "Choose: " response
 case "$response" in
-    1) 
-cat > /home/backup-$name.sh << EOF
-#!/bin/bash
-date=\$(date +%y-%m-%d)
-rclone mkdir $name:Backup/backup-\$date
-cd /home
-for i in */; do
-    zip -r "\${i%/}.zip" "\$i"
-done
-mkdir /home/backup
-mv /home/*.zip /home/backup
-rclone copy /home/backup $name:Backup/backup-\$date
-rm -rf /home/backup
-lines=\$(rclone lsf $name: 2>&1 | wc -l)
-if [ \$lines -gt 1 ]
-then
-    oldbak=\$(rclone lsf $name: 2>&1 | head -n 1)
-    rclone purge "$name:\$oldbak"
-else
-    echo "Old backup not detected, not executing remove command"
-fi
-EOF
-chmod +x /home/backup-$name.sh
-echo ""
-echo "Backup command created..."
-crontab -l > backup-$name
-echo "0 2 * * * /home/backup-$name.sh > /home/backup-$name.log 2>&1" >> backup-$name
-crontab backup-$name
-rm backup-$name
-echo ""
-echo "Cron job created..."
-echo ""
-echo "Make sure it's included on your cron list :"
-crontab -l
-        ;;
-    *)
-cat > /home/backup-$name.sh << EOF
-#!/bin/bash
-date=\$(date +%y-%m-%d)
-rclone mkdir $name:backup-\$date
-cd /home
-for i in */; do
-    zip -r "\${i%/}.zip" "\$i"
-done
-mkdir /home/backup
-mv /home/*.zip /home/backup/
-rclone copy /home/backup/ $name:backup-\$date/
-rm -rf /home/backup
-lines=\$(rclone lsf $name: 2>&1 | wc -l)
-if [ \$lines -gt 1 ]
-then
-    oldbak=\$(rclone lsf $name: 2>&1 | head -n 1)
-    rclone purge "$name:\$oldbak"
-else
-    echo "Old backup not detected, not executing remove command"
-fi
-EOF
-chmod +x /home/backup-$name.sh
-echo ""
-echo "Backup command created..."
-crontab -l > backup-$name
-echo "0 2 * * * /home/backup-$name.sh > /home/backup-$name.log 2>&1" >> backup-$name
-crontab backup-$name
-rm backup-$name
-echo ""
-echo "Cron job created..."
-echo ""
-echo "Make sure it's included on your cron list :"
-crontab -l
-        ;;
+    1) backup_path="Backup/backup-\$date" ;;
+    2) backup_path="bucket:Backup/backup-\$date" ;;
+    3) backup_path="bucket:Backup/backup-\$date" ;; 
+    4) backup_path="Backup/backup-\$date" ;;
+    5) backup_path="Backup/backup-\$date" ;; 
+    *) echo "Invalid option"; exit 1 ;;
 esac
+
+cat > /home/backup-$name.sh << EOF
+#!/bin/bash
+date=\$(date +%y-%m-%d)
+rclone mkdir $name:$backup_path
+cd /home
+for i in */; do
+    zip -r "\${i%/}.zip" "\$i"
+done
+mkdir -p /home/backup
+mv /home/*.zip /home/backup/
+rclone copy /home/backup/ $name:$backup_path/
+rm -rf /home/backup
+lines=\$(rclone lsf $name: 2>&1 | wc -l)
+if [ \$lines -gt 1 ]
+then
+    oldbak=\$(rclone lsf $name: 2>&1 | head -n 1)
+    rclone purge "$name:\$oldbak"
+else
+    echo "Old backup not detected, not executing remove command"
+fi
+EOF
+
+chmod +x /home/backup-$name.sh
+echo ""
+echo "Backup command created..."
+
+crontab -l > current_cron
+echo "0 2 * * * /home/backup-$name.sh > /home/backup-$name.log 2>&1" >> current_cron
+crontab current_cron
+rm current_cron
+
+echo ""
+echo "Cron job created..."
+echo ""
+echo "Make sure it's included in your cron list:"
+crontab -l
 echo "Backup rule successfully added"
 }
 
