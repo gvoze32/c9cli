@@ -508,48 +508,79 @@ service docker start
 }
 
 backups(){
-echo "=Everyday Backup at 2 AM="
-echo "Make sure you have set up an rclone config file using command: rclone config"
-echo ""
-read -p "If all has been set up correctly, then input your rclone remote name : " name
-echo ""
-echo "Choose the backup service provider"
-echo "1. Google Drive"
-echo "2. Storj"
-echo "3. Backblaze B2"
-echo "4. pCloud"
-echo "5. Jottacloud"
-read -r -p "Choose: " response
-case "$response" in
-    1) backup_path="Backup/backup-\$date" ;;
-    2) backup_path="backup-\$date" ;;
-    3) backup_path="backup-\$date" ;; 
-    4) backup_path="Backup/backup-\$date" ;;
-    5) backup_path="Backup/backup-\$date" ;; 
-    *) echo "Invalid option"; exit 1 ;;
-esac
+    echo "=Everyday Backup at 2 AM="
+    echo "Make sure you have set up an rclone config file using command: rclone config"
+    echo "If your storage is bucket type, then name the rclone config name same as your bucket name"
+    echo ""
+    read -p "If all has been set up correctly, then input your rclone remote name: " name
+    echo ""
+    echo "Choose the backup service provider"
+    echo "1. Google Drive"
+    echo "2. Storj"
+    echo "3. Backblaze B2"
+    echo "4. pCloud"
+    echo "5. Jottacloud"
+    read -r -p "Choose: " response
+    case "$response" in
+        1) backup_path="Backup/backup-\$date" ;;
+        2) backup_path="backup-\$date" ;;
+        3) backup_path="backup-\$date" ;; 
+        4) backup_path="Backup/backup-\$date" ;;
+        5) backup_path="Backup/backup-\$date" ;;
+        *) echo "Invalid option"; exit 1 ;;
+    esac
 
-cat > /home/backup-$name.sh << EOF
+    cat > /home/backup-$name.sh << EOF
 #!/bin/bash
 date=\$(date +%y-%m-%d)
-rclone mkdir $name:$backup_path
+echo "Creating backup directory: $name:$backup_path" >> /home/backup-$name.log
+rclone mkdir $name:$backup_path >> /home/backup-$name.log 2>&1
+
 cd /home
+echo "Archiving files..." >> /home/backup-$name.log
 for i in */; do
-    zip -r "\${i%/}.zip" "\$i"
+    zip -r "\${i%/}.zip" "\$i" >> /home/backup-$name.log 2>&1
 done
+
+echo "Moving archived files to /home/backup" >> /home/backup-$name.log
 mkdir -p /home/backup
-mv /home/*.zip /home/backup/
-rclone copy /home/backup/ $name:$backup_path/
-rm -rf /home/backup
-lines=\$(rclone lsf $name: 2>&1 | wc -l)
-if [ \$lines -gt 1 ]
-then
-    oldbak=\$(rclone lsf $name: 2>&1 | head -n 1)
-    rclone purge "$name:\$oldbak"
+mv /home/*.zip /home/backup/ >> /home/backup-$name.log 2>&1
+
+echo "Copying backup to remote" >> /home/backup-$name.log
+rclone copy /home/backup/ $name:$backup_path/ >> /home/backup-$name.log 2>&1
+
+echo "Removing local backup files" >> /home/backup-$name.log
+rm -rf /home/backup >> /home/backup-$name.log 2>&1
+
+echo "Checking for old backups" >> /home/backup-$name.log
+old_backups=\$(rclone lsf $name:$backup_path 2>&1)
+if [ -n "\$old_backups" ]; then
+    echo "Found old backups: \${old_backups}" >> /home/backup-$name.log
+    echo "\$old_backups" | sort | head -n -1 | while read -r oldbak; do
+        echo "Removing old backup: $name:\$oldbak" >> /home/backup-$name.log
+        rclone purge "$name:\$oldbak" >> /home/backup-$name.log 2>&1
+    done
 else
-    echo "Old backup not detected, not executing remove command"
+    echo "No old backups detected, not executing remove command" >> /home/backup-$name.log
 fi
 EOF
+
+    chmod +x /home/backup-$name.sh
+    echo ""
+    echo "Backup command created..."
+
+    crontab -l > current_cron
+    echo "0 2 * * * /home/backup-$name.sh > /home/backup-$name.log 2>&1" >> current_cron
+    crontab current_cron
+    rm current_cron
+
+    echo ""
+    echo "Cron job created..."
+    echo ""
+    echo "Make sure it's included in your cron list:"
+    crontab -l
+    echo "Backup rule successfully added"
+}
 
 chmod +x /home/backup-$name.sh
 echo ""
