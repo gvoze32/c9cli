@@ -205,8 +205,8 @@ NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$pw
 EOF
 docker compose -p $user up -d
-if [ -d "/home/c9users/$user/workspace" ]; then
-cd /home/c9users/$user/workspace
+if [ -d "/home/c9users/$user" ]; then
+cd /home/c9users/$user
 
 ### Your custom default bundling files goes here, it's recommended to put it on resources directory
 ### START
@@ -238,8 +238,8 @@ EOF
 sed -i '$ d' /home/c9usersmemlimit/docker-compose.yml
 echo "          memory: $mem" >> /home/c9usersmemlimit/docker-compose.yml
 docker compose -p $user up -d
-if [ -d "/home/c9usersmemlimit/$user/workspace" ]; then
-cd /home/c9usersmemlimit/$user/workspace
+if [ -d "/home/c9usersmemlimit/$user" ]; then
+cd /home/c9usersmemlimit/$user
 
 ### Your custom default bundling files goes here, it's recommended to put it on resources directory
 ### START
