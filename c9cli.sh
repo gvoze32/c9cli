@@ -211,7 +211,7 @@ while [[ "$#" -gt 0 ]]; do
       shift 2
       ;;
     -o|--port)
-      portenv="$2"
+      port="$2"
       shift 2
       ;;
     -i|--image)
@@ -225,29 +225,39 @@ while [[ "$#" -gt 0 ]]; do
   esac
 done
 
-read -p "Username : " user
-read -p "Password : " pw
+if [[ -z "$user" ]]; then
+  read -p "Username: " user
+fi
+if [[ -z "$pw" ]]; then
+  read -p "Password: " pw
+fi
 echo
-read -p "Port : " port
+if [[ -z "$port" ]]; then
+  read -p "Port: " port
+fi
 echo
-echo "Select image:"
-echo "1. Ubuntu 20.04"
-echo "2. Ubuntu 22.04"
-read -p "Enter image option (1/2) : " image_choice
-if [ "$image_choice" == "1" ]; then
-  image="gvoze32/cloud9:focal"
-elif [ "$image_choice" == "2" ]; then
-  image="gvoze32/cloud9:jammy"
+if [[ -z "$image" ]]; then
+  echo "Select image:"
+  echo "1. Ubuntu 20.04"
+  echo "2. Ubuntu 22.04"
+  read -p "Enter image option (1/2): " image_choice
+  if [ "$image_choice" == "1" ]; then
+    image="gvoze32/cloud9:focal"
+  elif [ "$image_choice" == "2" ]; then
+    image="gvoze32/cloud9:jammy"
+  else
+    echo "Invalid option, using default image."
+    image="gvoze32/cloud9:focal"
+  fi
 else
-  echo "Invalid option, using default image."
-  image="gvoze32/cloud9:focal"
+  echo "Using provided image: $image"
 fi
 cd /home/c9users
 rm .env
 cat > /home/c9users/.env << EOF
-PORT=$port
 NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$pw
+PORT=$port
 DOCKER_IMAGE=$image
 EOF
 docker compose -p $user up -d
@@ -280,7 +290,7 @@ while [[ "$#" -gt 0 ]]; do
       shift 2
       ;;
     -o|--port)
-      portenv="$2"
+      port="$2"
       shift 2
       ;;
     -i|--image)
@@ -288,7 +298,7 @@ while [[ "$#" -gt 0 ]]; do
       shift 2
       ;;
     -l|--limit)
-      mem="$2"
+      limit="$2"
       shift 2
       ;;
     *)
@@ -298,31 +308,43 @@ while [[ "$#" -gt 0 ]]; do
   esac
 done
 
-read -p "Username : " user
-read -p "Password : " pw
+if [[ -z "$user" ]]; then
+  read -p "Username: " user
+fi
+if [[ -z "$pw" ]]; then
+  read -p "Password: " pw
+fi
 echo
-read -p "Port : " portenv
-read -p "Memory Limit (Example = 1024m) : " mem
+if [[ -z "$port" ]]; then
+  read -p "Port: " port
+fi
+if [[ -z "$limit" ]]; then
+  read -p "Memory Limit (ex: 1024m): " limit
+fi
 echo
-echo "Select image:"
-echo "1. Ubuntu 20.04"
-echo "2. Ubuntu 22.04"
-read -p "Enter image option (1/2) : " image_choice
-if [ "$image_choice" == "1" ]; then
-  image="gvoze32/cloud9:focal"
-elif [ "$image_choice" == "2" ]; then
-  image="gvoze32/cloud9:jammy"
+if [[ -z "$image" ]]; then
+  echo "Select image:"
+  echo "1. Ubuntu 20.04"
+  echo "2. Ubuntu 22.04"
+  read -p "Enter image option (1/2) : " image_choice
+  if [ "$image_choice" == "1" ]; then
+    image="gvoze32/cloud9:focal"
+  elif [ "$image_choice" == "2" ]; then
+    image="gvoze32/cloud9:jammy"
+  else
+    echo "Invalid option, using default image."
+    image="gvoze32/cloud9:focal"
+  fi
 else
-  echo "Invalid option, using default image."
-  image="gvoze32/cloud9:focal"
+  echo "Using provided image: $image"
 fi
 cd /home/c9usersmemlimit
 rm .env
 cat > /home/c9usersmemlimit/.env << EOF
-PORT=$portenv
 NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$pw
-MEMORY=$mem
+PORT=$port
+MEMORY=$limit
 DOCKER_IMAGE=$image
 EOF
 docker compose -p $user up -d
