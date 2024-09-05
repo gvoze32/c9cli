@@ -66,11 +66,11 @@ bantuan() {
     echo "version             : Show version"
     echo
     echo "Options:"
-    echo "  -u, --username    : Username"
-    echo "  -p, --password    : Password"
-    echo "  -o, --port        : Port number"
-    echo "  -i, --image       : Image to use (e.g., gvoze32/cloud9:focal)"
-    echo "  -l, --limit       : Memory limit (e.g., 1024m)"
+    echo "  -u                : Username"
+    echo "  -p                : Password"
+    echo "  -o                : Port number"
+    echo "  -i                : Image to use (e.g., gvoze32/cloud9:focal)"
+    echo "  -l                : Memory limit (e.g., 1024m)"
     echo
     echo "Copyright (c) 2024 c9cli (under MIT License)"
     echo "Built with love♡ by gvoze32"
