@@ -225,11 +225,14 @@ if [[ -z "$image" ]]; then
   echo "Select image:"
   echo "1. Ubuntu 20.04"
   echo "2. Ubuntu 22.04"
+  echo "3. Ubuntu 24.04"
   read -p "Enter image option (1/2): " image_choice
   if [ "$image_choice" == "1" ]; then
     image="gvoze32/cloud9:focal"
   elif [ "$image_choice" == "2" ]; then
     image="gvoze32/cloud9:jammy"
+  elif [ "$image_choice" == "3" ]; then
+    image="gvoze32/cloud9:noble"
   else
     echo "Invalid option, using default image."
     image="gvoze32/cloud9:focal"
@@ -301,11 +304,14 @@ if [[ -z "$image" ]]; then
   echo "Select image:"
   echo "1. Ubuntu 20.04"
   echo "2. Ubuntu 22.04"
+  echo "3. Ubuntu 24.04"
   read -p "Enter image option (1/2) : " image_choice
   if [ "$image_choice" == "1" ]; then
     image="gvoze32/cloud9:focal"
   elif [ "$image_choice" == "2" ]; then
     image="gvoze32/cloud9:jammy"
+  elif [ "$image_choice" == "3" ]; then
+    image="gvoze32/cloud9:noble"
   else
     echo "Invalid option, using default image."
     image="gvoze32/cloud9:focal"
