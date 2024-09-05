@@ -65,6 +65,13 @@ bantuan() {
     echo "help                : Show help"
     echo "version             : Show version"
     echo
+    echo "Options:"
+    echo "  -u, --username    Username for the Docker container (optional)"
+    echo "  -p, --password    Password for the Docker container (optional)"
+    echo "  -o, --port        Port number for the Docker container (optional)"
+    echo "  -i, --image       Docker image to use (default: gvoze32/cloud9:focal)"
+    echo "  -l, --limit       Memory limit for the Docker container (e.g., 1024m, optional)"
+    echo
     echo "Copyright (c) 2024 c9cli (under MIT License)"
     echo "Built with love♡ by gvoze32"
 }
@@ -193,6 +200,31 @@ systemctl status c9-$user.service
 }
 
 createnewdocker(){
+while [[ "$#" -gt 0 ]]; do
+  case $1 in
+    -u|--username)
+      user="$2"
+      shift 2
+      ;;
+    -p|--password)
+      pw="$2"
+      shift 2
+      ;;
+    -o|--port)
+      portenv="$2"
+      shift 2
+      ;;
+    -i|--image)
+      image="$2"
+      shift 2
+      ;;
+    *)
+      echo "Usage: c9cli create docker [-u username] [-p password] [-o port] [-i image]"
+      return 1
+      ;;
+  esac
+done
+
 read -p "Username : " user
 read -p "Password : " pw
 echo
@@ -234,8 +266,38 @@ fi
 }
 
 # CREATE DOCKERLIMIT
-
 createnewdockermemlimit(){
+mem="1024m"
+
+while [[ "$#" -gt 0 ]]; do
+  case $1 in
+    -u|--username)
+      user="$2"
+      shift 2
+      ;;
+    -p|--password)
+      pw="$2"
+      shift 2
+      ;;
+    -o|--port)
+      portenv="$2"
+      shift 2
+      ;;
+    -i|--image)
+      image="$2"
+      shift 2
+      ;;
+    -l|--limit)
+      mem="$2"
+      shift 2
+      ;;
+    *)
+      echo "Usage: c9cli create dockerlimit [-u username] [-p password] [-o port] [-i image] [-l memory limit]"
+      return 1
+      ;;
+  esac
+done
+
 read -p "Username : " user
 read -p "Password : " pw
 echo
