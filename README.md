@@ -28,6 +28,6 @@ sudo wget https://raw.githubusercontent.com/gvoze32/c9cli/master/c9cli.sh -O /us
 c9cli help
 ```
 
-Using Docker image from [gvoze32/cloud9image](https://github.com/gvoze32/cloud9image) / [dockerhub](https://hub.docker.com/repository/docker/gvoze32/cloud9)
+Using Docker image from [cloud9image](https://github.com/gvoze32/cloud9image) / [dockerhub](https://hub.docker.com/repository/docker/gvoze32/cloud9)
 
 If you have any problem in using c9cli, please open new issue.
