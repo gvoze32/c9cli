@@ -279,34 +279,61 @@ fi
 createnewdockermemlimit(){
 mem="1024m"
 
-while [[ "$#" -gt 0 ]]; do
-  case $1 in
-    -u|--username)
-      user="$2"
-      shift 2
+while getopts "u:p:o:i:l:" opt; do
+  case ${opt} in
+    u )
+      user=$OPTARG
       ;;
-    -p|--password)
-      pw="$2"
-      shift 2
+    p )
+      pw=$OPTARG
       ;;
-    -o|--port)
-      port="$2"
-      shift 2
+    o )
+      port=$OPTARG
       ;;
-    -i|--image)
-      image="$2"
-      shift 2
+    i )
+      image=$OPTARG
       ;;
-    -l|--limit)
-      limit="$2"
-      shift 2
+    l )
+      limit=$OPTARG
       ;;
-    *)
-      echo "Usage: c9cli create dockerlimit [-u username] [-p password] [-o port] [-i image] [-l memory limit]"
-      return 1
+    \? )
+      echo "Invalid option: $OPTARG" 1>&2
+      ;;
+    : )
+      echo "Invalid option: $OPTARG requires an argument" 1>&2
       ;;
   esac
 done
+shift $((OPTIND -1))
+
+# while [[ "$#" -gt 0 ]]; do
+#   case $1 in
+#     -u|--username)
+#       user="$2"
+#       shift 2
+#       ;;
+#     -p|--password)
+#       pw="$2"
+#       shift 2
+#       ;;
+#     -o|--port)
+#       port="$2"
+#       shift 2
+#       ;;
+#     -i|--image)
+#       image="$2"
+#       shift 2
+#       ;;
+#     -l|--limit)
+#       limit="$2"
+#       shift 2
+#       ;;
+#     *)
+#       echo "Usage: c9cli create dockerlimit [-u username] [-p password] [-o port] [-i image] [-l memory limit]"
+#       return 1
+#       ;;
+#   esac
+# done
 
 echo "Creating docker container with memory limit:"
 echo "Username: $user"
