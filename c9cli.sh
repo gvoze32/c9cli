@@ -197,12 +197,26 @@ read -p "Username : " user
 read -s -p "Password : " pw
 echo
 read -p "Port : " port
+echo
+echo "Select image:"
+echo "1. Ubuntu 20.04"
+echo "2. Ubuntu 22.04"
+read -p "Enter image option (1/2) : " image_choice
+if [ "$image_choice" == "1" ]; then
+  image="gvoze32/cloud9:focal"
+elif [ "$image_choice" == "2" ]; then
+  image="gvoze32/cloud9:jammy"
+else
+  echo "Invalid option, using default image."
+  image="gvoze32/cloud9:focal"
+fi
 cd /home/c9users
 rm .env
 cat > /home/c9users/.env << EOF
 PORT=$port
 NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$pw
+DOCKER_IMAGE=$image
 EOF
 docker compose -p $user up -d
 if [ -d "/home/c9users/$user" ]; then
@@ -227,6 +241,19 @@ read -s -p "Password : " pw
 echo
 read -p "Port : " portenv
 read -p "Memory Limit (Example = 1024m) : " mem
+echo
+echo "Select image:"
+echo "1. Ubuntu 20.04"
+echo "2. Ubuntu 22.04"
+read -p "Enter image option (1/2) : " image_choice
+if [ "$image_choice" == "1" ]; then
+  image="gvoze32/cloud9:focal"
+elif [ "$image_choice" == "2" ]; then
+  image="gvoze32/cloud9:jammy"
+else
+  echo "Invalid option, using default image."
+  image="gvoze32/cloud9:focal"
+fi
 cd /home/c9usersmemlimit
 rm .env
 cat > /home/c9usersmemlimit/.env << EOF
@@ -234,9 +261,8 @@ PORT=$portenv
 NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$pw
 MEMORY=$mem
+DOCKER_IMAGE=$image
 EOF
-sed -i '$ d' /home/c9usersmemlimit/docker-compose.yml
-echo "          memory: $mem" >> /home/c9usersmemlimit/docker-compose.yml
 docker compose -p $user up -d
 if [ -d "/home/c9usersmemlimit/$user" ]; then
 cd /home/c9usersmemlimit/$user

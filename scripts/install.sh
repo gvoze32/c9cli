@@ -25,7 +25,7 @@ install_docker() {
         sudo cat > /home/c9users/docker-compose.yml << EOF
 services:
   cloud9:
-    image: lscr.io/linuxserver/cloud9:latest
+    image: \${DOCKER_IMAGE}
     container_name: c9-\${NAMA_PELANGGAN}
     environment:
       - TZ=Asia/Jakarta
@@ -44,7 +44,7 @@ install_docker_memlimit() {
         sudo cat > /home/c9usersmemlimit/docker-compose.yml << EOF
 services:
   cloud9:
-    image: lscr.io/linuxserver/cloud9:latest
+    image: \${DOCKER_IMAGE}
     container_name: c9-\${NAMA_PELANGGAN}
     environment:
       - TZ=Asia/Jakarta
