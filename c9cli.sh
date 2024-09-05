@@ -66,11 +66,11 @@ bantuan() {
     echo "version             : Show version"
     echo
     echo "Options:"
-    echo "  -u, --username    Username for the Docker container (optional)"
-    echo "  -p, --password    Password for the Docker container (optional)"
-    echo "  -o, --port        Port number for the Docker container (optional)"
-    echo "  -i, --image       Docker image to use (default: gvoze32/cloud9:focal)"
-    echo "  -l, --limit       Memory limit for the Docker container (e.g., 1024m, optional)"
+    echo "  -u, --username    : Username"
+    echo "  -p, --password    : Password"
+    echo "  -o, --port        : Port number"
+    echo "  -i, --image       : Image to use (e.g., gvoze32/cloud9:focal)"
+    echo "  -l, --limit       : Memory limit (e.g., 1024m)"
     echo
     echo "Copyright (c) 2024 c9cli (under MIT License)"
     echo "Built with love♡ by gvoze32"
@@ -141,7 +141,7 @@ createnewsystemdlimit(){
 read -p "Username : " user
 read -p "Password : " password
 echo
-read -p "Memory Limit (Example = 1G) : " mem
+read -p "Memory Limit (e.g., 1G) : " mem
 read -p "Port : " port
 
 apt-get update -y
@@ -200,28 +200,13 @@ systemctl status c9-$user.service
 }
 
 createnewdocker(){
-while [[ "$#" -gt 0 ]]; do
-  case $1 in
-    -u|--username)
-      user="$2"
-      shift 2
-      ;;
-    -p|--password)
-      pw="$2"
-      shift 2
-      ;;
-    -o|--port)
-      port="$2"
-      shift 2
-      ;;
-    -i|--image)
-      image="$2"
-      shift 2
-      ;;
-    *)
-      echo "Usage: c9cli create docker [-u username] [-p password] [-o port] [-i image]"
-      return 1
-      ;;
+while getopts "u:p:o:l:i:" opt; do
+  case $opt in
+    u) user="$OPTARG" ;;
+    p) pw="$OPTARG" ;;
+    o) port="$OPTARG" ;;
+    i) image="$OPTARG" ;;
+    \?) echo "Invalid option: -$OPTARG" >&2 ;;
   esac
 done
 
@@ -252,6 +237,14 @@ if [[ -z "$image" ]]; then
 else
   echo "Using provided image: $image"
 fi
+
+echo "Creating docker container:"
+echo "Username: $user"
+echo "Password: $pw"
+echo "Port: $port"
+echo "Memory Limit: $limit"
+echo "Image: $image"
+
 cd /home/c9users
 rm .env
 cat > /home/c9users/.env << EOF
@@ -279,41 +272,16 @@ fi
 createnewdockermemlimit(){
 limit="1024m"
 
-while [[ "$#" -gt 0 ]]; do
-  case $1 in
-    -u|--username)
-      user="$2"
-      shift 2
-      ;;
-    -p|--password)
-      pw="$2"
-      shift 2
-      ;;
-    -o|--port)
-      port="$2"
-      shift 2
-      ;;
-    -i|--image)
-      image="$2"
-      shift 2
-      ;;
-    -l|--limit)
-      limit="$2"
-      shift 2
-      ;;
-    *)
-      echo "Usage: c9cli create dockerlimit [-u username] [-p password] [-o port] [-i image] [-l memory limit]"
-      return 1
-      ;;
+while getopts "u:p:o:l:i:" opt; do
+  case $opt in
+    u) user="$OPTARG" ;;
+    p) pw="$OPTARG" ;;
+    o) port="$OPTARG" ;;
+    l) limit="$OPTARG" ;;
+    i) image="$OPTARG" ;;
+    \?) echo "Invalid option: -$OPTARG" >&2 ;;
   esac
 done
-
-echo "Creating docker container with memory limit:"
-echo "Username: $user"
-echo "Password: $pw"
-echo "Port: $port"
-echo "Memory Limit: $limit"
-echo "Image: $image"
 
 if [[ -z "$user" ]]; then
   read -p "Username: " user
@@ -326,7 +294,7 @@ if [[ -z "$port" ]]; then
   read -p "Port: " port
 fi
 if [[ -z "$limit" ]]; then
-  read -p "Memory Limit (ex: 1024m): " limit
+  read -p "Memory Limit (e.g., 1024m): " limit
 fi
 echo
 if [[ -z "$image" ]]; then
@@ -345,6 +313,14 @@ if [[ -z "$image" ]]; then
 else
   echo "Using provided image: $image"
 fi
+
+echo "Creating docker container with memory limit:"
+echo "Username: $user"
+echo "Password: $pw"
+echo "Port: $port"
+echo "Memory Limit: $limit"
+echo "Image: $image"
+
 cd /home/c9usersmemlimit
 rm .env
 cat > /home/c9usersmemlimit/.env << EOF
@@ -492,7 +468,7 @@ changepassworddocker() {
       ;;
     2)
       base_dir="/home/c9usersmemlimit"
-      read -p "Memory Limit (Example = 1024m): " mem
+      read -p "Memory Limit (e.g., 1024m): " mem
       ;;
     *)
       echo "Invalid option"
