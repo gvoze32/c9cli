@@ -308,6 +308,13 @@ while [[ "$#" -gt 0 ]]; do
   esac
 done
 
+echo "Creating docker container with memory limit:"
+echo "Username: $user"
+echo "Password: $pw"
+echo "Port: $port"
+echo "Memory Limit: $limit"
+echo "Image: $image"
+
 if [[ -z "$user" ]]; then
   read -p "Username: " user
 fi
