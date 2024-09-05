@@ -73,7 +73,7 @@ bantuan() {
 
 createnewsystemd(){
 read -p "Username : " user
-read -s -p "Password : " password
+read -p "Password : " password
 echo
 read -p "Port : " port
 
@@ -132,7 +132,7 @@ systemctl status c9-$user.service
 
 createnewsystemdlimit(){
 read -p "Username : " user
-read -s -p "Password : " password
+read -p "Password : " password
 echo
 read -p "Memory Limit (Example = 1G) : " mem
 read -p "Port : " port
@@ -194,7 +194,7 @@ systemctl status c9-$user.service
 
 createnewdocker(){
 read -p "Username : " user
-read -s -p "Password : " pw
+read -p "Password : " pw
 echo
 read -p "Port : " port
 echo
@@ -237,7 +237,7 @@ fi
 
 createnewdockermemlimit(){
 read -p "Username : " user
-read -s -p "Password : " pw
+read -p "Password : " pw
 echo
 read -p "Port : " portenv
 read -p "Memory Limit (Example = 1024m) : " mem
