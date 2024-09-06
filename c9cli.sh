@@ -665,11 +665,11 @@ if [ "\$backup_count" -gt 1 ]; then
 
         if [ "$use_purge" = true ]; then
             echo "Using rclone purge for bucket storage" >> /home/backup-$name.log
-            rclone purge "$name:$cloud_folder/\$full_path" >> /home/backup-$name.log 2>&1
+            rclone purge "$name:\$full_path" >> /home/backup-$name.log 2>&1
         else
             echo "Using rclone delete for non-bucket storage" >> /home/backup-$name.log
-            rclone delete "$name:$cloud_folder/\$full_path" >> /home/backup-$name.log 2>&1
-            rclone rmdirs "$name:$cloud_folder/\$full_path" --leave-root >> /home/backup-$name.log 2>&1
+            rclone delete "$name:\$full_path" >> /home/backup-$name.log 2>&1
+            rclone rmdirs "$name:\$full_path" --leave-root >> /home/backup-$name.log 2>&1
         fi
     done
 else
