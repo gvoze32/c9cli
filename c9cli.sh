@@ -613,6 +613,8 @@ backups(){
     echo ""
     read -p "If all has been set up correctly, then input your rclone remote name: " name
     echo ""
+    read -p "Define the backup folder name on the cloud: " cloud_folder
+    echo ""
     echo "Choose the backup service provider"
     echo "1. Google Drive"
     echo "2. Storj"
@@ -621,11 +623,11 @@ backups(){
     echo "5. Jottacloud"
     read -r -p "Choose: " response
     case "$response" in
-        1) backup_path="Backup/backup-\$date"; list_path="Backup" ;;
-        2) backup_path="backup-\$date"; list_path="" ;;
-        3) backup_path="backup-\$date"; list_path="" ;;
-        4) backup_path="Backup/backup-\$date"; list_path="Backup" ;;
-        5) backup_path="Backup/backup-\$date"; list_path="Backup" ;;
+        1) backup_path="$cloud_folder/backup-\$date"; list_path="$cloud_folder"; use_purge=false ;;
+        2) backup_path="$cloud_folder/backup-\$date"; list_path="$cloud_folder"; use_purge=true ;;
+        3) backup_path="$cloud_folder/backup-\$date"; list_path="$cloud_folder"; use_purge=true ;;
+        4) backup_path="$cloud_folder/backup-\$date"; list_path="$cloud_folder"; use_purge=false ;;
+        5) backup_path="$cloud_folder/backup-\$date"; list_path="$cloud_folder"; use_purge=false ;;
         *) echo "Invalid option"; exit 1 ;;
     esac
 
@@ -633,7 +635,7 @@ backups(){
 #!/bin/bash
 date=\$(date +%y-%m-%d)
 echo "Creating backup directory: $name:$backup_path" >> /home/backup-$name.log
-rclone mkdir $name:$backup_path >> /home/backup-$name.log 2>&1
+rclone mkdir "$name:$backup_path" >> /home/backup-$name.log 2>&1
 
 cd /home
 echo "Archiving files..." >> /home/backup-$name.log
@@ -646,21 +648,29 @@ mkdir -p /home/backup
 mv /home/*.zip /home/backup/ >> /home/backup-$name.log 2>&1
 
 echo "Copying backup to remote" >> /home/backup-$name.log
-rclone copy /home/backup/ $name:$backup_path/ >> /home/backup-$name.log 2>&1
+rclone copy /home/backup/ "$name:$backup_path/" >> /home/backup-$name.log 2>&1
 
 echo "Removing local backup files" >> /home/backup-$name.log
 rm -rf /home/backup >> /home/backup-$name.log 2>&1
 
 echo "Checking for old backups" >> /home/backup-$name.log
-old_backups=\$(rclone lsf $name:$list_path 2>&1 | grep '^backup-' | sort)
+old_backups=\$(rclone lsf "$name:$list_path" 2>&1 | grep '^backup-' | sort)
 backup_count=\$(echo "\$old_backups" | wc -l)
 
 if [ "\$backup_count" -gt 1 ]; then
     echo "Found \$((backup_count - 1)) old backups:" >> /home/backup-$name.log
     echo "\$old_backups" | head -n -1 | while read -r oldbak; do
-        full_path="\${list_path:+\$list_path/}\$oldbak"
+        full_path="\$list_path/\$oldbak"
         echo "Removing old backup: $name:\$full_path" >> /home/backup-$name.log
-        rclone purge "$name:\$full_path" >> /home/backup-$name.log 2>&1
+
+        if [ "$use_purge" = true ]; then
+            echo "Using rclone purge for bucket storage" >> /home/backup-$name.log
+            rclone purge "$name:\$full_path" >> /home/backup-$name.log 2>&1
+        else
+            echo "Using rclone delete for non-bucket storage" >> /home/backup-$name.log
+            rclone delete "$name:\$full_path" >> /home/backup-$name.log 2>&1
+            rclone rmdirs "$name:\$full_path" --leave-root >> /home/backup-$name.log 2>&1
+        fi
     done
 else
     echo "No old backups detected (only one backup present), not executing remove command" >> /home/backup-$name.log
