@@ -669,7 +669,7 @@ if [ "\$backup_count" -gt 1 ]; then
         else
             echo "Using rclone delete for non-bucket storage" >> /home/backup-$name.log
             rclone delete "$name:\$full_path" >> /home/backup-$name.log 2>&1
-            rclone rmdirs "$name:\$full_path" --leave-root >> /home/backup-$name.log 2>&1
+            rclone rmdirs "$name:\$full_path" >> /home/backup-$name.log 2>&1
         fi
     done
 else
