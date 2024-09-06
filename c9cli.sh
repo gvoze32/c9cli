@@ -607,11 +607,13 @@ service docker start
 }
 
 backups(){
-    echo "=Everyday Backup at 2 AM="
+    echo "=Everyday Backup="
     echo "Make sure you have set up an rclone config file using command: rclone config"
     echo "If your storage is bucket type, then name the rclone config name same as your bucket name"
     echo ""
     read -p "If all has been set up correctly, then input your rclone remote name: " name
+    echo ""
+    read -p "Enter the time for backup (hour 0-23): " hour
     echo ""
     read -p "Define the backup folder name on the cloud: " cloud_folder
     echo ""
@@ -638,7 +640,7 @@ echo "Creating backup directory: $name:$backup_path" >> /home/backup-$name.log
 rclone mkdir "$name:$backup_path" >> /home/backup-$name.log 2>&1
 
 cd /home
-echo "Archiving files..." >> /home/backup-$name.log
+echo "Archiving files" >> /home/backup-$name.log
 for i in */; do
     zip -r "\${i%/}.zip" "\$i" >> /home/backup-$name.log 2>&1
 done
@@ -679,15 +681,15 @@ EOF
 
     chmod +x /home/backup-$name.sh
     echo ""
-    echo "Backup command created..."
+    echo "Backup command created"
 
     crontab -l > current_cron
-    echo "0 2 * * * /home/backup-$name.sh > /home/backup-$name.log 2>&1" >> current_cron
+    echo "0 $hour * * * /home/backup-$name.sh > /home/backup-$name.log 2>&1" >> current_cron
     crontab current_cron
     rm current_cron
 
     echo ""
-    echo "Cron job created..."
+    echo "Cron job created"
     echo ""
     echo "Make sure it's included in your cron list:"
     crontab -l
