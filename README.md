@@ -13,13 +13,13 @@ Make sure you have root access before doing this installation.
 Get Dependencies
 
 ```
-sudo wget https://raw.githubusercontent.com/gvoze32/c9cli/master/scripts/install.sh && sudo chmod +x install.sh && sudo ./install.sh
+sudo curl -fsSL https://raw.githubusercontent.com/gvoze32/c9cli/master/scripts/install.sh | sudo bash
 ```
 
 Install
 
 ```
-sudo wget https://raw.githubusercontent.com/gvoze32/c9cli/master/c9cli.sh -O /usr/local/bin/c9cli && sudo chmod +x /usr/local/bin/c9cli
+sudo curl -fsSL https://raw.githubusercontent.com/gvoze32/c9cli/master/c9cli.sh -o /usr/local/bin/c9cli && sudo chmod +x /usr/local/bin/c9cli
 ```
 
 ## Run
