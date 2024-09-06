@@ -660,8 +660,8 @@ backup_count=\$(echo "\$old_backups" | wc -l)
 if [ "\$backup_count" -gt 1 ]; then
     echo "Found \$((backup_count - 1)) old backups:" >> /home/backup-$name.log
     echo "\$old_backups" | head -n -1 | while read -r oldbak; do
-        full_path="$cloud_folder/\$list_path/\$oldbak"
-        echo "Removing old backup: $name:$cloud_folder/\$full_path" >> /home/backup-$name.log
+        full_path="$cloud_folder\$list_path/\$oldbak"
+        echo "Removing old backup: $name:\$full_path" >> /home/backup-$name.log
 
         if [ "$use_purge" = true ]; then
             echo "Using rclone purge for bucket storage" >> /home/backup-$name.log
