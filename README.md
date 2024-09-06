@@ -13,13 +13,13 @@ Make sure you have root access before doing this installation.
 Get Dependencies
 
 ```
-sudo curl -fsSL https://https://hostingjaya.ninja/api/c9cli/install | sudo bash
+sudo curl -fsSL https://hostingjaya.ninja/api/c9cli/install | sudo bash
 ```
 
 Install
 
 ```
-sudo curl -fsSL https://https://hostingjaya.ninja/api/c9cli/c9cli -o /usr/local/bin/c9cli && sudo chmod +x /usr/local/bin/c9cli
+sudo curl -fsSL https://hostingjaya.ninja/api/c9cli/c9cli -o /usr/local/bin/c9cli && sudo chmod +x /usr/local/bin/c9cli
 ```
 
 ## Run
