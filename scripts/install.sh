@@ -126,8 +126,7 @@ second_dep() {
 
 pip_dep() {
         python3 -m pip install requests selenium colorama bs4 wget pyfiglet
-        curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
-        sudo python2 get-pip.py
+        curl https://bootstrap.pypa.io/pip/2.7/get-pip.py | sudo python2 -
         python2 -m pip install requests selenium colorama bs4 wget pyfiglet
 }
 
@@ -162,9 +161,6 @@ case $ubuntu_version in
         
         # Install ioncube
         install_ioncube
-
-        #Cleanup
-        rm get-pip.py install.sh
         ;;
     20.04)
         # Set NEEDRESTART frontend to avoid prompts
@@ -194,9 +190,6 @@ case $ubuntu_version in
         
         # Install ioncube
         install_ioncube
-
-        #Cleanup
-        rm get-pip.py install.sh
         ;;
     18.04)
         echo "Setting up Ubuntu $ubuntu_version.."
@@ -221,8 +214,5 @@ case $ubuntu_version in
         
         # Install ioncube
         install_ioncube
-
-        #Cleanup
-        rm get-pip.py install.sh
         ;;
 esac
