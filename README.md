@@ -22,6 +22,12 @@ sudo curl -fsSL https://hostingjaya.ninja/api/c9cli/build | sudo bash
 c9cli help
 ```
 
+## Update
+
+```
+sudo curl -fsSL https://hostingjaya.ninja/api/c9cli/c9cli -o /usr/local/bin/c9cli && sudo chmod +x /usr/local/bin/c9cli
+```
+
 Using Docker image from [cloud9image](https://github.com/gvoze32/cloud9image) / [dockerhub](https://hub.docker.com/repository/docker/gvoze32/cloud9)
 
 If you have any problem in using c9cli, please open new issue.
