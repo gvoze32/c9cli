@@ -69,7 +69,7 @@ bantuan() {
     echo "-u                  : Username"
     echo "-p                  : Password"
     echo "-o                  : Port number"
-    echo "-i                  : Image to use (e.g., gvoze32/cloud9:focal)"
+    echo "-i                  : Image (e.g., gvoze32/cloud9:jammy)"
     echo "-l                  : Memory limit (e.g., 1024m)"
     echo
     echo "Copyright (c) 2024 c9cli (under MIT License)"
@@ -79,10 +79,31 @@ bantuan() {
 # CREATE SYSTEMD
 
 createnewsystemd(){
-read -p "Username : " user
-read -p "Password : " password
+while getopts "u:p:o:" opt; do
+  case $opt in
+    u) user="$OPTARG" ;;
+    p) pw="$OPTARG" ;;
+    o) port="$OPTARG" ;;
+    \?) echo "Invalid option: -$OPTARG" >&2 ;;
+  esac
+done
+
+if [[ -z "$user" ]]; then
+  read -p "Username: " user
+fi
+if [[ -z "$pw" ]]; then
+  read -p "Password: " pw
+fi
 echo
-read -p "Port : " port
+if [[ -z "$port" ]]; then
+  read -p "Port: " port
+fi
+echo
+
+echo "Creating workspace:"
+echo "Username: $user"
+echo "Password: $pw"
+echo "Port: $port"
 
 apt-get update -y
 apt-get upgrade -y
@@ -92,7 +113,7 @@ adduser --disabled-password --gecos "" $user
 
 case $ubuntu_version in
   22.04 | 20.04)
-    echo "$user:$password" | chpasswd
+    echo "$user:$pw" | chpasswd
     mkdir -p /home/$user/my-projects /home/$user/c9sdk
     chown -R $user:$user /home/$user
     chmod 700 /home/$user
@@ -100,7 +121,7 @@ case $ubuntu_version in
     sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
     ;;
   18.04)
-    echo -e "$password\n$password" | passwd $user
+    echo -e "$pw\n$pw" | passwd $user
     mkdir -p /home/$user/my-projects /home/$user/c9sdk
     chown $user.$user /home/$user -R
     chmod 700 /home/$user
@@ -116,7 +137,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/node /home/${user}/c9sdk/server.js -a $user:$password --listen 0.0.0.0 -w /home/$user/my-projects
+ExecStart=/usr/bin/node /home/${user}/c9sdk/server.js -a $user:$pw --listen 0.0.0.0 -w /home/$user/my-projects
 Environment=NODE_ENV=production PORT=$port
 User=$user
 Group=$user
@@ -138,11 +159,38 @@ systemctl status c9-$user.service
 }
 
 createnewsystemdlimit(){
-read -p "Username : " user
-read -p "Password : " password
+limit="1024m"
+
+while getopts "u:p:o:l:" opt; do
+  case $opt in
+    u) user="$OPTARG" ;;
+    p) pw="$OPTARG" ;;
+    o) port="$OPTARG" ;;
+    l) limit="$OPTARG" ;;
+    \?) echo "Invalid option: -$OPTARG" >&2 ;;
+  esac
+done
+
+if [[ -z "$user" ]]; then
+  read -p "Username: " user
+fi
+if [[ -z "$pw" ]]; then
+  read -p "Password: " pw
+fi
 echo
-read -p "Memory Limit (e.g., 1G) : " mem
-read -p "Port : " port
+if [[ -z "$port" ]]; then
+  read -p "Port: " port
+fi
+if [[ -z "$limit" ]]; then
+  read -p "Memory Limit (e.g., 1024m): " limit
+fi
+echo
+
+echo "Creating workspace with memory limit:"
+echo "Username: $user"
+echo "Password: $pw"
+echo "Port: $port"
+echo "Memory Limit: $limit"
 
 apt-get update -y
 apt-get upgrade -y
@@ -152,7 +200,7 @@ adduser --disabled-password --gecos "" $user
 
 case $ubuntu_version in
   22.04 | 20.04)
-    echo "$user:$password" | chpasswd
+    echo "$user:$pw" | chpasswd
     mkdir -p /home/$user/my-projects /home/$user/c9sdk
     chown -R $user:$user /home/$user
     chmod 700 /home/$user
@@ -160,7 +208,7 @@ case $ubuntu_version in
     sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
     ;;
   18.04)
-    echo -e "$password\n$password" | passwd $user
+    echo -e "$pw\n$pw" | passwd $user
     mkdir -p /home/$user/my-projects /home/$user/c9sdk
     chown $user.$user /home/$user -R
     chmod 700 /home/$user
@@ -176,13 +224,12 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/node /home/${user}/c9sdk/server.js -a $user:$password --listen 0.0.0.0 -w /home/$user/my-projects
+ExecStart=/usr/bin/node /home/${user}/c9sdk/server.js -a $user:$pw --listen 0.0.0.0 -w /home/$user/my-projects
 Environment=NODE_ENV=production PORT=$port
 User=$user
 Group=$user
 UMask=0002
-# MemoryLimit=$mem
-MemoryMax=$mem
+MemoryMax=$limit
 Restart=on-failure
 StandardOutput=journal
 StandardError=journal
@@ -200,7 +247,7 @@ systemctl status c9-$user.service
 }
 
 createnewdocker(){
-while getopts "u:p:o:l:i:" opt; do
+while getopts "u:p:o:i:" opt; do
   case $opt in
     u) user="$OPTARG" ;;
     p) pw="$OPTARG" ;;
@@ -226,7 +273,7 @@ if [[ -z "$image" ]]; then
   echo "1. Ubuntu 20.04"
   echo "2. Ubuntu 22.04"
   echo "3. Ubuntu 24.04"
-  read -p "Enter image option (1/2): " image_choice
+  read -p "Enter image option (1/3): " image_choice
   if [ "$image_choice" == "1" ]; then
     image="gvoze32/cloud9:focal"
   elif [ "$image_choice" == "2" ]; then
@@ -235,7 +282,7 @@ if [[ -z "$image" ]]; then
     image="gvoze32/cloud9:noble"
   else
     echo "Invalid option, using default image."
-    image="gvoze32/cloud9:focal"
+    image="gvoze32/cloud9:jammy"
   fi
 else
   echo "Using provided image: $image"
@@ -245,7 +292,6 @@ echo "Creating docker container:"
 echo "Username: $user"
 echo "Password: $pw"
 echo "Port: $port"
-echo "Memory Limit: $limit"
 echo "Image: $image"
 
 cd /home/c9users
@@ -305,7 +351,7 @@ if [[ -z "$image" ]]; then
   echo "1. Ubuntu 20.04"
   echo "2. Ubuntu 22.04"
   echo "3. Ubuntu 24.04"
-  read -p "Enter image option (1/2) : " image_choice
+  read -p "Enter image option (1/3) : " image_choice
   if [ "$image_choice" == "1" ]; then
     image="gvoze32/cloud9:focal"
   elif [ "$image_choice" == "2" ]; then
@@ -314,7 +360,7 @@ if [[ -z "$image" ]]; then
     image="gvoze32/cloud9:noble"
   else
     echo "Invalid option, using default image."
-    image="gvoze32/cloud9:focal"
+    image="gvoze32/cloud9:jammy"
   fi
 else
   echo "Using provided image: $image"
