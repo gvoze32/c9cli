@@ -16,7 +16,7 @@ Install
 sudo curl -fsSL https://hostingjaya.ninja/api/c9cli/build | sudo bash
 ```
 
-## Run
+Run
 
 ```
 c9cli help
