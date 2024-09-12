@@ -68,10 +68,8 @@ blank_env() {
 }
 
 custom_docker_size(){
-        read -p "Increase docker network limit to more than 30 containers? [y/N] (Default = n): " choice
-        if [[ $choice == [yY] || $choice == [yY][eE][sS] ]]; then
-            echo "Setting docker daemon service rule.."
-            sudo cat > /etc/docker/daemon.json << EOF
+        echo "Setting docker daemon service rule"
+        sudo cat > /etc/docker/daemon.json << EOF
 {
     "default-address-pools": [
         {
@@ -81,17 +79,9 @@ custom_docker_size(){
     ]
 }
 EOF
-            sudo service docker restart
-            sudo docker network inspect bridge | grep Subnet
-            echo "Done."
-        else
-            echo ""
-            echo "==============================="
-            echo " Default docker version is set "
-            echo "==============================="
-            echo ""
-            echo ""
-        fi
+        sudo service docker restart
+        sudo docker network inspect bridge | grep Subnet
+        echo "Docker daemon service rule added"
 }
 
 install_ioncube(){
