@@ -764,10 +764,10 @@ case $1 in
 create)
   case $2 in
     systemd)
-      createnewsystemd
+      createnewsystemd "${@:3}"
     ;;
     systemdlimit)
-      createnewsystemdlimit
+      createnewsystemdlimit "${@:3}"
     ;;
     docker)
       createnewdocker "${@:3}"
