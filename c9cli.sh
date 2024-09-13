@@ -653,7 +653,7 @@ service docker start
 }
 
 backups(){
-    echo "=Everyday Backup="
+    echo "Scheduled Backup"
     echo "Make sure you have set up an rclone config file using command: rclone config"
     echo "If your storage is bucket type, then name the rclone config name same as your bucket name"
     echo ""
@@ -685,10 +685,21 @@ date=\$(date +%y-%m-%d)
 echo "Creating backup directory: $name:$backup_path" >> /home/backup-$name.log
 rclone mkdir "$name:$backup_path" >> /home/backup-$name.log 2>&1
 
+echo "Archiving contents of c9users and c9usersmemlimit folders (excluding .c9 folders)" >> /home/backup-$name.log
 cd /home
-echo "Archiving files" >> /home/backup-$name.log
-for i in */; do
-    zip -r "\${i%/}.zip" "\$i" >> /home/backup-$name.log 2>&1
+for folder in c9users c9usersmemlimit; do
+    if [ -d "\$folder" ]; then
+        echo "Backing up contents of \$folder" >> /home/backup-$name.log
+        cd "\$folder"
+        for user_folder in */; do
+            user=\${user_folder%/}
+            echo "Backing up \$user from \$folder" >> /home/backup-$name.log
+            zip -r "/home/\$folder-\$user-\$date.zip" "\$user_folder" -x "*/\.c9/*" "\$user_folder.c9/*" >> /home/backup-$name.log 2>&1
+        done
+        cd /home
+    else
+        echo "Folder \$folder not found, skipping" >> /home/backup-$name.log
+    fi
 done
 
 echo "Moving archived files to /home/backup" >> /home/backup-$name.log
