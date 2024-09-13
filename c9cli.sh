@@ -61,7 +61,7 @@ bantuan() {
     echo "    configure       : Stop, start or restart running container"
     echo "    start           : Start Docker daemon service"
     echo "port                : Show used port lists"
-    echo "backup              : Backup workspace data with Rclone" -  WARNING: Currently supports for c9users and c9usersmemlimit docker containers only"
+    echo "backup              : Backup workspace data with Rclone - WARNING: Currently supports for c9users and c9usersmemlimit docker containers only"
     echo "help                : Show help"
     echo "version             : Show version"
     echo
