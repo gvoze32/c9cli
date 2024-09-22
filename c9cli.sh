@@ -69,9 +69,9 @@ bantuan() {
     echo "-u                  : Username"
     echo "-p                  : Password"
     echo "-o                  : Port number"
-    echo "-i                  : Image (e.g., gvoze32/cloud9:jammy)"
-    echo "-c                  : CPU limit (e.g., 10% or 1.0)"
     echo "-l                  : Memory limit (e.g., 1024m)"
+    echo "-c                  : CPU limit (e.g., 10% or 1.0)"
+    echo "-i                  : Image (e.g., gvoze32/cloud9:jammy)"
     echo
     echo "Copyright (c) 2024 c9cli (under MIT License)"
     echo "Built with love♡ by gvoze32"
@@ -163,13 +163,13 @@ createnewsystemdlimit(){
 limit="1024m"
 cpu_limit="10%"
 
-while getopts "u:p:o:c:l:" opt; do
+while getopts "u:p:o:l:c:" opt; do
   case $opt in
     u) user="$OPTARG" ;;
     p) pw="$OPTARG" ;;
     o) port="$OPTARG" ;;
-    c) cpu_limit="$OPTARG" ;;
     l) limit="$OPTARG" ;;
+    c) cpu_limit="$OPTARG" ;;
     \?) echo "Invalid option: -$OPTARG" >&2 ;;
   esac
 done
