@@ -70,6 +70,7 @@ bantuan() {
     echo "-p                  : Password"
     echo "-o                  : Port number"
     echo "-i                  : Image (e.g., gvoze32/cloud9:jammy)"
+    echo "-c                  : CPU limit (e.g., 10% or 1.0)"
     echo "-l                  : Memory limit (e.g., 1024m)"
     echo
     echo "Copyright (c) 2024 c9cli (under MIT License)"
@@ -160,12 +161,14 @@ systemctl status c9-$user.service
 
 createnewsystemdlimit(){
 limit="1024m"
+cpu_limit="10%"
 
-while getopts "u:p:o:l:" opt; do
+while getopts "u:p:o:c:l:" opt; do
   case $opt in
     u) user="$OPTARG" ;;
     p) pw="$OPTARG" ;;
     o) port="$OPTARG" ;;
+    c) cpu_limit="$OPTARG" ;;
     l) limit="$OPTARG" ;;
     \?) echo "Invalid option: -$OPTARG" >&2 ;;
   esac
@@ -184,6 +187,9 @@ fi
 if [[ -z "$limit" ]]; then
   read -p "Memory Limit (e.g., 1024m): " limit
 fi
+if [[ -z "$cpu_limit" ]]; then
+  read -p "CPU Limit (e.g., 10%): " cpu_limit
+fi
 echo
 
 echo "Creating workspace with memory limit:"
@@ -191,6 +197,7 @@ echo "Username: $user"
 echo "Password: $pw"
 echo "Port: $port"
 echo "Memory Limit: $limit"
+echo "CPU Limit: $cpu_limit"
 
 apt-get update -y
 apt-get upgrade -y
@@ -230,6 +237,7 @@ User=$user
 Group=$user
 UMask=0002
 MemoryMax=$limit
+CPUQuota=$cpu_limit
 Restart=on-failure
 StandardOutput=journal
 StandardError=journal
@@ -320,13 +328,15 @@ fi
 # CREATE DOCKERLIMIT
 createnewdockermemlimit(){
 limit="1024m"
+cpu_limit="1.0"
 
-while getopts "u:p:o:l:i:" opt; do
+while getopts "u:p:o:l:c:i:" opt; do
   case $opt in
     u) user="$OPTARG" ;;
     p) pw="$OPTARG" ;;
     o) port="$OPTARG" ;;
     l) limit="$OPTARG" ;;
+    c) cpu_limit="$OPTARG" ;;
     i) image="$OPTARG" ;;
     \?) echo "Invalid option: -$OPTARG" >&2 ;;
   esac
@@ -344,6 +354,9 @@ if [[ -z "$port" ]]; then
 fi
 if [[ -z "$limit" ]]; then
   read -p "Memory Limit (e.g., 1024m): " limit
+fi
+if [[ -z "$cpu_limit" ]]; then
+  read -p "CPU Limit (e.g., 1.0 for 1 core): " cpu_limit
 fi
 echo
 if [[ -z "$image" ]]; then
@@ -371,6 +384,7 @@ echo "Username: $user"
 echo "Password: $pw"
 echo "Port: $port"
 echo "Memory Limit: $limit"
+echo "CPU Limit: $cpu_limit"
 echo "Image: $image"
 
 cd /home/c9usersmemlimit
@@ -380,6 +394,7 @@ NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$pw
 PORT=$port
 MEMORY=$limit
+CPU_LIMIT=$cpu_limit
 DOCKER_IMAGE=$image
 EOF
 docker compose -p $user up -d

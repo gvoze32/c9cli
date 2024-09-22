@@ -59,6 +59,7 @@ services:
       resources:
         limits:
           memory: \${MEMORY}
+          cpus: \${CPU_LIMIT}
 EOF
 }
 
