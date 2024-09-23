@@ -160,9 +160,6 @@ systemctl status c9-$user.service
 }
 
 createnewsystemdlimit(){
-limit="1024m"
-cpu_limit="10%"
-
 while getopts "u:p:o:l:c:" opt; do
   case $opt in
     u) user="$OPTARG" ;;
@@ -184,6 +181,7 @@ echo
 if [[ -z "$port" ]]; then
   read -p "Port: " port
 fi
+echo
 if [[ -z "$limit" ]]; then
   read -p "Memory Limit (e.g., 1024m): " limit
 fi
@@ -327,9 +325,6 @@ fi
 
 # CREATE DOCKERLIMIT
 createnewdockermemlimit(){
-limit="1024m"
-cpu_limit="1.0"
-
 while getopts "u:p:o:l:c:i:" opt; do
   case $opt in
     u) user="$OPTARG" ;;
@@ -352,6 +347,7 @@ echo
 if [[ -z "$port" ]]; then
   read -p "Port: " port
 fi
+echo
 if [[ -z "$limit" ]]; then
   read -p "Memory Limit (e.g., 1024m): " limit
 fi
