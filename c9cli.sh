@@ -53,7 +53,8 @@ bantuan() {
     echo "  docker"
     echo "    delete          : Delete Docker container"
     echo "    status          : Show container status"
-    echo "    restart         : Restart (all) running containers"
+    echo "    restart         : Restart running containers"
+    echo "    restartall      : Restart (all) running containers"
     echo "    password        : Change user password, port & update limited RAM for dockerlimit"
     echo "    schedule        : Schedule container deletion"
     echo "    scheduled       : Show scheduled container deletion"
@@ -61,7 +62,7 @@ bantuan() {
     echo "    configure       : Stop, start or restart running container"
     echo "    start           : Start Docker daemon service"
     echo "port                : Show used port lists"
-    echo "backup              : Backup workspace data with Rclone - WARNING: Currently supports for c9users and c9usersmemlimit docker containers only"
+    echo "backup              : Backup workspace data with Rclone (Docker only)"
     echo "help                : Show help"
     echo "version             : Show version"
     echo
@@ -411,7 +412,7 @@ fi
 # MANAGE SYSTEMD
 
 deletesystemd(){
-read -p "Input User : " user
+read -p "Input User: " user
 sleep 3
 systemctl stop c9-$user.service
 sleep 3
@@ -422,12 +423,12 @@ rm -rf /home/$user
 }
 
 statussystemd(){
-read -p "Input User : " user
+read -p "Input User: " user
 systemctl status c9-$user.service
 }
 
 restartsystemd(){
-read -p "Input User : " user
+read -p "Input User: " user
 systemctl daemon-reload
 systemctl enable c9-$user.service
 systemctl restart c9-$user.service
@@ -436,8 +437,8 @@ systemctl status c9-$user.service
 }
 
 changepasswordsystemd() {
-read -p "Input User :" user
-read -p "Input New Password :" password
+read -p "Input User: " user
+read -p "Input New Password: " password
 
 sed -i "s/-a $user:.*/-a $user:$password/" /lib/systemd/system/c9-$user.service
 systemctl daemon-reload
@@ -447,7 +448,7 @@ systemctl status c9-$user.service
 }
 
 schedulesystemd(){
-read -p "Input User : " user
+read -p "Input User: " user
 echo " "
 echo "Format Example for Time: "
 echo " "
@@ -479,7 +480,7 @@ atq
 }
 
 convertsystemd(){
-read -p "Input User : " user
+read -p "Input User: " user
 echo "Input user password"
 passwd $user
 echo "Warning, C9 will be restart!"
@@ -494,7 +495,7 @@ systemctl status c9-$user.service
 # MANAGE DOCKER
 
 deletedocker(){
-read -p "Input User : " user
+read -p "Input User: " user
 echo Are the file is using Docker or Docker Memory Limit?
 echo 1. Docker
 echo 2. Docker Memory Limit
@@ -520,8 +521,8 @@ docker stats
 }
 
 changepassworddocker() {
-  read -p "Username : " user
-  read -p "New Password : " newpw
+  read -p "Username: " user
+  read -p "New Password: " newpw
   read -p "Port: " port
   read -p "Answer 1 if user are using docker and answer 2 if user using dockermemlimit [1/2] : " option
   
@@ -532,6 +533,8 @@ changepassworddocker() {
     2)
       base_dir="/home/c9usersmemlimit"
       read -p "Memory Limit (e.g., 1024m): " mem
+      echo
+      read -p "CPU Limit (e.g., 1.0 for 1 core): " cpu_limit
       ;;
     *)
       echo "Invalid option"
@@ -556,7 +559,8 @@ EOF
     if [ "$option" = "2" ]; then
       sed -i '$ d' /home/c9usersmemlimit/docker-compose.yml
       echo "          memory: $mem" >> docker-compose.yml
-      echo "Memory limits updated for user $user"
+      echo "          cpus: $cpu_limit" >> docker-compose.yml
+      echo "Memory and cpus limits updated for user $user"
     fi
   else
     echo "User $user does not exist or workspace directory not found"
@@ -564,7 +568,7 @@ EOF
 }
 
 scheduledocker(){
-read -p "Input User : " user
+read -p "Input User: " user
 echo Are the file is using docker or dockermemlimit?
 read -r -p "Answer Y if you are using docker and answer N if you are using dockermemlimit [y/N] " response
 echo " "
@@ -600,7 +604,7 @@ esac
 }
 
 configuredocker(){
-read -p "Input User : " user
+read -p "Input User: " user
 echo 1. Stop
 echo 2. Start
 echo 3. Restart
@@ -656,6 +660,28 @@ esac
 }
 
 restartdocker(){
+containers=$(docker ps --format "{{.Names}}")
+echo "Container lists:"
+echo "$containers" | sed 's/^c9-//'
+
+read -p "Input User: " user
+
+container_name="c9-$user"
+
+if echo "$containers" | grep -qw "$container_name"; then
+    docker restart "$container_name"
+
+    if [ $? -eq 0 ]; then
+        echo "Container '$container_name' restarted successfully."
+    else
+        echo "Container restart '$container_name' failed."
+    fi
+else
+    echo "Container name '$container_name' invalid. Make sure the name is correct."
+fi
+}
+
+restartdockerall(){
 docker restart $(docker ps -q)
 }
 
@@ -855,6 +881,9 @@ manage)
       ;;
       restart)
         restartdocker
+      ;;
+      restartall)
+        restartdockerall
       ;;
       start)
         startdocker
