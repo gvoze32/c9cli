@@ -524,7 +524,7 @@ changepassworddocker() {
   read -p "Username: " user
   read -p "New Password: " newpw
   read -p "Port: " port
-  read -p "Answer 1 if user are using docker and answer 2 if user using dockermemlimit [1/2] : " option
+  read -p "Answer 1 if user is using docker and answer 2 if user is using dockermemlimit [1/2]: " option
   
   case $option in
     1)
@@ -533,7 +533,6 @@ changepassworddocker() {
     2)
       base_dir="/home/c9usersmemlimit"
       read -p "Memory Limit (e.g., 1024m): " mem
-      echo
       read -p "CPU Limit (e.g., 1.0 for 1 core): " cpu_limit
       ;;
     *)
@@ -542,26 +541,29 @@ changepassworddocker() {
       ;;
   esac
   
-  cd "$base_dir/$user"
-  
   if [ -d "$base_dir/$user" ]; then
+    cd "$base_dir/$user" || return
+
     cat > .env << EOF
 PORT=$port
 NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$newpw
 EOF
-    echo "Password changed successfully for user $user"
+
+    if [ "$option" = "2" ]; then
+      cat >> .env << EOF
+MEMORY=$mem
+CPU_LIMIT=$cpu_limit
+EOF
+      echo "Memory and CPU limits updated for user $user"
+    fi
+    
+    echo "Password and .env updated for user $user"
     
     docker compose -p $user down
     docker compose -p $user up -d
     echo "Docker container restarted for user $user"
     
-    if [ "$option" = "2" ]; then
-      sed -i '$ d' /home/c9usersmemlimit/docker-compose.yml
-      echo "          memory: $mem" >> docker-compose.yml
-      echo "          cpus: $cpu_limit" >> docker-compose.yml
-      echo "Memory and cpus limits updated for user $user"
-    fi
   else
     echo "User $user does not exist or workspace directory not found"
   fi
