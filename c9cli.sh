@@ -9,7 +9,7 @@ fi
 ubuntu_version=$(lsb_release -r | awk '{print $2}')
 
 check_update() {
-    repo_url="https://hostingjaya.ninja/api/c9cli/c9cli"
+    repo_url="https://raw.githubusercontent.com/gvoze32/c9cli/master/c9cli.sh"
     latest_version=$(curl -s "$repo_url" | grep 'VERSION=' | cut -d'"' -f2)
     
     if [ -n "$latest_version" ]; then
