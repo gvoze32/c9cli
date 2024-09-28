@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="4.4"
+VERSION="4.5"
 
 if [ "$(id -u)" != "0" ]; then
     echo "c9cli must be run as root!" 1>&2
@@ -891,108 +891,125 @@ about
 # MENU
 
 case $1 in
-create)
-  case $2 in
-    systemd)
-      createnewsystemd "${@:3}"
-    ;;
-    systemdlimit)
-      createnewsystemdlimit "${@:3}"
-    ;;
-    docker)
-      createnewdocker "${@:3}"
-    ;;
-    dockerlimit)
-      createnewdockermemlimit "${@:3}"
-    ;;
-    *)
-      echo "Command not found, type c9cli help for help"
-  esac
-  ;;
-manage)
-  case $2 in
-    systemd)
-    case $3 in
-      delete)
-        deletesystemd "${@:4}"
-      ;;
-      status)
-        statussystemd
-      ;;
-      restart)
-        statussystemd
-      ;;
-      password)
-        changepasswordsystemd
-      ;;
-      schedule)
-        schedulesystemd
-      ;;
-      scheduled)
-        scheduledatq
-      ;;
-      convert)
-        convertsystemd
-      ;;
-      *)
-      echo "Command not found, type c9cli help for help"
-    esac
+  create)
+    case $2 in
+      systemd)
+        createnewsystemd "${@:3}"
         ;;
-    docker)
-    case $3 in
-      delete)
-        deletedocker "${@:4}"
-      ;;
-      list)
-        listdocker
-      ;;
-      status)
-        statusdocker
-      ;;
-      password)
-        changepassworddocker
-      ;;
-      schedule)
-        scheduledocker
-      ;;
-      scheduled)
-        scheduledatq
-      ;;
-      configure)
-        configuredocker
-      ;;
-      restart)
-        restartdocker
-      ;;
-      restartall)
-        restartdockerall
-      ;;
-      start)
-        startdocker
-      ;;
+      systemdlimit)
+        createnewsystemdlimit "${@:3}"
+        ;;
+      docker)
+        createnewdocker "${@:3}"
+        ;;
+      dockerlimit)
+        createnewdockermemlimit "${@:3}"
+        ;;
       *)
-      echo "Command not found, type c9cli help for help"
+        echo "Command not found, type c9cli help for help"
+        ;;
     esac
-  esac
-;;
-port)
-  portlist
-;;
-update)
-  updates
-;;
-backup)
-  backups
-;;
-daemon)
-  dockerdaemon
-;;
-help)
-  helps
-;;
-version)
-  versions
-;;
-*)
-echo "Command not found, type c9cli help for help"
+    ;;
+    
+  manage)
+    case $2 in
+      systemd)
+        case $3 in
+          delete)
+            deletesystemd "${@:4}"
+            ;;
+          status)
+            statussystemd
+            ;;
+          restart)
+            restartsystemd
+            ;;
+          password)
+            changepasswordsystemd
+            ;;
+          schedule)
+            schedulesystemd
+            ;;
+          scheduled)
+            scheduledatq
+            ;;
+          convert)
+            convertsystemd
+            ;;
+          *)
+            echo "Command not found, type c9cli help for help"
+            ;;
+        esac
+        ;;
+        
+      docker)
+        case $3 in
+          delete)
+            deletedocker "${@:4}"
+            ;;
+          list)
+            listdocker
+            ;;
+          status)
+            statusdocker
+            ;;
+          password)
+            changepassworddocker
+            ;;
+          schedule)
+            scheduledocker
+            ;;
+          scheduled)
+            scheduledatq
+            ;;
+          configure)
+            configuredocker
+            ;;
+          restart)
+            restartdocker
+            ;;
+          restartall)
+            restartdockerall
+            ;;
+          start)
+            startdocker
+            ;;
+          *)
+            echo "Command not found, type c9cli help for help"
+            ;;
+        esac
+        ;;
+      *)
+        echo "Command not found, type c9cli help for help"
+        ;;
+    esac
+    ;;
+  
+  port)
+    portlist
+    ;;
+  
+  update)
+    updates
+    ;;
+  
+  backup)
+    backups
+    ;;
+  
+  daemon)
+    dockerdaemon
+    ;;
+  
+  help)
+    helps
+    ;;
+  
+  version)
+    versions
+    ;;
+  
+  *)
+    echo "Command not found, type c9cli help for help"
+    ;;
 esac
