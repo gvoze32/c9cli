@@ -1,4 +1,5 @@
 #!/bin/bash
+VERSION="4.2"
 
 if [ "$(id -u)" != "0" ]; then
     echo "c9cli must be run as root!" 1>&2
@@ -6,6 +7,18 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 ubuntu_version=$(lsb_release -r | awk '{print $2}')
+
+check_update() {
+    repo_url="https://hostingjaya.ninja/api/c9cli/c9cli"
+    latest_version=$(curl -s "$repo_url" | grep 'VERSION=' | cut -d'"' -f2)
+    
+    if [[ "$latest_version" > "$VERSION" ]]; then
+        echo "A new version ($latest_version) is available. Run 'c9cli update' to update."
+    fi
+}
+
+check_update
+
 
 # COMMANDS
 
@@ -21,8 +34,7 @@ banner() {
 }
 about() {
     echo "Name of File  : c9cli.sh"
-    echo "Version       : v4.2 [Warung - Bekicot] Linux Version"
-    echo "Built         : 2024.8 [Magetan]"
+    echo "Version       : $VERSION"
     echo "Tested on     :"
     echo "    - Debian  : Ubuntu 18.04, 20.04, 22.04"
     echo
@@ -63,6 +75,7 @@ bantuan() {
     echo "    start           : Start Docker daemon service"
     echo "port                : Show used port lists"
     echo "backup              : Backup workspace data with Rclone (Docker only)"
+    echo "update              : Update c9cli to the latest version"
     echo "help                : Show help"
     echo "version             : Show version"
     echo
@@ -796,6 +809,18 @@ portlist(){
 lsof -i -P -n | grep LISTEN
 }
 
+updates() {
+  echo "Updating to version $latest_version..."
+  
+  sudo curl -fsSL https://hostingjaya.ninja/api/c9cli/c9cli -o /usr/local/bin/c9cli && sudo chmod +x /usr/local/bin/c9cli
+  
+  if [[ $? -eq 0 ]]; then
+    echo "Update successful! You can now use the updated version."
+  else
+    echo "Update failed. Please try again later."
+  fi
+}
+
 # BASIC MENUS
 
 helps(){
@@ -897,6 +922,9 @@ manage)
 ;;
 port)
   portlist
+;;
+update)
+  updates
 ;;
 backup)
   backups
