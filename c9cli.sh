@@ -21,7 +21,21 @@ check_update() {
     fi
 }
 
-check_update
+LAST_CHECK_FILE="/tmp/c9cli_last_check"
+
+if [ -f "$LAST_CHECK_FILE" ]; then
+    last_check=$(cat "$LAST_CHECK_FILE")
+    current_time=$(date +%s)
+    time_diff=$((current_time - last_check))
+
+    if [ $time_diff -gt 86400 ]; then
+        check_update
+        echo "$current_time" > "$LAST_CHECK_FILE"
+    fi
+else
+    echo "0" > "$LAST_CHECK_FILE"
+    check_update
+fi
 
 # COMMANDS
 
