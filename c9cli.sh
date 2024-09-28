@@ -12,8 +12,12 @@ check_update() {
     repo_url="https://hostingjaya.ninja/api/c9cli/c9cli"
     latest_version=$(curl -s "$repo_url" | grep 'VERSION=' | cut -d'"' -f2)
     
-    if [[ "$latest_version" > "$VERSION" ]]; then
-        echo "A new version ($latest_version) is available. Run 'c9cli update' to update."
+    if [ -n "$latest_version" ]; then
+        if [ "$latest_version" != "$VERSION" ]; then
+            echo "A new version ($latest_version) is available. Run 'c9cli update' to update."
+        fi
+    else
+        echo "Failed to check for updates. Please check your internet connection."
     fi
 }
 
