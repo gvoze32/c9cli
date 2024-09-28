@@ -10,8 +10,8 @@ ubuntu_version=$(lsb_release -r | awk '{print $2}')
 
 check_update() {
     repo_url="https://hostingjaya.ninja/api/c9cli/c9cli"
-    latest_version=$(curl -s "$repo_url" | grep -oP 'VERSION="\K[^"]+')
-    
+    latest_version=$(curl -s "$repo_url" | grep -o 'VERSION="[0-9]*\.[0-9]*"' | cut -d '"' -f 2)
+
     if [ -n "$latest_version" ]; then
         if [ "$latest_version" != "$VERSION" ]; then
             echo "A new version ($latest_version) is available. Run 'c9cli update' to update."
@@ -813,14 +813,24 @@ lsof -i -P -n | grep LISTEN
 }
 
 updates() {
-  echo "Updating to version $latest_version..."
-  
-  sudo curl -fsSL https://hostingjaya.ninja/api/c9cli/c9cli -o /usr/local/bin/c9cli && sudo chmod +x /usr/local/bin/c9cli
-  
-  if [[ $? -eq 0 ]]; then
-    echo "Update successful! You can now use the updated version."
+  repo_url="https://hostingjaya.ninja/api/c9cli/c9cli"
+  latest_version=$(curl -s "$repo_url" | grep -o 'VERSION="[0-9]*\.[0-9]*"' | cut -d '"' -f 2)
+
+  if [ -n "$latest_version" ]; then
+      if [ "$latest_version" != "$VERSION" ]; then
+          echo "Updating to version $latest_version..."
+          sudo curl -fsSL https://hostingjaya.ninja/api/c9cli/c9cli -o /usr/local/bin/c9cli && sudo chmod +x /usr/local/bin/c9cli
+
+          if [[ $? -eq 0 ]]; then
+            echo "Update successful! You can now use the updated version."
+          else
+            echo "Update failed. Please try again later."
+          fi
+      else
+          echo "You are using the latest version ($VERSION)."
+      fi
   else
-    echo "Update failed. Please try again later."
+      echo "Failed to check for updates. Please check your internet connection."
   fi
 }
 
