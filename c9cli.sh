@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="4.3"
+VERSION="4.4"
 
 if [ "$(id -u)" != "0" ]; then
     echo "c9cli must be run as root!" 1>&2
@@ -103,6 +103,8 @@ bantuan() {
     echo "-l                  : Memory limit (e.g., 1024m)"
     echo "-c                  : CPU limit (e.g., 10% or 1.0)"
     echo "-i                  : Image (e.g., gvoze32/cloud9:jammy)"
+    echo
+    echo "-t                  : Type (e.g., 1 for Docker, 2 for Docker Memory Limit)"
     echo
     echo "Copyright (c) 2024 c9cli (under MIT License)"
     echo "Built with love♡ by gvoze32"
@@ -442,7 +444,17 @@ fi
 # MANAGE SYSTEMD
 
 deletesystemd(){
-read -p "Input User: " user
+while getopts "u:" opt; do
+  case $opt in
+    u) user="$OPTARG" ;;
+    \?) echo "Invalid option: -$OPTARG" >&2 ;;
+  esac
+done
+
+if [[ -z "$user" ]]; then
+  read -p "Input User: " user
+fi
+
 sleep 3
 systemctl stop c9-$user.service
 sleep 3
@@ -525,11 +537,27 @@ systemctl status c9-$user.service
 # MANAGE DOCKER
 
 deletedocker(){
-read -p "Input User: " user
-echo Are the file is using Docker or Docker Memory Limit?
-echo 1. Docker
-echo 2. Docker Memory Limit
-read -r -p "Choose: " response
+while getopts "u:t:" opt; do
+  case $opt in
+    u) user="$OPTARG" ;;
+    t) type="$OPTARG" ;;
+    \?) echo "Invalid option: -$OPTARG" >&2 ;;
+  esac
+done
+
+if [[ -z "$user" ]]; then
+  read -p "Input User: " user
+fi
+
+if [[ -z "$type" ]]; then
+  echo "Are the file is using Docker or Docker Memory Limit?"
+  echo "1. Docker"
+  echo "2. Docker Memory Limit"
+  read -r -p "Choose: " response
+else
+  response="$type"
+fi
+
 case "$response" in
     1) 
 cd /home/c9users
@@ -886,7 +914,7 @@ manage)
     systemd)
     case $3 in
       delete)
-        deletesystemd
+        deletesystemd "${@:4}"
       ;;
       status)
         statussystemd
@@ -913,7 +941,7 @@ manage)
     docker)
     case $3 in
       delete)
-        deletedocker
+        deletedocker "${@:4}"
       ;;
       list)
         listdocker
