@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="4.5"
+VERSION="4.6"
 
 if [ "$(id -u)" != "0" ]; then
     echo "c9cli must be run as root!" 1>&2
@@ -916,7 +916,7 @@ case $1 in
       systemd)
         case $3 in
           delete)
-            deletesystemd "${@:4}"
+            deletesystemd "${@:5}"
             ;;
           status)
             statussystemd
@@ -945,7 +945,7 @@ case $1 in
       docker)
         case $3 in
           delete)
-            deletedocker "${@:4}"
+            deletedocker "${@:5}"
             ;;
           list)
             listdocker
