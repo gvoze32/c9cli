@@ -916,7 +916,7 @@ case $1 in
       systemd)
         case $3 in
           delete)
-            deletesystemd "${@:5}"
+            deletesystemd "${@:4}"
             ;;
           status)
             statussystemd
@@ -945,7 +945,7 @@ case $1 in
       docker)
         case $3 in
           delete)
-            deletedocker "${@:5}"
+            deletedocker "${@:4}"
             ;;
           list)
             listdocker
