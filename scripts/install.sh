@@ -116,9 +116,27 @@ second_dep() {
 }
 
 pip_dep() {
+        sudo apt install -y python3-pip
         python3 -m pip install requests selenium colorama bs4 wget pyfiglet
         curl https://bootstrap.pypa.io/pip/2.7/get-pip.py | sudo python2 -
         python2 -m pip install requests selenium colorama bs4 wget pyfiglet
+}
+
+print_banner() {
+  cat <<-'EOF'
+=================================================
+             ____ ___   ____ _     ___               
+            / ___/ _ \ / ___| |   |_ _|              
+           | |  | (_) | |   | |    | |               
+           | |___\__, | |___| |___ | |               
+  ___ _   _ \____|_/_/ \____|_____|___|  _____ ____  
+ |_ _| \ | / ___|_   _|/ \  | |   | |   | ____|  _ \ 
+  | ||  \| \___ \ | | / _ \ | |   | |   |  _| | |_) |
+  | || |\  |___) || |/ ___ \| |___| |___| |___|  _ < 
+ |___|_| \_|____/ |_/_/   \_\_____|_____|_____|_| \_\
+                                                     
+==================================================
+EOF
 }
 
 case $ubuntu_version in
@@ -130,13 +148,15 @@ case $ubuntu_version in
         export NEEDRESTART_SUSPEND=1
         export NEEDRESTART_MODE=l
 
+        print_banner
+
         echo "Setting up Ubuntu $ubuntu_version.."
 
         # Update packages
         update_packages
 
         # Install dependencies
-        sudo apt install -y at git nodejs npm build-essential php php8.1-common php-gd php-mbstring php-curl php8.1-mysql php-json php8.1-xml php-fpm python2 python3 python3-pip zip unzip dos2unix
+        sudo apt install -y at git nodejs npm build-essential php php8.1-common php-gd php-mbstring php-curl php8.1-mysql php-json php8.1-xml php-fpm python2 python3 zip unzip dos2unix
         pip_dep
         systemctl start atd
         second_dep
@@ -159,13 +179,15 @@ case $ubuntu_version in
         export NEEDRESTART_SUSPEND=1
         export NEEDRESTART_MODE=l
 
+        print_banner
+
         echo "Setting up Ubuntu $ubuntu_version.."
 
         # Update packages
         update_packages
 
         # Install dependencies
-        sudo apt install -y at git nodejs npm build-essential php7.4-cli php-gd php-mbstring php-curl php-mysqli php-json php-dom php-fpm python2 python3 python3-pip zip unzip dos2unix
+        sudo apt install -y at git nodejs npm build-essential php7.4-cli php-gd php-mbstring php-curl php-mysqli php-json php-dom php-fpm python2 python3 zip unzip dos2unix
         pip_dep
         systemctl start atd
         second_dep
@@ -183,13 +205,15 @@ case $ubuntu_version in
         install_ioncube
         ;;
     18.04)
+        print_banner
+        
         echo "Setting up Ubuntu $ubuntu_version.."
 
         # Update packages
         update_packages
 
         # Install dependencies
-        sudo apt install -y curl at git nodejs npm build-essential php php7.2-common php-gd php-mbstring php-curl php7.2-mysql php-json php7.2-xml php-fpm python2-minimal python3 python3-pip zip unzip dos2unix
+        sudo apt install -y curl at git nodejs npm build-essential php php7.2-common php-gd php-mbstring php-curl php7.2-mysql php-json php7.2-xml php-fpm python2-minimal python3 zip unzip dos2unix
         pip_dep
         systemctl start atd
         second_dep
