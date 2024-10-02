@@ -918,7 +918,6 @@ updates() {
             if sudo curl -fsSL "$repo_url" -o /usr/local/bin/c9cli; then
                 sudo chmod +x /usr/local/bin/c9cli
                 echo "Update successful! You can now use the updated version."
-                exec /usr/local/bin/c9cli "$@"
             else
                 echo "Update failed. Please try again later."
             fi
