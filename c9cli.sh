@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="4.6"
+VERSION="4.7"
 
 if [ "$(id -u)" != "0" ]; then
     echo "c9cli must be run as root!" 1>&2
@@ -479,14 +479,34 @@ systemctl status c9-$user.service
 }
 
 changepasswordsystemd() {
-read -p "Input User: " user
-read -p "Input New Password: " password
+  while getopts "u:p:o:" opt; do
+    case $opt in
+      u) user="$OPTARG" ;;
+      p) password="$OPTARG" ;;
+      o) port="$OPTARG" ;;
+      \?) echo "Invalid option: -$OPTARG" >&2 ;;
+    esac
+  done
 
-sed -i "s/-a $user:.*/-a $user:$password/" /lib/systemd/system/c9-$user.service
-systemctl daemon-reload
-systemctl restart c9-$user.service
-sleep 10
-systemctl status c9-$user.service
+  if [[ -z "$user" ]]; then
+    read -p "Input User: " user
+  fi
+
+  if [[ -z "$password" ]]; then
+    read -p "Input New Password: " password
+  fi
+
+  if [[ -z "$port" ]]; then
+    read -p "Input New Port: " port
+  fi
+
+  sed -i "s/-a $user:.*/-a $user:$password/" /lib/systemd/system/c9-$user.service
+  sed -i "s/PORT=.*/PORT=$port/" /lib/systemd/system/c9-$user.service
+
+  systemctl daemon-reload
+  systemctl restart c9-$user.service
+  sleep 10
+  systemctl status c9-$user.service
 }
 
 schedulesystemd(){
@@ -578,27 +598,51 @@ statusdocker(){
 docker stats
 }
 
-changepassworddocker() {
-  read -p "Username: " user
-  read -p "New Password: " newpw
-  read -p "Port: " port
-  read -p "Answer 1 if user is using docker and answer 2 if user is using dockermemlimit [1/2]: " option
-  
-  case $option in
-    1)
-      base_dir="/home/c9users"
-      ;;
-    2)
+changepassworddocker(){
+  while getopts "u:p:t:o:" opt; do
+    case $opt in
+      u) user="$OPTARG" ;;
+      p) newpw="$OPTARG" ;;
+      t) type="$OPTARG" ;;
+      o) port="$OPTARG" ;;
+      \?) echo "Invalid option: -$OPTARG" >&2 ;;
+    esac
+  done
+
+  if [[ -z "$user" ]]; then
+    read -p "Input Username: " user
+  fi
+
+  if [[ -z "$newpw" ]]; then
+    read -p "Input New Password: " newpw
+  fi
+
+  if [[ -z "$port" ]]; then
+    read -p "Input Port: " port
+  fi
+
+  if [[ -z "$type" ]]; then
+    echo "Is the user using Docker or Docker Memory Limit?"
+    echo "1. Docker"
+    echo "2. Docker Memory Limit"
+    read -r -p "Choose: " response
+  else
+    response="$type"
+  fi
+
+  case "$response" in
+    1) base_dir="/home/c9users" ;;
+    2) 
       base_dir="/home/c9usersmemlimit"
       read -p "Memory Limit (e.g., 1024m): " mem
       read -p "CPU Limit (e.g., 1.0 for 1 core): " cpu_limit
       ;;
-    *)
-      echo "Invalid option"
-      return
+    *) 
+      echo "Invalid option" 
+      return 
       ;;
   esac
-  
+
   if [ -d "$base_dir/$user" ]; then
     cd "$base_dir/$user" || return
 
@@ -608,7 +652,7 @@ NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$newpw
 EOF
 
-    if [ "$option" = "2" ]; then
+    if [ "$response" = "2" ]; then
       cat >> .env << EOF
 MEMORY=$mem
 CPU_LIMIT=$cpu_limit
@@ -616,7 +660,7 @@ EOF
       echo "Memory and CPU limits updated for user $user"
     fi
     
-    echo "Password and .env updated for user $user"
+    echo "Password, port, and .env updated for user $user"
     
     docker compose -p $user down
     docker compose -p $user up -d
@@ -926,7 +970,7 @@ case $1 in
             restartsystemd
             ;;
           password)
-            changepasswordsystemd
+            changepasswordsystemd "${@:4}"
             ;;
           schedule)
             schedulesystemd
@@ -955,7 +999,7 @@ case $1 in
             statusdocker
             ;;
           password)
-            changepassworddocker
+            changepassworddocker "${@:4}"
             ;;
           schedule)
             scheduledocker
