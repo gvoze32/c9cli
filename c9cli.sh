@@ -899,21 +899,25 @@ lsof -i -P -n | grep LISTEN
 }
 
 updates() {
-  repo_url="https://hostingjaya.ninja/api/c9cli/c9cli"
-  latest_version=$(curl -s "$repo_url" | grep -o 'VERSION="[0-9]*\.[0-9]*"' | cut -d '"' -f 2)
+    repo_url="https://hostingjaya.ninja/api/c9cli/c9cli"
+    latest_version=$(curl -s "$repo_url" | grep -o 'VERSION="[0-9]*\.[0-9]*"' | cut -d '"' -f 2)
 
-  if [ -n "$latest_version" ]; then
-      if [ "$latest_version" != "$VERSION" ]; then
-          echo "Updating to version $latest_version..."
-          sudo curl -fsSL https://hostingjaya.ninja/api/c9cli/c9cli -o /usr/local/bin/c9cli
-          sudo chmod +x /usr/local/bin/c9cli
-          echo "Update successful! You can now use the updated version."
-      else
-          echo "You are using the latest version ($VERSION)."
-      fi
-  else
-      echo "Failed to check for updates. Please check your internet connection."
-  fi
+    if [ -n "$latest_version" ]; then
+        if [ "$latest_version" != "$VERSION" ]; then
+            echo "Updating to version $latest_version..."
+            if sudo curl -fsSL "$repo_url" -o /usr/local/bin/c9cli; then
+                sudo chmod +x /usr/local/bin/c9cli
+                echo "Update successful! You can now use the updated version."
+                exec /usr/local/bin/c9cli "$@"
+            else
+                echo "Update failed. Please try again later."
+            fi
+        else
+            echo "You are using the latest version ($VERSION)."
+        fi
+    else
+        echo "Failed to check for updates. Please check your internet connection."
+    fi
 }
 
 # BASIC MENUS
