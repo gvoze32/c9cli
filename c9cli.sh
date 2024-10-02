@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="4.7"
+VERSION="4.8"
 
 if [ "$(id -u)" != "0" ]; then
     echo "c9cli must be run as root!" 1>&2
@@ -599,12 +599,14 @@ docker stats
 }
 
 changepassworddocker(){
-  while getopts "u:p:t:o:" opt; do
+  while getopts "u:p:t:o:l:c:" opt; do
     case $opt in
       u) user="$OPTARG" ;;
       p) newpw="$OPTARG" ;;
       t) type="$OPTARG" ;;
       o) port="$OPTARG" ;;
+      l) mem="$OPTARG" ;;
+      c) cpu_limit="$OPTARG" ;;
       \?) echo "Invalid option: -$OPTARG" >&2 ;;
     esac
   done
@@ -631,11 +633,19 @@ changepassworddocker(){
   fi
 
   case "$response" in
-    1) base_dir="/home/c9users" ;;
+    1) 
+      base_dir="/home/c9users"
+      mem=""
+      cpu_limit=""
+      ;;
     2) 
       base_dir="/home/c9usersmemlimit"
-      read -p "Memory Limit (e.g., 1024m): " mem
-      read -p "CPU Limit (e.g., 1.0 for 1 core): " cpu_limit
+      if [[ -z "$mem" ]]; then
+        read -p "Memory Limit (e.g., 1024m): " mem
+      fi
+      if [[ -z "$cpu_limit" ]]; then
+        read -p "CPU Limit (e.g., 1.0 for 1 core): " cpu_limit
+      fi
       ;;
     *) 
       echo "Invalid option" 
