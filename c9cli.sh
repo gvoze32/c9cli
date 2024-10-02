@@ -905,8 +905,8 @@ updates() {
   if [ -n "$latest_version" ]; then
       if [ "$latest_version" != "$VERSION" ]; then
           echo "Updating to version $latest_version..."
-          sudo curl -fsSL https://hostingjaya.ninja/api/c9cli/c9cli -o /usr/local/bin/c9cli > /dev/null 2>&1
-          sudo chmod +x /usr/local/bin/c9cli > /dev/null 2>&1
+          sudo curl -fsSL https://hostingjaya.ninja/api/c9cli/c9cli -o /usr/local/bin/c9cli
+          sudo chmod +x /usr/local/bin/c9cli
           echo "Update successful! You can now use the updated version."
       else
           echo "You are using the latest version ($VERSION)."
