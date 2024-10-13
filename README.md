@@ -1,27 +1,57 @@
 # c9cli
 
-Create and manage secure Cloud9 IDE private users using SystemD and Docker services.
+c9cli is a command-line interface tool for managing Cloud9 workspaces and Docker containers. It provides a set of commands to create, manage, and monitor development environments efficiently.
 
-## Requirements
+## Features
 
-- Ubuntu 18.04, 20.04 or 22.04
+- Create and manage SystemD workspaces
+- Create and manage Docker containers
+- Limit RAM and CPU usage for workspaces
+- Manage user accounts and passwords
+- Schedule workspace deletions
+- Backup workspaces to cloud storage
+- Monitor port usage and container status
 
-## Usage
+## Installation
 
 Make sure you have root access before doing this installation.
 
-Install
-
-```
+```bash
 sudo curl -fsSL https://hostingjaya.ninja/api/c9cli/build | sudo bash
 ```
 
-Help
+## Usage
 
+c9cli must be run as root. The general syntax is:
+
+```bash
+c9cli [command] [argument] [argument]
 ```
-c9cli help
+
+## Supported Environments
+
+- Debian-based systems (Ubuntu 18.04, 20.04, 22.04)
+
+## Backup
+
+c9cli supports backing up workspaces to various cloud storage providers using Rclone.
+
+To set up a backup, use the `c9cli backup` command and follow the prompts.
+
+## Updating
+
+To update c9cli to the latest version, run:
+
+```bash
+c9cli update
 ```
 
-Using Docker image from [cloud9image](https://github.com/gvoze32/cloud9image) / [dockerhub](https://hub.docker.com/repository/docker/gvoze32/cloud9)
+## License
 
-If you have any problem in using c9cli, please open new issue.
+This project is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0) License. See the LICENSE file for details.
+
+## Information
+
+Using Docker image from [cloud9image](https://github.com/gvoze32/cloud9image)
+
+If you have any problem in using c9cli, please open a new issue.
