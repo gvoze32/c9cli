@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="4.8"
+VERSION="4.9"
 
 if [ "$(id -u)" != "0" ]; then
     echo "c9cli must be run as root!" 1>&2
@@ -461,7 +461,6 @@ sleep 3
 killall -u $user
 sleep 3
 userdel $user
-rm -rf /home/$user
 }
 
 statussystemd(){
@@ -587,7 +586,6 @@ cd /home/c9usersmemlimit
         ;;
 esac
 docker compose -p $user down
-rm -rf $user
 }
 
 listdocker(){
