@@ -461,6 +461,8 @@ sleep 3
 killall -u $user
 sleep 3
 userdel $user
+# OPTIONAL: Remove user directory
+# rm -rf /home/$user
 }
 
 statussystemd(){
@@ -586,6 +588,8 @@ cd /home/c9usersmemlimit
         ;;
 esac
 docker compose -p $user down
+# OPTIONAL: Remove user directory
+# rm -rf $user
 }
 
 listdocker(){
