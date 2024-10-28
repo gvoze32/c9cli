@@ -128,12 +128,10 @@ fi
 if [[ -z "$pw" ]]; then
   read -p "Password: " pw
 fi
-echo
 if [[ -z "$port" ]]; then
   read -p "Port: " port
 fi
 echo
-
 echo "Creating workspace:"
 echo "Username: $user"
 echo "Password: $pw"
@@ -210,11 +208,9 @@ fi
 if [[ -z "$pw" ]]; then
   read -p "Password: " pw
 fi
-echo
 if [[ -z "$port" ]]; then
   read -p "Port: " port
 fi
-echo
 if [[ -z "$limit" ]]; then
   read -p "Memory Limit (e.g., 1024m): " limit
 fi
@@ -222,7 +218,6 @@ if [[ -z "$cpu_limit" ]]; then
   read -p "CPU Limit (e.g., 10%): " cpu_limit
 fi
 echo
-
 echo "Creating workspace with memory limit:"
 echo "Username: $user"
 echo "Password: $pw"
@@ -302,11 +297,9 @@ fi
 if [[ -z "$pw" ]]; then
   read -p "Password: " pw
 fi
-echo
 if [[ -z "$port" ]]; then
   read -p "Port: " port
 fi
-echo
 if [[ -z "$image" ]]; then
   echo "Select image:"
   echo "1. Ubuntu 20.04"
@@ -326,7 +319,7 @@ if [[ -z "$image" ]]; then
 else
   echo "Using provided image: $image"
 fi
-
+echo
 echo "Creating docker container:"
 echo "Username: $user"
 echo "Password: $pw"
@@ -376,18 +369,15 @@ fi
 if [[ -z "$pw" ]]; then
   read -p "Password: " pw
 fi
-echo
 if [[ -z "$port" ]]; then
   read -p "Port: " port
 fi
-echo
 if [[ -z "$limit" ]]; then
   read -p "Memory Limit (e.g., 1024m): " limit
 fi
 if [[ -z "$cpu_limit" ]]; then
   read -p "CPU Limit (e.g., 1.0 for 1 core): " cpu_limit
 fi
-echo
 if [[ -z "$image" ]]; then
   echo "Select image:"
   echo "1. Ubuntu 20.04"
@@ -407,7 +397,7 @@ if [[ -z "$image" ]]; then
 else
   echo "Using provided image: $image"
 fi
-
+echo
 echo "Creating docker container with memory limit:"
 echo "Username: $user"
 echo "Password: $pw"
