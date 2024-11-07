@@ -32,10 +32,11 @@ services:
       - USERNAME=\${NAMA_PELANGGAN}
       - PASSWORD=\${PASSWORD_PELANGGAN}
     volumes:
-      - /home/c9users/\${NAMA_PELANGGAN}:/code
+      - /home/c9users/\${NAMA_PELANGGAN}:/workspace
     ports:
       - \${PORT}:8000
     restart: always
+    command: --packed
 EOF
 }
 
@@ -51,10 +52,11 @@ services:
       - USERNAME=\${NAMA_PELANGGAN}
       - PASSWORD=\${PASSWORD_PELANGGAN}
     volumes:
-      - /home/c9usersmemlimit/\${NAMA_PELANGGAN}:/code
+      - /home/c9usersmemlimit/\${NAMA_PELANGGAN}:/workspace
     ports:
       - \${PORT}:8000
     restart: always
+    command: --packed
     deploy:
       resources:
         limits:
