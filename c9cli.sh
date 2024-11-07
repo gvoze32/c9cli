@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="5.0"
+VERSION="5.1"
 
 if [ "$(id -u)" != "0" ]; then
     echo "c9cli must be run as root!" 1>&2
@@ -169,7 +169,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/node /home/${user}/c9sdk/server.js -a $user:$pw --listen 0.0.0.0 -w /home/$user/my-projects
+ExecStart=/usr/bin/node /home/${user}/c9sdk/server.js -a $user:$pw -l 0.0.0.0 --packed -w /home/$user/my-projects
 Environment=NODE_ENV=production PORT=$port
 User=$user
 Group=$user
@@ -257,7 +257,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/node /home/${user}/c9sdk/server.js -a $user:$pw --listen 0.0.0.0 -w /home/$user/my-projects
+ExecStart=/usr/bin/node /home/${user}/c9sdk/server.js -a $user:$pw -l 0.0.0.0 --packed -w /home/$user/my-projects
 Environment=NODE_ENV=production PORT=$port
 User=$user
 Group=$user
