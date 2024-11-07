@@ -36,7 +36,6 @@ services:
     ports:
       - \${PORT}:8000
     restart: always
-    command: --packed
 EOF
 }
 
@@ -56,7 +55,6 @@ services:
     ports:
       - \${PORT}:8000
     restart: always
-    command: --packed
     deploy:
       resources:
         limits:
