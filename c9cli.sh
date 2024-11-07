@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="5.2"
+VERSION="5.3"
 
 if [ "$(id -u)" != "0" ]; then
     echo "c9cli must be run as root!" 1>&2
@@ -72,6 +72,7 @@ bantuan() {
     echo "  dockerlimit       : Create a new Docker container with limited RAM"
     echo "manage"
     echo "  systemd"
+    echo "    stop            : Stop workspace"
     echo "    delete          : Delete workspace"
     echo "    status          : Show workspace status"
     echo "    restart         : Restart workspace"
@@ -79,7 +80,9 @@ bantuan() {
     echo "    schedule        : Schedule workspace deletion"
     echo "    scheduled       : Show scheduled workspace deletion"
     echo "    convert         : Convert user to superuser"
+    echo "    start           : Start workspace"
     echo "  docker"
+    echo "    stop            : Stop Docker container"
     echo "    delete          : Delete Docker container"
     echo "    status          : Show container status"
     echo "    restart         : Restart running containers"
@@ -433,6 +436,22 @@ fi
 
 # MANAGE SYSTEMD
 
+stopsystemd(){
+while getopts "u:" opt; do
+  case $opt in
+    u) user="$OPTARG" ;;
+    \?) echo "Invalid option: -$OPTARG" >&2 ;;
+  esac
+done
+
+if [[ -z "$user" ]]; then
+  read -p "Input User: " user
+fi
+
+sleep 3
+systemctl stop c9-$user.service
+}
+
 deletesystemd(){
 while getopts "u:" opt; do
   case $opt in
@@ -521,10 +540,11 @@ read -p "Time: " waktu
 at $waktu <<END
 sleep 3
 systemctl stop c9-$user.service
-sleep 3
-killall -u $user
-sleep 3
-userdel $user
+# OPTIONAL: Remove user directory
+# sleep 3
+# killall -u $user
+# sleep 3
+# userdel $user
 END
 }
 
@@ -545,7 +565,45 @@ sleep 10
 systemctl status c9-$user.service
 }
 
+startsystemd(){
+read -p "Input User: " user
+systemctl start c9-$user.service
+}
+
 # MANAGE DOCKER
+
+stopdocker(){
+while getopts "u:t:" opt; do
+  case $opt in
+    u) user="$OPTARG" ;;
+    t) type="$OPTARG" ;;
+    \?) echo "Invalid option: -$OPTARG" >&2 ;;
+  esac
+done
+
+if [[ -z "$user" ]]; then
+  read -p "Input User: " user
+fi
+
+if [[ -z "$type" ]]; then
+  echo "Are the file is using Docker or Docker Memory Limit?"
+  echo "1. Docker"
+  echo "2. Docker Memory Limit"
+  read -r -p "Choose: " response
+else
+  response="$type"
+fi
+
+case "$response" in
+    1) 
+cd /home/c9users
+        ;;
+    *)
+cd /home/c9usersmemlimit
+        ;;
+esac
+docker compose -p $user stop
+}
 
 deletedocker(){
 while getopts "u:t:" opt; do
@@ -663,9 +721,11 @@ EOF
     fi
     
     echo "Password, port, and .env updated for user $user"
-    
-    docker compose -p $user down
-    docker compose -p $user up -d
+    docker compose -p $user stop
+    docker compose -p $user start
+    # OPTIONAL: Remove user directory
+    # docker compose -p $user down
+    # docker compose -p $user up -d
     echo "Docker container restarted for user $user"
     
   else
@@ -697,13 +757,17 @@ case "$response" in
     [yY][eE][sS]|[yY]) 
 at $waktu <<END
 cd /home/c9users
-docker compose -p $user down
+docker compose -p $user stop
+# OPTIONAL: Remove user directory
+# docker compose -p $user down
 END
         ;;
     *)
 at $waktu <<END
 cd /home/c9usersmemlimit
-docker compose -p $user down
+docker compose -p $user stop
+# OPTIONAL: Remove user directory
+# docker compose -p $user down
 END
         ;;
 esac
@@ -730,6 +794,8 @@ cd /home/c9usersmemlimit
         ;;
 esac
 docker container stop $user
+# OPTIONAL: Remove user directory
+# docker compose -p $user down
         ;;
     2) 
 echo Are the file is using Docker or Docker Memory Limit?
@@ -761,6 +827,9 @@ cd /home/c9usersmemlimit
 esac
 docker container stop $user
 docker container start $user
+# OPTIONAL: Remove user directory
+# docker compose -p $user down
+# docker compose -p $user up -d
         ;;
 esac
 }
@@ -792,7 +861,8 @@ docker restart $(docker ps -q)
 }
 
 startdocker(){
-service docker start
+read -p "Input User: " user
+docker container start $user
 }
 
 backups(){
@@ -1047,6 +1117,9 @@ case $1 in
     case $2 in
       systemd)
         case $3 in
+          stop)
+            stopsystemd "${@:4}"
+            ;;
           delete)
             deletesystemd "${@:4}"
             ;;
@@ -1068,6 +1141,9 @@ case $1 in
           convert)
             convertsystemd
             ;;
+          start)
+            startsystemd
+            ;;
           *)
             echo "Command not found, type c9cli help for help"
             ;;
@@ -1076,6 +1152,9 @@ case $1 in
         
       docker)
         case $3 in
+          stop)
+            stopdocker "${@:4}"
+            ;;
           delete)
             deletedocker "${@:4}"
             ;;
