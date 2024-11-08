@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="5.3"
+VERSION="5.4"
 
 if [ "$(id -u)" != "0" ]; then
     echo "c9cli must be run as root!" 1>&2
@@ -897,6 +897,7 @@ backups(){
 date=\$(date +%y-%m-%d)
 backup_success=false
 log_file="/home/backup-$name.log"
+temp_backup_path="$cloud_folder/temp-backup-\$date"
 
 log_message() {
     echo "\$(date '+%Y-%m-%d %H:%M:%S') - \$1" >> "\$log_file"
@@ -921,7 +922,6 @@ verify_remote_backup() {
         done
         
         if [ "\$missing_files" = false ]; then
-            # Verify file sizes match
             for local_file in /home/backup/*.zip; do
                 basename="\$(basename "\$local_file")"
                 local_size=\$(stat -c%s "\$local_file")
@@ -949,8 +949,8 @@ verify_remote_backup() {
 }
 
 log_message "Starting backup process"
-log_message "Creating backup directory: $name:$backup_path"
-rclone mkdir "$name:$backup_path" >> "\$log_file" 2>&1
+log_message "Creating temporary backup directory: $name:$temp_backup_path"
+rclone mkdir "$name:$temp_backup_path" >> "\$log_file" 2>&1
 
 log_message "Archiving contents of c9users and c9usersmemlimit folders"
 cd /home
@@ -979,10 +979,10 @@ mv /home/*.zip /home/backup/ >> "\$log_file" 2>&1
 max_retries=3
 retry_count=0
 while [ \$retry_count -lt \$max_retries ]; do
-    log_message "Copying backup to remote (attempt \$((retry_count + 1)) of \$max_retries)"
+    log_message "Copying backup to temporary remote folder (attempt \$((retry_count + 1)) of \$max_retries)"
     
-    if rclone copy /home/backup/ "$name:$backup_path/" >> "\$log_file" 2>&1; then
-        if verify_remote_backup "\$backup_path"; then
+    if rclone copy /home/backup/ "$name:$temp_backup_path/" >> "\$log_file" 2>&1; then
+        if verify_remote_backup "\$temp_backup_path"; then
             backup_success=true
             break
         fi
@@ -997,37 +997,12 @@ done
 
 if [ "\$backup_success" = true ]; then
     log_message "Backup successfully verified on remote"
-    
-    log_message "Checking for old backups"
-    old_backups=\$(rclone lsf "$name:$list_path" 2>&1 | grep '^backup-' | sort)
-    backup_count=\$(echo "\$old_backups" | wc -l)
-    
-    if [ "\$backup_count" -gt 1 ]; then
-        log_message "Found \$((backup_count - 1)) old backups to clean up"
-        echo "\$old_backups" | head -n -1 | while read -r oldbak; do
-            full_path="$cloud_folder\$list_path/\$oldbak"
-            log_message "Removing old backup: $name:\$full_path"
-            
-            if [ "$use_purge" = true ]; then
-                if rclone purge "$name:\$full_path" >> "\$log_file" 2>&1; then
-                    log_message "Successfully purged old backup: \$full_path"
-                else
-                    log_message "WARNING: Failed to purge old backup: \$full_path"
-                fi
-            else
-                if rclone delete "$name:\$full_path" >> "\$log_file" 2>&1 && \
-                   rclone rmdirs "$name:\$full_path" >> "\$log_file" 2>&1; then
-                    log_message "Successfully deleted old backup: \$full_path"
-                else
-                    log_message "WARNING: Failed to delete old backup: \$full_path"
-                fi
-            fi
-        done
-    else
-        log_message "No old backups to clean up"
-    fi
+    rclone move "$name:$temp_backup_path" "$name:$backup_path" >> "\$log_file" 2>&1
+    log_message "Deleting old backup folder and its contents"
+    rclone purge "$name:$backup_path" >> "\$log_file" 2>&1
 else
-    log_message "ERROR: Backup failed after \$max_retries attempts. Previous backups preserved."
+    log_message "ERROR: Backup failed. Moving remaining files to new backup location"
+    rclone move "$name:$backup_path" "$name:$temp_backup_path" >> "\$log_file" 2>&1
 fi
 
 log_message "Removing local backup files"
