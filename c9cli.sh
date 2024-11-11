@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="5.4"
+VERSION="5.5"
 
 if [ "$(id -u)" != "0" ]; then
     echo "c9cli must be run as root!" 1>&2
@@ -87,6 +87,7 @@ bantuan() {
     echo "    status          : Show container status"
     echo "    restart         : Restart running containers"
     echo "    restartall      : Restart (all) running containers"
+    echo "    reset           : Reset Docker container"
     echo "    password        : Change user password, port & update limited RAM for dockerlimit"
     echo "    schedule        : Schedule container deletion"
     echo "    scheduled       : Show scheduled container deletion"
@@ -859,6 +860,40 @@ restartdockerall(){
 docker restart $(docker ps -q)
 }
 
+resetdocker(){
+while getopts "u:t:" opt; do
+  case $opt in
+    u) user="$OPTARG" ;;
+    t) type="$OPTARG" ;;
+    \?) echo "Invalid option: -$OPTARG" >&2 ;;
+  esac
+done
+
+if [[ -z "$user" ]]; then
+  read -p "Input User: " user
+fi
+
+if [[ -z "$type" ]]; then
+  echo "Are the file is using Docker or Docker Memory Limit?"
+  echo "1. Docker"
+  echo "2. Docker Memory Limit"
+  read -r -p "Choose: " response
+else
+  response="$type"
+fi
+
+case "$response" in
+    1)
+cd /home/c9users
+        ;;
+    *)
+cd /home/c9usersmemlimit
+        ;;
+esac
+docker compose -p $user down
+docker compose -p $user up -d
+}
+
 startdocker(){
 read -p "Input User: " user
 docker container start $user
@@ -1155,6 +1190,9 @@ case $1 in
             ;;
           restartall)
             restartdockerall
+            ;;
+          reset)
+            resetdocker
             ;;
           start)
             startdocker
