@@ -106,7 +106,6 @@ bantuan() {
     echo "-l                  : Memory limit (e.g., 1024m)"
     echo "-c                  : CPU limit (e.g., 10% or 1.0)"
     echo "-i                  : Image (e.g., gvoze32/cloud9:jammy)"
-    echo
     echo "-t                  : Type (e.g., 1 for Docker, 2 for Docker Memory Limit)"
     echo
     echo "Copyright (c) 2024 c9cli (under MIT License)"
