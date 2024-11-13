@@ -69,7 +69,8 @@ blank_env() {
 }
 
 custom_docker_size(){
-        echo "Setting docker daemon service rule"
+        echo "Creating /etc/docker/daemon.json file"
+        echo "Setting custom Docker default address pools"
         sudo cat > /etc/docker/daemon.json << EOF
 {
     "default-address-pools": [
@@ -82,7 +83,7 @@ custom_docker_size(){
 EOF
         sudo service docker restart
         sudo docker network inspect bridge | grep Subnet
-        echo "Docker daemon service rule added"
+        echo "Docker default address pools set to 10.10.0.0/16 with size 24"
 }
 
 install_ioncube(){
