@@ -122,23 +122,6 @@ pip_dep() {
         python2 -m pip install requests selenium colorama bs4 wget pyfiglet
 }
 
-print_banner() {
-  cat <<-'EOF'
-=================================================
-             ____ ___   ____ _     ___               
-            / ___/ _ \ / ___| |   |_ _|              
-           | |  | (_) | |   | |    | |               
-           | |___\__, | |___| |___ | |               
-  ___ _   _ \____|_/_/ \____|_____|___|  _____ ____  
- |_ _| \ | / ___|_   _|/ \  | |   | |   | ____|  _ \ 
-  | ||  \| \___ \ | | / _ \ | |   | |   |  _| | |_) |
-  | || |\  |___) || |/ ___ \| |___| |___| |___|  _ < 
- |___|_| \_|____/ |_/_/   \_\_____|_____|_____|_| \_\
-                                                     
-==================================================
-EOF
-}
-
 case $ubuntu_version in
     22.04)
         # Set NEEDRESTART frontend to avoid prompts
@@ -147,8 +130,6 @@ case $ubuntu_version in
         export DEBIAN_FRONTEND=noninteractive
         export NEEDRESTART_SUSPEND=1
         export NEEDRESTART_MODE=l
-
-        print_banner
 
         echo "Setting up Ubuntu $ubuntu_version.."
 
@@ -179,8 +160,6 @@ case $ubuntu_version in
         export NEEDRESTART_SUSPEND=1
         export NEEDRESTART_MODE=l
 
-        print_banner
-
         echo "Setting up Ubuntu $ubuntu_version.."
 
         # Update packages
@@ -204,9 +183,7 @@ case $ubuntu_version in
         # Install ioncube
         install_ioncube
         ;;
-    18.04)
-        print_banner
-        
+    18.04)        
         echo "Setting up Ubuntu $ubuntu_version.."
 
         # Update packages
