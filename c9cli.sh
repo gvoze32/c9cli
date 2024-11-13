@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="5.5"
+VERSION="5.6"
 
 if [ "$(id -u)" != "0" ]; then
     echo "c9cli must be run as root!" 1>&2
@@ -73,6 +73,7 @@ bantuan() {
     echo "manage"
     echo "  systemd"
     echo "    stop            : Stop workspace"
+    echo "    start           : Start workspace"
     echo "    delete          : Delete workspace"
     echo "    status          : Show workspace status"
     echo "    restart         : Restart workspace"
@@ -80,9 +81,9 @@ bantuan() {
     echo "    schedule        : Schedule workspace deletion"
     echo "    scheduled       : Show scheduled workspace deletion"
     echo "    convert         : Convert user to superuser"
-    echo "    start           : Start workspace"
     echo "  docker"
     echo "    stop            : Stop Docker container"
+    echo "    start           : Start Docker container"
     echo "    delete          : Delete Docker container"
     echo "    status          : Show container status"
     echo "    restart         : Restart running containers"
@@ -93,7 +94,6 @@ bantuan() {
     echo "    scheduled       : Show scheduled container deletion"
     echo "    list            : Show Docker container lists"
     echo "    configure       : Stop, start or restart running container"
-    echo "    start           : Start Docker daemon service"
     echo "port                : Show used port lists"
     echo "backup              : Backup workspace data with Rclone (Docker only)"
     echo "update              : Update c9cli to the latest version"
@@ -452,6 +452,22 @@ sleep 3
 systemctl stop c9-$user.service
 }
 
+startsystemd(){
+while getopts "u:" opt; do
+  case $opt in
+    u) user="$OPTARG" ;;
+    \?) echo "Invalid option: -$OPTARG" >&2 ;;
+  esac
+done
+
+if [[ -z "$user" ]]; then
+  read -p "Input User: " user
+fi
+
+sleep 3
+systemctl start c9-$user.service
+}
+
 deletesystemd(){
 while getopts "u:" opt; do
   case $opt in
@@ -565,11 +581,6 @@ sleep 10
 systemctl status c9-$user.service
 }
 
-startsystemd(){
-read -p "Input User: " user
-systemctl start c9-$user.service
-}
-
 # MANAGE DOCKER
 
 stopdocker(){
@@ -603,6 +614,39 @@ cd /home/c9usersmemlimit
         ;;
 esac
 docker compose -p $user stop
+}
+
+startdocker(){
+while getopts "u:t:" opt; do
+  case $opt in
+    u) user="$OPTARG" ;;
+    t) type="$OPTARG" ;;
+    \?) echo "Invalid option: -$OPTARG" >&2 ;;
+  esac
+done
+
+if [[ -z "$user" ]]; then
+  read -p "Input User: " user
+fi
+
+if [[ -z "$type" ]]; then
+  echo "Are the file is using Docker or Docker Memory Limit?"
+  echo "1. Docker"
+  echo "2. Docker Memory Limit"
+  read -r -p "Choose: " response
+else
+  response="$type"
+fi
+
+case "$response" in
+    1) 
+cd /home/c9users
+        ;;
+    *)
+cd /home/c9usersmemlimit
+        ;;
+esac
+docker compose -p $user start
 }
 
 deletedocker(){
@@ -894,11 +938,6 @@ docker compose -p $user down
 docker compose -p $user up -d
 }
 
-startdocker(){
-read -p "Input User: " user
-docker container start $user
-}
-
 backups(){
     echo "Scheduled Backup - WARNING: This script currently only supports backup for c9users and c9usersmemlimit docker containers"
     echo "Make sure you have set up an rclone config file using command: rclone config"
@@ -1129,6 +1168,9 @@ case $1 in
           stop)
             stopsystemd "${@:4}"
             ;;
+          start)
+            startsystemd "${@:4}"
+            ;;
           delete)
             deletesystemd "${@:4}"
             ;;
@@ -1150,9 +1192,6 @@ case $1 in
           convert)
             convertsystemd
             ;;
-          start)
-            startsystemd
-            ;;
           *)
             echo "Command not found, type c9cli help for help"
             ;;
@@ -1163,6 +1202,9 @@ case $1 in
         case $3 in
           stop)
             stopdocker "${@:4}"
+            ;;
+          start)
+            startdocker "${@:4}"
             ;;
           delete)
             deletedocker "${@:4}"
@@ -1193,9 +1235,6 @@ case $1 in
             ;;
           reset)
             resetdocker
-            ;;
-          start)
-            startdocker
             ;;
           *)
             echo "Command not found, type c9cli help for help"
