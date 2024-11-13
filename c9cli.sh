@@ -723,7 +723,7 @@ EOF
     echo "Password, port, and .env updated for user $user"
     docker compose -p $user stop
     docker compose -p $user start
-    # OPTIONAL: Remove user directory
+    # OPTIONAL: Remove user setup
     # docker compose -p $user down
     # docker compose -p $user up -d
     echo "Docker container restarted for user $user"
@@ -758,7 +758,7 @@ case "$response" in
 at $waktu <<END
 cd /home/c9users
 docker compose -p $user stop
-# OPTIONAL: Remove user directory
+# OPTIONAL: Remove user setup
 # docker compose -p $user down
 END
         ;;
@@ -766,7 +766,7 @@ END
 at $waktu <<END
 cd /home/c9usersmemlimit
 docker compose -p $user stop
-# OPTIONAL: Remove user directory
+# OPTIONAL: Remove user setup
 # docker compose -p $user down
 END
         ;;
@@ -794,7 +794,7 @@ cd /home/c9usersmemlimit
         ;;
 esac
 docker container stop $user
-# OPTIONAL: Remove user directory
+# OPTIONAL: Remove user setup
 # docker compose -p $user down
         ;;
     2) 
@@ -827,7 +827,7 @@ cd /home/c9usersmemlimit
 esac
 docker container stop $user
 docker container start $user
-# OPTIONAL: Remove user directory
+# OPTIONAL: Remove user setup
 # docker compose -p $user down
 # docker compose -p $user up -d
         ;;
