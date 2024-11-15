@@ -108,6 +108,9 @@ bantuan() {
     echo "-c                  : CPU limit (e.g., 10% or 1.0)"
     echo "-i                  : Image (e.g., gvoze32/cloud9:jammy)"
     echo "-t                  : Type (e.g., 1 for Docker, 2 for Docker Memory Limit)"
+    echo "-n                  : Rclone remote name"
+    echo "-h                  : Backup hour"
+    echo "-f                  : Backup folder name"
     echo
     echo "Copyright (c) 2024 c9cli (under MIT License)"
     echo "Built with love♡ by gvoze32"
@@ -939,15 +942,28 @@ docker compose -p $user up -d
 }
 
 backups(){
+    while getopts "n:h:f:" opt; do
+        case $opt in
+            n) name="$OPTARG" ;;
+            h) hour="$OPTARG" ;;
+            f) cloud_folder="$OPTARG" ;;
+            \?) echo "Invalid option: -$OPTARG" >&2 ;;
+        esac
+    done
+
     echo "Scheduled Backup - WARNING: This script currently only supports backup for c9users and c9usersmemlimit docker containers"
     echo "Make sure you have set up an rclone config file using command: rclone config"
     echo "If your storage is bucket type, then name the rclone config name same as your bucket name"
     echo ""
-    read -p "If all has been set up correctly, then input your rclone remote name: " name
-    echo ""
-    read -p "Enter the time for backup (hour 0-23): " hour
-    echo ""
-    read -p "Define the backup folder name on the cloud: " cloud_folder
+    if [[ -z "$name" ]]; then
+      read -p "If all has been set up correctly, then input your rclone remote name: " name
+    fi
+    if [[ -z "$hour" ]]; then
+      read -p "Enter the time for backup (hour 0-23): " hour
+    fi
+    if [[ -z "$cloud_folder" ]]; then
+      read -p "Define the backup folder name on the cloud: " cloud_folder
+    fi
     echo ""
     echo "Choose the backup service provider"
     echo "1. Google Drive"
@@ -957,12 +973,12 @@ backups(){
     echo "5. Jottacloud"
     read -r -p "Choose: " response
     case "$response" in
-        1) backup_path="$cloud_folder"; list_path="$cloud_folder"; use_purge=false ;;
-        2) backup_path="$cloud_folder"; list_path="$cloud_folder"; use_purge=true ;;
-        3) backup_path="$cloud_folder"; list_path="$cloud_folder"; use_purge=true ;;
-        4) backup_path="$cloud_folder"; list_path="$cloud_folder"; use_purge=false ;;
-        5) backup_path="$cloud_folder"; list_path="$cloud_folder"; use_purge=false ;;
-        *) echo "Invalid option"; exit 1 ;;
+      1) backup_path="$cloud_folder"; list_path="$cloud_folder"; use_purge=false ;;
+      2) backup_path="$cloud_folder"; list_path="$cloud_folder"; use_purge=true ;;
+      3) backup_path="$cloud_folder"; list_path="$cloud_folder"; use_purge=true ;;
+      4) backup_path="$cloud_folder"; list_path="$cloud_folder"; use_purge=false ;;
+      5) backup_path="$cloud_folder"; list_path="$cloud_folder"; use_purge=false ;;
+      *) echo "Invalid option"; exit 1 ;;
     esac
 
     cat > /home/backup-$name.sh << EOF
