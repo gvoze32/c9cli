@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="5.8"
+VERSION="5.9"
 
 if [ "$(id -u)" != "0" ]; then
     echo "c9cli must be run as root!" 1>&2
@@ -1277,7 +1277,7 @@ case $1 in
     ;;
   
   backup)
-    backups
+    backups "${@:2}"
     ;;
   
   daemon)
