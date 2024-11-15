@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="5.6"
+VERSION="5.7"
 
 if [ "$(id -u)" != "0" ]; then
     echo "c9cli must be run as root!" 1>&2
@@ -957,76 +957,75 @@ backups(){
     echo "5. Jottacloud"
     read -r -p "Choose: " response
     case "$response" in
-        1) backup_path="$cloud_folder/backup-\$date"; list_path="$cloud_folder"; use_purge=false ;;
-        2) backup_path="$cloud_folder/backup-\$date"; list_path="$cloud_folder"; use_purge=true ;;
-        3) backup_path="$cloud_folder/backup-\$date"; list_path="$cloud_folder"; use_purge=true ;;
-        4) backup_path="$cloud_folder/backup-\$date"; list_path="$cloud_folder"; use_purge=false ;;
-        5) backup_path="$cloud_folder/backup-\$date"; list_path="$cloud_folder"; use_purge=false ;;
+        1) backup_path="$cloud_folder"; list_path="$cloud_folder"; use_purge=false ;;
+        2) backup_path="$cloud_folder"; list_path="$cloud_folder"; use_purge=true ;;
+        3) backup_path="$cloud_folder"; list_path="$cloud_folder"; use_purge=true ;;
+        4) backup_path="$cloud_folder"; list_path="$cloud_folder"; use_purge=false ;;
+        5) backup_path="$cloud_folder"; list_path="$cloud_folder"; use_purge=false ;;
         *) echo "Invalid option"; exit 1 ;;
     esac
 
     cat > /home/backup-$name.sh << EOF
 #!/bin/bash
-date=\$(date +%y-%m-%d)
-backup_success=false
+date=\$(date +%Y%m%d)
 log_file="/home/backup-$name.log"
-temp_backup_path="$cloud_folder/temp-backup-\$date"
 
 log_message() {
     echo "\$(date '+%Y-%m-%d %H:%M:%S') - \$1" >> "\$log_file"
 }
 
-verify_remote_backup() {
-    local path="\$1"
+verify_backup() {
+    local folder="\$1"
+    local user="\$2"
+    local new_file="\$folder-\$user-\$date.zip"
     local retry_count=3
     local retry_delay=5
     
     for ((i=1; i<=retry_count; i++)); do
-        log_message "Verification attempt \$i of \$retry_count"
+        log_message "Verification attempt \$i of \$retry_count for \$new_file"
         
-        local missing_files=false
-        for local_file in /home/backup/*.zip; do
-            basename="\$(basename "\$local_file")"
-            if ! rclone lsf "$name:\$path/\$basename" &>/dev/null; then
-                log_message "WARNING: File \$basename not found in remote"
-                missing_files=true
-                break
+        if ! rclone lsf "$name:$backup_path/\$new_file" &>/dev/null; then
+            log_message "WARNING: \$new_file not found in remote"
+            if [ \$i -lt \$retry_count ]; then
+                log_message "Retrying in \$retry_delay seconds..."
+                sleep \$retry_delay
+                continue
             fi
-        done
-        
-        if [ "\$missing_files" = false ]; then
-            for local_file in /home/backup/*.zip; do
-                basename="\$(basename "\$local_file")"
-                local_size=\$(stat -c%s "\$local_file")
-                remote_size=\$(rclone size "$name:\$path/\$basename" --json | grep -o '"bytes":[0-9]*' | cut -d: -f2)
-                
-                if [ "\$local_size" != "\$remote_size" ]; then
-                    log_message "WARNING: Size mismatch for \$basename (local: \$local_size, remote: \$remote_size)"
-                    missing_files=true
-                    break
-                fi
-            done
+            return 1
         fi
         
-        if [ "\$missing_files" = false ]; then
-            return 0
+        local_size=\$(stat -c%s "/home/backup/\$new_file")
+        remote_size=\$(rclone size "$name:$backup_path/\$new_file" --json | grep -o '"bytes":[0-9]*' | cut -d: -f2)
+        
+        if [ "\$local_size" != "\$remote_size" ]; then
+            log_message "WARNING: Size mismatch for \$new_file (local: \$local_size, remote: \$remote_size)"
+            if [ \$i -lt \$retry_count ]; then
+                log_message "Retrying in \$retry_delay seconds..."
+                sleep \$retry_delay
+                continue
+            fi
+            return 1
         fi
         
-        if [ \$i -lt \$retry_count ]; then
-            log_message "Verification failed, retrying in \$retry_delay seconds..."
-            sleep \$retry_delay
-        fi
+        return 0
     done
     
     return 1
 }
 
-log_message "Starting backup process"
-log_message "Creating temporary backup directory: $name:$temp_backup_path"
-rclone mkdir "$name:$temp_backup_path" >> "\$log_file" 2>&1
+cleanup_old_backup() {
+    local folder="\$1"
+    local user="\$2"
+    
+    log_message "Cleaning up old backup files for \$folder-\$user"
+    rclone delete "$name:$backup_path" --include "\$folder-\$user-*.zip" --exclude "\$folder-\$user-\$date.zip" >> "\$log_file" 2>&1
+}
 
-log_message "Archiving contents of c9users and c9usersmemlimit folders"
+log_message "Starting backup process"
+
 cd /home
+mkdir -p /home/backup
+
 for folder in c9users c9usersmemlimit; do
     if [ -d "\$folder" ]; then
         log_message "Processing \$folder"
@@ -1034,9 +1033,40 @@ for folder in c9users c9usersmemlimit; do
         for user_folder in */; do
             user=\${user_folder%/}
             log_message "Backing up \$user from \$folder"
-            if ! zip -r "/home/\$folder-\$user-\$date.zip" "\$user_folder" -x "*/\.c9/*" "\$user_folder.c9/*" >> "\$log_file" 2>&1; then
+            
+            if ! zip -r "/home/backup/\$folder-\$user-\$date.zip" "\$user_folder" -x "*/\.c9/*" "\$user_folder.c9/*" >> "\$log_file" 2>&1; then
                 log_message "ERROR: Failed to create zip for \$user in \$folder"
                 continue
+            fi
+
+            log_message "Uploading backup for \$folder-\$user"
+            max_retries=3
+            retry_count=0
+            upload_success=false
+
+            while [ \$retry_count -lt \$max_retries ]; do
+                log_message "Upload attempt \$((retry_count + 1)) of \$max_retries"
+                
+                if rclone copy "/home/backup/\$folder-\$user-\$date.zip" "$name:$backup_path/" >> "\$log_file" 2>&1; then
+                    if verify_backup "\$folder" "\$user"; then
+                        upload_success=true
+                        break
+                    fi
+                fi
+                
+                retry_count=\$((retry_count + 1))
+                if [ \$retry_count -lt \$max_retries ]; then
+                    log_message "Retry in 30 seconds..."
+                    sleep 30
+                fi
+            done
+
+            if [ "\$upload_success" = true ]; then
+                log_message "Backup successfully verified for \$folder-\$user"
+                cleanup_old_backup "\$folder" "\$user"
+            else
+                log_message "ERROR: Backup failed for \$folder-\$user after \$max_retries attempts"
+                log_message "Keeping old backup files for \$folder-\$user"
             fi
         done
         cd /home
@@ -1044,39 +1074,6 @@ for folder in c9users c9usersmemlimit; do
         log_message "Folder \$folder not found, skipping"
     fi
 done
-
-log_message "Moving archived files to /home/backup"
-mkdir -p /home/backup
-mv /home/*.zip /home/backup/ >> "\$log_file" 2>&1
-
-max_retries=3
-retry_count=0
-while [ \$retry_count -lt \$max_retries ]; do
-    log_message "Copying backup to temporary remote folder (attempt \$((retry_count + 1)) of \$max_retries)"
-    
-    if rclone copy /home/backup/ "$name:$temp_backup_path/" >> "\$log_file" 2>&1; then
-        if verify_remote_backup "\$temp_backup_path"; then
-            backup_success=true
-            break
-        fi
-    fi
-    
-    retry_count=\$((retry_count + 1))
-    if [ \$retry_count -lt \$max_retries ]; then
-        log_message "Retry in 30 seconds..."
-        sleep 30
-    fi
-done
-
-if [ "\$backup_success" = true ]; then
-    log_message "Backup successfully verified on remote"
-    rclone move "$name:$temp_backup_path" "$name:$backup_path" >> "\$log_file" 2>&1
-    log_message "Deleting old backup folder and its contents"
-    rclone purge "$name:$backup_path" >> "\$log_file" 2>&1
-else
-    log_message "ERROR: Backup failed. Moving remaining files to new backup location"
-    rclone move "$name:$backup_path" "$name:$temp_backup_path" >> "\$log_file" 2>&1
-fi
 
 log_message "Removing local backup files"
 rm -rf /home/backup >> "\$log_file" 2>&1
