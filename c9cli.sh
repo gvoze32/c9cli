@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="5.7"
+VERSION="5.8"
 
 if [ "$(id -u)" != "0" ]; then
     echo "c9cli must be run as root!" 1>&2
@@ -1017,8 +1017,16 @@ cleanup_old_backup() {
     local folder="\$1"
     local user="\$2"
     
-    log_message "Cleaning up old backup files for \$folder-\$user"
-    rclone delete "$name:$backup_path" --include "\$folder-\$user-*.zip" --exclude "\$folder-\$user-\$date.zip" >> "\$log_file" 2>&1
+    log_message "Checking for old backup files for \$folder-\$user"
+    
+    old_files=\$(rclone lsf "$name:\$backup_path" --include "\$folder-\$user-*.zip" --exclude "\$folder-\$user-\$date.zip" | wc -l)
+    
+    if [ "\$old_files" -gt 0 ]; then
+        log_message "Found \$old_files old backup(s) for \$folder-\$user, cleaning up..."
+        rclone delete "$name:\$backup_path" --include "\$folder-\$user-*.zip" --exclude "\$folder-\$user-\$date.zip" >> "\$log_file" 2>&1
+    else
+        log_message "No old backups found for \$folder-\$user, skipping cleanup"
+    fi
 }
 
 log_message "Starting backup process"
