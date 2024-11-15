@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="5.9"
+VERSION="5.10"
 
 if [ "$(id -u)" != "0" ]; then
     echo "c9cli must be run as root!" 1>&2
@@ -111,6 +111,7 @@ bantuan() {
     echo "-n                  : Rclone remote name"
     echo "-h                  : Backup hour"
     echo "-f                  : Backup folder name"
+    echo "-s                  : Backup service provider"
     echo
     echo "Copyright (c) 2024 c9cli (under MIT License)"
     echo "Built with love♡ by gvoze32"
@@ -942,11 +943,12 @@ docker compose -p $user up -d
 }
 
 backups(){
-    while getopts "n:h:f:" opt; do
+    while getopts "n:h:f:s:" opt; do
         case $opt in
             n) name="$OPTARG" ;;
             h) hour="$OPTARG" ;;
             f) cloud_folder="$OPTARG" ;;
+            s) service="$OPTARG" ;;
             \?) echo "Invalid option: -$OPTARG" >&2 ;;
         esac
     done
@@ -964,14 +966,18 @@ backups(){
     if [[ -z "$cloud_folder" ]]; then
       read -p "Define the backup folder name on the cloud: " cloud_folder
     fi
-    echo ""
-    echo "Choose the backup service provider"
-    echo "1. Google Drive"
-    echo "2. Storj"
-    echo "3. Backblaze B2"
-    echo "4. pCloud"
-    echo "5. Jottacloud"
-    read -r -p "Choose: " response
+    if [[ -z "$service" ]]; then
+      echo ""
+      echo "Choose the backup service provider"
+      echo "1. Google Drive"
+      echo "2. Storj"
+      echo "3. Backblaze B2"
+      echo "4. pCloud"
+      echo "5. Jottacloud"
+      read -r -p "Choose: " response
+    else
+      response="$service"
+    fi
     case "$response" in
       1) backup_path="$cloud_folder"; list_path="$cloud_folder"; use_purge=false ;;
       2) backup_path="$cloud_folder"; list_path="$cloud_folder"; use_purge=true ;;
