@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="5.10"
+VERSION="5.11"
 
 if [ "$(id -u)" != "0" ]; then
     echo "c9cli must be run as root!" 1>&2
@@ -1006,30 +1006,16 @@ verify_backup() {
     for ((i=1; i<=retry_count; i++)); do
         log_message "Verification attempt \$i of \$retry_count for \$new_file"
         
-        if ! rclone lsf "$name:$backup_path/\$new_file" &>/dev/null; then
-            log_message "WARNING: \$new_file not found in remote"
-            if [ \$i -lt \$retry_count ]; then
-                log_message "Retrying in \$retry_delay seconds..."
-                sleep \$retry_delay
-                continue
-            fi
-            return 1
+        if rclone lsf "$name:$backup_path/\$new_file" &>/dev/null; then
+            log_message "File \$new_file verified in remote"
+            return 0
         fi
         
-        local_size=\$(stat -c%s "/home/backup/\$new_file")
-        remote_size=\$(rclone size "$name:$backup_path/\$new_file" --json | grep -o '"bytes":[0-9]*' | cut -d: -f2)
-        
-        if [ "\$local_size" != "\$remote_size" ]; then
-            log_message "WARNING: Size mismatch for \$new_file (local: \$local_size, remote: \$remote_size)"
-            if [ \$i -lt \$retry_count ]; then
-                log_message "Retrying in \$retry_delay seconds..."
-                sleep \$retry_delay
-                continue
-            fi
-            return 1
+        log_message "WARNING: \$new_file not found in remote"
+        if [ \$i -lt \$retry_count ]; then
+            log_message "Retrying in \$retry_delay seconds..."
+            sleep \$retry_delay
         fi
-        
-        return 0
     done
     
     return 1
@@ -1040,14 +1026,13 @@ cleanup_old_backup() {
     local user="\$2"
     
     log_message "Checking for old backup files for \$folder-\$user"
-    
-    old_files=\$(rclone lsf "$name:\$backup_path" --include "\$folder-\$user-*.zip" --exclude "\$folder-\$user-\$date.zip" | wc -l)
+    old_files=\$(rclone lsf "$name:$backup_path" --include "\$folder-\$user-*.zip" --exclude "\$folder-\$user-\$date.zip" | wc -l)
     
     if [ "\$old_files" -gt 0 ]; then
         log_message "Found \$old_files old backup(s) for \$folder-\$user, cleaning up..."
-        rclone delete "$name:\$backup_path" --include "\$folder-\$user-*.zip" --exclude "\$folder-\$user-\$date.zip" >> "\$log_file" 2>&1
+        rclone delete "$name:$backup_path" --include "\$folder-\$user-*.zip" --exclude "\$folder-\$user-\$date.zip" >> "\$log_file" 2>&1
     else
-        log_message "No old backups found for \$folder-\$user, skipping cleanup"
+        log_message "No old backups found for \$folder-\$user"
     fi
 }
 
@@ -1092,12 +1077,14 @@ for folder in c9users c9usersmemlimit; do
             done
 
             if [ "\$upload_success" = true ]; then
-                log_message "Backup successfully verified for \$folder-\$user"
+                log_message "Backup successfully uploaded for \$folder-\$user"
                 cleanup_old_backup "\$folder" "\$user"
             else
                 log_message "ERROR: Backup failed for \$folder-\$user after \$max_retries attempts"
-                log_message "Keeping old backup files for \$folder-\$user"
             fi
+
+            log_message "Removing local backup file for \$folder-\$user"
+            rm -f "/home/backup/\$folder-\$user-\$date.zip"
         done
         cd /home
     else
