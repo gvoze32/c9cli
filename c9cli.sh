@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="5.11"
+VERSION="5.12"
 
 if [ "$(id -u)" != "0" ]; then
     echo "c9cli must be run as root!" 1>&2
@@ -1026,13 +1026,23 @@ cleanup_old_backup() {
     local user="\$2"
     
     log_message "Checking for old backup files for \$folder-\$user"
-    old_files=\$(rclone lsf "$name:$backup_path" --include "\$folder-\$user-*.zip" --exclude "\$folder-\$user-\$date.zip" | wc -l)
     
-    if [ "\$old_files" -gt 0 ]; then
-        log_message "Found \$old_files old backup(s) for \$folder-\$user, cleaning up..."
-        rclone delete "$name:$backup_path" --include "\$folder-\$user-*.zip" --exclude "\$folder-\$user-\$date.zip" >> "\$log_file" 2>&1
+    backup_files=\$(rclone lsf "$name:$backup_path" --include "\$folder-\$user-*.zip" | sort -r)
+    
+    backup_count=\$(echo "\$backup_files" | wc -l)
+    
+    if [ "\$backup_count" -gt 3 ]; then
+        log_message "Keeping last 3 backups for \$folder-\$user"
+        files_to_delete=\$(echo "\$backup_files" | tail -n +4)
+        
+        while IFS= read -r file; do
+            if [ ! -z "\$file" ]; then
+                log_message "Deleting old backup: \$file"
+                rclone delete "$name:$backup_path/\$file" >> "\$log_file" 2>&1
+            fi
+        done <<< "\$files_to_delete"
     else
-        log_message "No old backups found for \$folder-\$user"
+        log_message "Less than or equal to 3 backups found for \$folder-\$user, no cleanup needed"
     fi
 }
 
@@ -1092,7 +1102,7 @@ for folder in c9users c9usersmemlimit; do
     fi
 done
 
-log_message "Removing local backup files"
+log_message "Removing local backup directory"
 rm -rf /home/backup >> "\$log_file" 2>&1
 
 log_message "Backup process completed"
