@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="5.12"
+VERSION="5.13"
 
 if [ "$(id -u)" != "0" ]; then
     echo "c9cli must be run as root!" 1>&2
@@ -1031,9 +1031,9 @@ cleanup_old_backup() {
     
     backup_count=\$(echo "\$backup_files" | wc -l)
     
-    if [ "\$backup_count" -gt 3 ]; then
-        log_message "Keeping last 3 backups for \$folder-\$user"
-        files_to_delete=\$(echo "\$backup_files" | tail -n +4)
+    if [ "\$backup_count" -gt 2 ]; then
+        log_message "Keeping last 2 backups for \$folder-\$user"
+        files_to_delete=\$(echo "\$backup_files" | tail -n +3)
         
         while IFS= read -r file; do
             if [ ! -z "\$file" ]; then
@@ -1042,7 +1042,7 @@ cleanup_old_backup() {
             fi
         done <<< "\$files_to_delete"
     else
-        log_message "Less than or equal to 3 backups found for \$folder-\$user, no cleanup needed"
+        log_message "Less than or equal to 2 backups found for \$folder-\$user, no cleanup needed"
     fi
 }
 
