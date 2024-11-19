@@ -157,6 +157,8 @@ case $ubuntu_version in
         ;;
     20.04)
         # Set NEEDRESTART frontend to avoid prompts
+        sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
+        sed -i "s/#\$nrconf{kernelhints} = -1;/\$nrconf{kernelhints} = -1;/g" /etc/needrestart/needrestart.conf
         export DEBIAN_FRONTEND=noninteractive
         export NEEDRESTART_SUSPEND=1
         export NEEDRESTART_MODE=l
