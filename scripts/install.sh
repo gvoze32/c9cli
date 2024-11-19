@@ -157,8 +157,6 @@ case $ubuntu_version in
         ;;
     20.04)
         # Set NEEDRESTART frontend to avoid prompts
-        sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
-        sed -i "s/#\$nrconf{kernelhints} = -1;/\$nrconf{kernelhints} = -1;/g" /etc/needrestart/needrestart.conf
         export DEBIAN_FRONTEND=noninteractive
         export NEEDRESTART_SUSPEND=1
         export NEEDRESTART_MODE=l
@@ -169,7 +167,7 @@ case $ubuntu_version in
         update_packages
 
         # Install dependencies
-        sudo apt install -y at git nodejs npm build-essential php7.4-cli php-gd php-mbstring php-curl php-mysqli php-json php-dom php-fpm python2 python3 zip unzip dos2unix
+        sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" at git nodejs npm build-essential php7.4-cli php-gd php-mbstring php-curl php-mysqli php-json php-dom php-fpm python2 python3 zip unzip dos2unix
         pip_dep
         systemctl start atd
         second_dep
