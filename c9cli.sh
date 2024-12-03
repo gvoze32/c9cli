@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="5.13"
+VERSION="5.14"
 
 if [ "$(id -u)" != "0" ]; then
     echo "c9cli must be run as root!" 1>&2
@@ -883,11 +883,20 @@ esac
 }
 
 restartdocker(){
+while getopts "u:" opt; do
+  case $opt in
+    u) user="$OPTARG" ;;
+    \?) echo "Invalid option: -$OPTARG" >&2 ;;
+  esac
+done
+
 containers=$(docker ps --format "{{.Names}}")
 echo "Container lists:"
 echo "$containers" | sed 's/^c9-//'
 
-read -p "Input User: " user
+if [[ -z "$user" ]]; then
+  read -p "Input User: " user
+fi
 
 container_name="c9-$user"
 
@@ -1252,13 +1261,13 @@ case $1 in
             configuredocker
             ;;
           restart)
-            restartdocker
+            restartdocker "${@:4}"
             ;;
           restartall)
             restartdockerall
             ;;
           reset)
-            resetdocker
+            resetdocker "${@:4}"
             ;;
           *)
             echo "Command not found, type c9cli help for help"
