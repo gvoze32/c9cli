@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="5.14"
+VERSION="5.15"
 
 if [ "$(id -u)" != "0" ]; then
     echo "c9cli must be run as root!" 1>&2
@@ -495,12 +495,32 @@ userdel $user
 }
 
 statussystemd(){
-read -p "Input User: " user
+while getopts "u:" opt; do
+  case $opt in
+    u) user="$OPTARG" ;;
+    \?) echo "Invalid option: -$OPTARG" >&2 ;;
+  esac
+done
+
+if [[ -z "$user" ]]; then
+  read -p "Input User: " user
+fi
+
 systemctl status c9-$user.service
 }
 
 restartsystemd(){
-read -p "Input User: " user
+while getopts "u:" opt; do
+  case $opt in
+    u) user="$OPTARG" ;;
+    \?) echo "Invalid option: -$OPTARG" >&2 ;;
+  esac
+done
+
+if [[ -z "$user" ]]; then
+  read -p "Input User: " user
+fi
+
 systemctl daemon-reload
 systemctl enable c9-$user.service
 systemctl restart c9-$user.service
@@ -1208,10 +1228,10 @@ case $1 in
             deletesystemd "${@:4}"
             ;;
           status)
-            statussystemd
+            statussystemd "${@:4}"
             ;;
           restart)
-            restartsystemd
+            restartsystemd "${@:4}"
             ;;
           password)
             changepasswordsystemd "${@:4}"
