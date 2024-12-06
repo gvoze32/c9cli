@@ -107,12 +107,6 @@ EOF
 }
 
 update_packages() {
-        sudo apt update -y
-        sudo apt upgrade -y
-        sudo apt update -y
-}
-
-update_packages_20() {
         sudo DEBIAN_FRONTEND=noninteractive apt update -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
         sudo DEBIAN_FRONTEND=noninteractive apt upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
         sudo DEBIAN_FRONTEND=noninteractive apt update -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
@@ -170,7 +164,7 @@ case $ubuntu_version in
         echo "Setting up Ubuntu $ubuntu_version.."
 
         # Update packages
-        update_packages_20
+        update_packages
 
         # Install dependencies
         sudo apt install -y at git nodejs npm build-essential php7.4-cli php-gd php-mbstring php-curl php-mysqli php-json php-dom php-fpm python2 python3 zip unzip dos2unix
