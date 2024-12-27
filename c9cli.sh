@@ -9,31 +9,53 @@ fi
 ubuntu_version=$(lsb_release -r | awk '{print $2}')
 
 check_update() {
-    repo_url="https://hostingjaya.ninja/api/c9cli/c9cli"
-    latest_version=$(curl -s "$repo_url" | grep -o 'VERSION="[0-9]*\.[0-9]*"' | cut -d '"' -f 2)
-
-    if [ -n "$latest_version" ]; then
-        if [ "$latest_version" != "$VERSION" ]; then
-            echo "A new version ($latest_version) is available. Run 'c9cli update' to update."
+    echo "Checking for available updates..."
+    
+    REPO_URL="https://hostingjaya.ninja/api/c9cli"
+    
+    if ! curl --connect-timeout 5 -s "https://8.8.8.8" > /dev/null; then
+        echo "No internet connection detected."
+        return 1
+    }
+    
+    max_attempts=3
+    attempt=1
+    
+    while [ $attempt -le $max_attempts ]; do
+        if latest_info=$(curl -s --connect-timeout 10 "$REPO_URL/c9cli"); then
+            latest_version=$(echo "$latest_info" | grep -o 'VERSION="[0-9]*\.[0-9]*"' | cut -d '"' -f 2)
+            
+            if [ -n "$latest_version" ]; then
+                if [ "$latest_version" != "$VERSION" ]; then
+                    echo "New version available: v$latest_version (current: v$VERSION)"
+                    echo "Run 'c9cli update' to update."
+                fi
+                return 0
+            fi
         fi
-    else
-        echo "Failed to check for updates. Please check your internet connection."
-    fi
+        
+        attempt=$((attempt + 1))
+        [ $attempt -le $max_attempts ] && sleep 2
+    done
+    
+    echo "Failed to check for updates after $max_attempts attempts."
+    return 1
 }
 
 LAST_CHECK_FILE="/tmp/c9cli_last_check"
+CHECK_INTERVAL=86400
 
 if [ -f "$LAST_CHECK_FILE" ]; then
     last_check=$(cat "$LAST_CHECK_FILE")
     current_time=$(date +%s)
     time_diff=$((current_time - last_check))
 
-    if [ $time_diff -gt 86400 ]; then
+    if [ $time_diff -gt $CHECK_INTERVAL ]; then
         check_update
         echo "$current_time" > "$LAST_CHECK_FILE"
     fi
 else
-    echo "0" > "$LAST_CHECK_FILE"
+    echo "$current_time" > "$LAST_CHECK_FILE"
     check_update
 fi
 
@@ -1162,24 +1184,75 @@ lsof -i -P -n | grep LISTEN
 }
 
 updates() {
-    repo_url="https://hostingjaya.ninja/api/c9cli/c9cli"
-    latest_version=$(curl -s "$repo_url" | grep -o 'VERSION="[0-9]*\.[0-9]*"' | cut -d '"' -f 2)
+    echo "Checking for updates..."
+    
+    REPO_URL="https://hostingjaya.ninja/api/c9cli"
+    SCRIPT_PATH="/usr/local/bin/c9cli"
+    BACKUP_PATH="/usr/local/bin/c9cli.backup"
+    TEMP_PATH="/tmp/c9cli.tmp"
 
-    if [ -n "$latest_version" ]; then
-        if [ "$latest_version" != "$VERSION" ]; then
-            echo "Updating to version $latest_version..."
-            if sudo curl -fsSL "$repo_url" -o /usr/local/bin/c9cli; then
-                sudo chmod +x /usr/local/bin/c9cli
-                echo "Update successful! You can now use the updated version."
-            else
-                echo "Update failed. Please try again later."
-            fi
-        else
-            echo "You are using the latest version ($VERSION)."
-        fi
-    else
+    if ! latest_info=$(curl -s --connect-timeout 10 "$REPO_URL/c9cli"); then
         echo "Failed to check for updates. Please check your internet connection."
+        return 1
     fi
+
+    latest_version=$(echo "$latest_info" | grep -o 'VERSION="[0-9]*\.[0-9]*"' | cut -d '"' -f 2)
+    
+    if [ -z "$latest_version" ]; then
+        echo "Could not determine latest version."
+        return 1
+    fi
+
+    echo "Current version: $VERSION"
+    echo "Latest version: $latest_version"
+
+    if [ "$VERSION" = "$latest_version" ]; then
+        echo "You are already running the latest version!"
+        return 0
+    fi
+
+    read -p "Would you like to update to version $latest_version? (y/N) " -n 1 -r
+    echo
+    
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo "Update cancelled."
+        return 0
+    fi
+
+    echo "Downloading update..."
+    
+    if ! curl -fsSL "$REPO_URL/c9cli" -o "$TEMP_PATH"; then
+        echo "Failed to download update."
+        return 1
+    fi
+
+    if ! grep -q "VERSION=\"$latest_version\"" "$TEMP_PATH"; then
+        echo "Downloaded file verification failed."
+        rm -f "$TEMP_PATH"
+        return 1
+    fi
+
+    echo "Creating backup..."
+    if ! cp "$SCRIPT_PATH" "$BACKUP_PATH"; then
+        echo "Failed to create backup."
+        rm -f "$TEMP_PATH"
+        return 1
+    fi
+
+    echo "Installing update..."
+    if ! mv "$TEMP_PATH" "$SCRIPT_PATH"; then
+        echo "Failed to install update."
+        echo "Restoring from backup..."
+        mv "$BACKUP_PATH" "$SCRIPT_PATH"
+        return 1
+    fi
+
+    chmod +x "$SCRIPT_PATH"
+
+    rm -f "$BACKUP_PATH"
+
+    echo "Successfully updated to version $latest_version!"
+    echo "Please restart your shell or run 'source $SCRIPT_PATH'"
 }
 
 quickcreatec9() {
