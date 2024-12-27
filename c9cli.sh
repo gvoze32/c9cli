@@ -16,7 +16,7 @@ check_update() {
     if ! curl --connect-timeout 5 -s "https://8.8.8.8" > /dev/null; then
         echo "No internet connection detected."
         return 1
-    }
+    fi
     
     max_attempts=3
     attempt=1
@@ -45,9 +45,10 @@ check_update() {
 LAST_CHECK_FILE="/tmp/c9cli_last_check"
 CHECK_INTERVAL=86400
 
+current_time=$(date +%s)
+
 if [ -f "$LAST_CHECK_FILE" ]; then
     last_check=$(cat "$LAST_CHECK_FILE")
-    current_time=$(date +%s)
     time_diff=$((current_time - last_check))
 
     if [ $time_diff -gt $CHECK_INTERVAL ]; then
