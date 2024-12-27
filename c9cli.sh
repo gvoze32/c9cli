@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="5.15"
+VERSION="5.16"
 
 if [ "$(id -u)" != "0" ]; then
     echo "c9cli must be run as root!" 1>&2
@@ -65,6 +65,9 @@ bantuan() {
     echo "c9cli [command] [argument] [argument]"
     echo
     echo "Command Lists:"
+    echo "quickcreate         : Quick create C9 workspace in root"
+    echo "  restart           : Restart quick created C9"
+    echo "  fix               : Fix quick created C9 installation"
     echo "create"
     echo "  systemd           : Create a new SystemD workspace"
     echo "  systemdlimit      : Create a new SystemD workspace with limited RAM"
@@ -1179,6 +1182,91 @@ updates() {
     fi
 }
 
+quickcreatec9() {
+    echo -e "Starting Quick C9 Installation..."
+
+    ipvpsmu=$(curl -s ifconfig.me)
+    echo "Server IP: $ipvpsmu"
+
+    WORKSPACE_DIR="/root/workspace"
+    mkdir -p "$WORKSPACE_DIR"
+
+    echo "Downloading C9 SDK..."
+    if [ ! -d "/root/c9sdk" ]; then
+        git clone https://github.com/c9/core.git /root/c9sdk
+    fi
+    
+    cd /root/c9sdk
+    ./scripts/install-sdk.sh
+
+    echo "Starting C9 Server..."
+    echo "Access Cloud9 IDE at: http://$ipvpsmu:8080"
+    node server.js \
+        -l "$ipvpsmu:8080" \
+        -p 8080 \
+        --listen 0.0.0.0 \
+        -w "$WORKSPACE_DIR" &
+
+    echo -e "Quick C9 Installation Complete!"
+    echo -e "Access Cloud9 IDE at: http://$ipvpsmu:8080"
+}
+
+restartquickcreate() {
+    echo -e "Restarting C9 Server..."
+    
+    echo "Stopping existing C9 server..."
+    pkill -f "node.*server.js"
+    sleep 3
+    
+    ipvpsmu=$(curl -s ifconfig.me)
+    echo "Server IP: $ipvpsmu"
+
+    cd /root/c9sdk || {
+        echo "C9 SDK directory not found!"
+        exit 1
+    }
+
+    echo "Starting C9 Server..."
+    node server.js \
+        -l "$ipvpsmu:8080" \
+        -p 8080 \
+        --listen 0.0.0.0 \
+        -w "/root/workspace" &
+
+    echo -e "C9 Server Successfully Restarted!"
+    echo -e "Access Cloud9 IDE at: http://$ipvpsmu:8080"
+}
+
+fixquickcreate() {
+    echo "Fixing C9..."
+
+    echo "Stopping existing C9 server..."
+    pkill -f "node.*server.js"
+    sleep 3
+
+    cd /root/c9sdk || {
+        echo "C9 SDK directory not found!"
+        exit 1
+    }
+    
+    git reset --hard
+    git fetch origin && git reset origin/HEAD --hard
+    
+    ./scripts/install-sdk.sh
+    
+    ipvpsmu=$(curl -s ifconfig.me)
+    
+    echo "Starting C9 Server..."
+    node server.js \
+        -l "$ipvpsmu:8080" \
+        -p 8080 \
+        --listen 0.0.0.0 \
+        -w "/root/workspace" &
+
+    echo -e "C9 Fix Complete!"
+    echo -e "Access Cloud9 IDE at: http://$ipvpsmu:8080"
+}
+
 # BASIC MENUS
 
 helps(){
@@ -1322,6 +1410,20 @@ case $1 in
   
   version)
     versions
+    ;;
+  
+  quickcreate)
+    case $2 in
+        restart)
+            restartquickcreate
+            ;;
+        fix)
+            fixquickcreate
+            ;;
+        *)
+            quickcreatec9
+            ;;
+    esac
     ;;
   
   *)

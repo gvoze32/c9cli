@@ -4,6 +4,7 @@ c9cli is a command-line interface tool for managing Cloud9 workspaces and Docker
 
 ## Features
 
+- Quick create C9 workspace in root
 - Create and manage SystemD workspaces
 - Create and manage Docker containers
 - Limit RAM and CPU usage for workspaces
@@ -26,6 +27,14 @@ c9cli must be run as root. The general syntax is:
 
 ```bash
 c9cli [command] [argument] [argument]
+```
+
+### Quick Create
+
+To quickly create a C9 workspace in root:
+
+```bash
+c9cli quickcreate
 ```
 
 ## Supported Environments
