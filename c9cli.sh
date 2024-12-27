@@ -1282,6 +1282,20 @@ about
 # MENU
 
 case $1 in
+  quickcreate)
+    case $2 in
+        restart)
+          restartquickcreate
+          ;;
+        fix)
+          fixquickcreate
+          ;;
+        *)
+          echo "Command not found, type c9cli help for help"
+          ;;
+    esac
+    ;;
+
   create)
     case $2 in
       systemd)
@@ -1411,21 +1425,7 @@ case $1 in
   version)
     versions
     ;;
-  
-  quickcreate)
-    case $2 in
-        restart)
-            restartquickcreate
-            ;;
-        fix)
-            fixquickcreate
-            ;;
-        *)
-            quickcreatec9
-            ;;
-    esac
-    ;;
-  
+    
   *)
     echo "Command not found, type c9cli help for help"
     ;;
