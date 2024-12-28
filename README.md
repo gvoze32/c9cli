@@ -29,8 +29,6 @@ c9cli must be run as root. The general syntax is:
 c9cli [command] [argument] [argument]
 ```
 
-### Quick Create
-
 To quickly create a C9 workspace in root:
 
 ```bash
