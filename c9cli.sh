@@ -1208,10 +1208,14 @@ updates() {
         return 1
     fi
 
-    latest_version=$(echo "$latest_info" | grep -o 'VERSION="[0-9]*\.[0-9]*"' | cut -d '"' -f 2)
+    latest_version=""
+    if echo "$latest_info" | grep -q 'VERSION='; then
+        latest_version=$(echo "$latest_info" | grep -o 'VERSION="[0-9]*\.[0-9]*"' | head -n1 | cut -d '"' -f 2)
+    fi
     
     if [ -z "$latest_version" ]; then
-        echo "Could not determine latest version."
+        echo "Could not determine latest version from server."
+        echo "Server response: $(echo "$latest_info" | head -n1)"
         return 1
     fi
 
