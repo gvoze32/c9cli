@@ -1212,7 +1212,7 @@ updates() {
     echo "Error: Received HTML response instead of script file"
     echo "Please check if the update server URL is correct"
     return 1
-  }
+  fi
 
   latest_version=""
   if echo "$latest_info" | grep -q 'VERSION='; then
