@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="5.16"
+VERSION="5.17"
 
 if [ "$(id -u)" != "0" ]; then
     echo "c9cli must be run as root!" 1>&2
@@ -797,9 +797,24 @@ changepassworddocker(){
       ;;
   esac
 
+  cd "$base_dir" || return
+
+  cat > .env << EOF
+NAMA_PELANGGAN=$user
+PASSWORD_PELANGGAN=$newpw
+PORT=$port
+EOF
+
+  if [ "$response" = "2" ]; then
+    cat >> .env << EOF
+MEMORY=$mem
+CPU_LIMIT=$cpu_limit
+DOCKER_IMAGE=gvoze32/cloud9:jammy
+EOF
+  fi
+
   if [ -d "$base_dir/$user" ]; then
     cd "$base_dir/$user" || return
-
     cat > .env << EOF
 PORT=$port
 NAMA_PELANGGAN=$user
@@ -811,17 +826,13 @@ EOF
 MEMORY=$mem
 CPU_LIMIT=$cpu_limit
 EOF
-      echo "Memory and CPU limits updated for user $user"
     fi
-    
-    echo "Password, port, and .env updated for user $user"
-    docker compose -p $user stop
-    docker compose -p $user start
-    # OPTIONAL: Remove user setup
-    # docker compose -p $user down
-    # docker compose -p $user up -d
-    echo "Docker container restarted for user $user"
-    
+
+    cd "$base_dir"
+    echo "Password, port and .env updated for user $user"
+    docker compose -p $user down
+    docker compose -p $user up -d
+    echo "Docker container recreated for user $user"
   else
     echo "User $user does not exist or workspace directory not found"
   fi
