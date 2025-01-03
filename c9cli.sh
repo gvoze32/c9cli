@@ -11,7 +11,7 @@ ubuntu_version=$(lsb_release -r | awk '{print $2}')
 check_update() {
     echo "Checking for available updates..."
     
-    REPO_URL="https://hostingjaya.ninja/api/c9cli"
+    REPO_URL="https://hostingjaya.ninja/api/mirror/c9cli"
     
     if ! curl --connect-timeout 5 -s "https://8.8.8.8" > /dev/null; then
         echo "No internet connection detected."
@@ -1198,7 +1198,7 @@ lsof -i -P -n | grep LISTEN
 updates() {
     echo "Checking for updates..."
     
-    REPO_URL="https://hostingjaya.ninja/api/c9cli"
+    REPO_URL="https://hostingjaya.ninja/api/mirror/c9cli"
     SCRIPT_PATH="/usr/local/bin/c9cli"
     BACKUP_PATH="/usr/local/bin/c9cli.backup"
     TEMP_PATH="/tmp/c9cli.tmp"
