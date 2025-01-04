@@ -1199,83 +1199,24 @@ updates() {
   echo "Checking for updates..."
   
   REPO_URL="https://hostingjaya.ninja/api/mirror/c9cli"
-  SCRIPT_PATH="/usr/local/bin/c9cli"
-  BACKUP_PATH="/usr/local/bin/c9cli.backup"
-  TEMP_PATH="/tmp/c9cli.tmp"
-
-  if ! latest_info=$(curl -s -H "User-Agent: c9cli/$VERSION" -H "Accept: text/plain" --connect-timeout 10 "$REPO_URL/c9cli"); then
+  latest_info=$(curl -s "$REPO_URL/c9cli")
+  latest_version=$(echo "$latest_info" | grep -o 'VERSION="[0-9]*\.[0-9]*"' | cut -d '"' -f 2)
+  
+  if [ -n "$latest_version" ]; then
+    if [ "$latest_version" != "$VERSION" ]; then
+      echo "Updating to version $latest_version..."
+      if sudo curl -fsSL "$REPO_URL/c9cli" -o /usr/local/bin/c9cli; then
+        sudo chmod +x /usr/local/bin/c9cli
+        echo "Update successful! You can now use the updated version."
+      else
+        echo "Update failed. Please try again later."
+      fi
+    else
+      echo "You are using the latest version ($VERSION)."
+    fi
+  else
     echo "Failed to check for updates. Please check your internet connection."
-    return 1
   fi
-
-  if [[ "$latest_info" == *"<!doctype html"* || "$latest_info" == *"<html"* ]]; then
-    echo "Error: Received HTML response instead of script file"
-    echo "Please check if the update server URL is correct"
-    return 1
-  fi
-
-  latest_version=""
-  if echo "$latest_info" | grep -q 'VERSION='; then
-    latest_version=$(echo "$latest_info" | grep -o 'VERSION="[0-9]*\.[0-9]*"' | head -n1 | cut -d '"' -f 2)
-  fi
-  
-  if [ -z "$latest_version" ]; then
-    echo "Could not determine latest version."
-    echo "Please try again later or check manually at:"
-    echo "$REPO_URL/c9cli"
-    return 1
-  fi
-
-  echo "Current version: $VERSION"
-  echo "Latest version: $latest_version"
-
-  if [ "$VERSION" = "$latest_version" ]; then
-    echo "You are already running the latest version!"
-    return 0
-  fi
-
-  read -p "Would you like to update to version $latest_version? (y/N) " -n 1 -r
-  echo
-  
-  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    echo "Update cancelled."
-    return 0
-  fi
-
-  echo "Downloading update..."
-  
-  if ! curl -fsSL -H "User-Agent: c9cli/$VERSION" -H "Accept: text/plain" "$REPO_URL/c9cli" -o "$TEMP_PATH"; then
-    echo "Failed to download update."
-    return 1
-  fi
-
-  if ! grep -q "VERSION=\"$latest_version\"" "$TEMP_PATH"; then
-    echo "Downloaded file verification failed."
-    rm -f "$TEMP_PATH"
-    return 1
-  fi
-
-  echo "Creating backup..."
-  if ! cp "$SCRIPT_PATH" "$BACKUP_PATH"; then
-    echo "Failed to create backup."
-    rm -f "$TEMP_PATH"
-    return 1
-  fi
-
-  echo "Installing update..."
-  if ! mv "$TEMP_PATH" "$SCRIPT_PATH"; then
-    echo "Failed to install update."
-    echo "Restoring from backup..."
-    mv "$BACKUP_PATH" "$SCRIPT_PATH"
-    return 1
-  fi
-
-  chmod +x "$SCRIPT_PATH"
-
-  rm -f "$BACKUP_PATH"
-
-  echo "Successfully updated to version $latest_version!"
-  echo "Please restart your shell or run 'source $SCRIPT_PATH'"
 }
 
 quickcreatec9() {
