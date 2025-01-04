@@ -23,13 +23,22 @@ check_update() {
         if [ "$latest_version" != "$VERSION" ]; then
           echo "New version available: v$latest_version (current: v$VERSION)"
           echo "Run 'c9cli update' to update."
+        else
+          echo "You are using the latest version (v$VERSION)."
         fi
         return 0
+      else
+        echo "Failed to extract version information."
       fi
+    else 
+      echo "Failed to connect to update server on attempt $attempt of $max_attempts."
     fi
     
     attempt=$((attempt + 1))
-    [ $attempt -le $max_attempts ] && sleep 2
+    [ $attempt -le $max_attempts ] && { 
+      echo "Retrying in 2 seconds..."
+      sleep 2
+    }
   done
   
   echo "Failed to check for updates after $max_attempts attempts."
@@ -1193,24 +1202,54 @@ updates() {
   echo "Checking for updates..."
   
   REPO_URL="https://hostingjaya.ninja/api/mirror/c9cli?raw=true"
-  latest_info=$(curl -s "$REPO_URL/c9cli")
-  latest_version=$(echo "$latest_info" | grep -o 'VERSION="[0-9]*\.[0-9]*"' | cut -d '"' -f 2)
+  max_attempts=3
+  attempt=1
   
-  if [ -n "$latest_version" ]; then
-    if [ "$latest_version" != "$VERSION" ]; then
-      echo "Updating to version $latest_version..."
-      if sudo curl -fsSL "$REPO_URL/c9cli" -o /usr/local/bin/c9cli; then
-        sudo chmod +x /usr/local/bin/c9cli
-        echo "Update successful! You can now use the updated version."
-      else
-        echo "Update failed. Please try again later."
+  while [ $attempt -le $max_attempts ]; do
+    if latest_info=$(curl -s --connect-timeout 10 "$REPO_URL/c9cli"); then
+      latest_version=$(echo "$latest_info" | grep -o 'VERSION="[0-9]*\.[0-9]*"' | cut -d '"' -f 2)
+      
+      if [ -n "$latest_version" ]; then
+        if [ "$latest_version" != "$VERSION" ]; then
+          echo "Updating to version $latest_version..."
+          
+          # Create temporary file
+          temp_file=$(mktemp)
+          
+          # Download to temporary file first
+          if curl -fsSL "$REPO_URL/c9cli" -o "$temp_file"; then
+            # Verify file was downloaded correctly
+            if [ -s "$temp_file" ] && grep -q "VERSION=\"$latest_version\"" "$temp_file"; then
+              # Move temporary file to final location
+              if sudo mv "$temp_file" /usr/local/bin/c9cli && sudo chmod +x /usr/local/bin/c9cli; then
+                echo "Successfully updated to version $latest_version!"
+                echo "Please restart your shell or run 'source /usr/local/bin/c9cli' to use the new version."
+                return 0
+              else
+                echo "Failed to install the update. Please check permissions and try again."
+              fi
+            else
+              echo "Downloaded file appears to be invalid. Update aborted."
+            fi
+          else
+            echo "Failed to download update. Please check your internet connection."
+          fi
+          
+          # Clean up temporary file if it exists
+          [ -f "$temp_file" ] && rm -f "$temp_file"
+        else
+          echo "You are already using the latest version ($VERSION)."
+          return 0
+        fi
       fi
-    else
-      echo "You are using the latest version ($VERSION)."
     fi
-  else
-    echo "Failed to check for updates. Please check your internet connection."
-  fi
+    
+    attempt=$((attempt + 1))
+    [ $attempt -le $max_attempts ] && sleep 2
+  done
+  
+  echo "Failed to check for updates after $max_attempts attempts."
+  return 1
 }
 
 quickcreatec9() {
