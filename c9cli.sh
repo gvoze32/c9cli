@@ -11,7 +11,7 @@ ubuntu_version=$(lsb_release -r | awk '{print $2}')
 check_update() {
   echo "Checking for available updates..."
   
-  REPO_URL="https://hostingjaya.ninja/api/mirror/c9cli"
+  REPO_URL="https://hostingjaya.ninja/api/mirror/c9cli?raw=true"
   max_attempts=3
   attempt=1
   
@@ -1192,7 +1192,7 @@ lsof -i -P -n | grep LISTEN
 updates() {
   echo "Checking for updates..."
   
-  REPO_URL="https://hostingjaya.ninja/api/mirror/c9cli"
+  REPO_URL="https://hostingjaya.ninja/api/mirror/c9cli?raw=true"
   latest_info=$(curl -s "$REPO_URL/c9cli")
   latest_version=$(echo "$latest_info" | grep -o 'VERSION="[0-9]*\.[0-9]*"' | cut -d '"' -f 2)
   
