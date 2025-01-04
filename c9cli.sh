@@ -9,37 +9,31 @@ fi
 ubuntu_version=$(lsb_release -r | awk '{print $2}')
 
 check_update() {
-    echo "Checking for available updates..."
-    
-    REPO_URL="https://hostingjaya.ninja/api/mirror/c9cli"
-    
-    if ! curl --connect-timeout 5 -s "https://8.8.8.8" > /dev/null; then
-        echo "No internet connection detected."
-        return 1
+  echo "Checking for available updates..."
+  
+  REPO_URL="https://hostingjaya.ninja/api/mirror/c9cli"
+  max_attempts=3
+  attempt=1
+  
+  while [ $attempt -le $max_attempts ]; do
+    if latest_info=$(curl -s --connect-timeout 10 "$REPO_URL/c9cli"); then
+      latest_version=$(echo "$latest_info" | grep -o 'VERSION="[0-9]*\.[0-9]*"' | cut -d '"' -f 2)
+      
+      if [ -n "$latest_version" ]; then
+        if [ "$latest_version" != "$VERSION" ]; then
+          echo "New version available: v$latest_version (current: v$VERSION)"
+          echo "Run 'c9cli update' to update."
+        fi
+        return 0
+      fi
     fi
     
-    max_attempts=3
-    attempt=1
-    
-    while [ $attempt -le $max_attempts ]; do
-        if latest_info=$(curl -s --connect-timeout 10 "$REPO_URL/c9cli"); then
-            latest_version=$(echo "$latest_info" | grep -o 'VERSION="[0-9]*\.[0-9]*"' | cut -d '"' -f 2)
-            
-            if [ -n "$latest_version" ]; then
-                if [ "$latest_version" != "$VERSION" ]; then
-                    echo "New version available: v$latest_version (current: v$VERSION)"
-                    echo "Run 'c9cli update' to update."
-                fi
-                return 0
-            fi
-        fi
-        
-        attempt=$((attempt + 1))
-        [ $attempt -le $max_attempts ] && sleep 2
-    done
-    
-    echo "Failed to check for updates after $max_attempts attempts."
-    return 1
+    attempt=$((attempt + 1))
+    [ $attempt -le $max_attempts ] && sleep 2
+  done
+  
+  echo "Failed to check for updates after $max_attempts attempts."
+  return 1
 }
 
 LAST_CHECK_FILE="/tmp/c9cli_last_check"
@@ -48,16 +42,16 @@ CHECK_INTERVAL=86400
 current_time=$(date +%s)
 
 if [ -f "$LAST_CHECK_FILE" ]; then
-    last_check=$(cat "$LAST_CHECK_FILE")
-    time_diff=$((current_time - last_check))
+  last_check=$(cat "$LAST_CHECK_FILE")
+  time_diff=$((current_time - last_check))
 
-    if [ $time_diff -gt $CHECK_INTERVAL ]; then
-        check_update
-        echo "$current_time" > "$LAST_CHECK_FILE"
-    fi
-else
-    echo "$current_time" > "$LAST_CHECK_FILE"
+  if [ $time_diff -gt $CHECK_INTERVAL ]; then
     check_update
+    echo "$current_time" > "$LAST_CHECK_FILE"
+  fi
+else
+  echo "$current_time" > "$LAST_CHECK_FILE"
+  check_update
 fi
 
 # COMMANDS
