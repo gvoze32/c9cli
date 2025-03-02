@@ -1383,6 +1383,9 @@ quickcreate)
   fix)
     fixquickcreate
     ;;
+  "")
+    quickcreatec9
+    ;;
   *)
     echo "Command not found, type c9cli help for help"
     ;;
