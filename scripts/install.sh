@@ -12,9 +12,9 @@ install_docker_app() {
         sudo chmod a+r /etc/apt/keyrings/docker.asc
 
         echo \
-        "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-        $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-        sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+                "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+        $(. /etc/os-release && echo "$VERSION_CODENAME") stable" |
+                sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
         sudo apt-get update
 
         sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
@@ -22,7 +22,7 @@ install_docker_app() {
 
 install_docker() {
         sudo adduser --disabled-password --gecos "" c9users
-        sudo cat > /home/c9users/docker-compose.yml << EOF
+        sudo cat >/home/c9users/docker-compose.yml <<EOF
 services:
   cloud9:
     image: \${DOCKER_IMAGE}
@@ -41,7 +41,7 @@ EOF
 
 install_docker_memlimit() {
         sudo adduser --disabled-password --gecos "" c9usersmemlimit
-        sudo cat > /home/c9usersmemlimit/docker-compose.yml << EOF
+        sudo cat >/home/c9usersmemlimit/docker-compose.yml <<EOF
 services:
   cloud9:
     image: \${DOCKER_IMAGE}
@@ -64,14 +64,14 @@ EOF
 }
 
 blank_env() {
-        > /home/c9users/.env
-        > /home/c9usersmemlimit/.env
+        >/home/c9users/.env
+        >/home/c9usersmemlimit/.env
 }
 
-custom_docker_size(){
+custom_docker_size() {
         echo "Creating /etc/docker/daemon.json file"
         echo "Setting custom Docker default address pools"
-        sudo cat > /etc/docker/daemon.json << EOF
+        sudo cat >/etc/docker/daemon.json <<EOF
 {
     "default-address-pools": [
         {
@@ -84,26 +84,6 @@ EOF
         sudo service docker restart
         sudo docker network inspect bridge | grep Subnet
         echo "Docker default address pools set to 10.10.0.0/16 with size 24"
-}
-
-install_ioncube(){
-        curl -O https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
-        tar -xvzf ioncube_loaders_lin_x86-64.tar.gz
-        rm ioncube_loaders_lin_x86-64.tar.gz
-        cd ioncube
-        php_ext_dir="$(command php -i | grep extension_dir 2>'/dev/null' \
-            | command head -n 1 \
-            | command cut --characters=31-38)"
-        php_version="$(command php --version 2>'/dev/null' \
-            | command head -n 1 \
-            | command cut --characters=5-7)"
-        cp ioncube_loader_lin_${php_version}.so /usr/lib/php/${php_ext_dir}
-        cd ..
-        rm -rf ioncube
-        cat > /etc/php/${php_version}/cli/conf.d/00-ioncube-loader.ini << EOF
-zend_extension=ioncube_loader_lin_${php_version}.so
-EOF
-        php -v
 }
 
 update_packages() {
@@ -124,7 +104,7 @@ pip_dep() {
 }
 
 case $ubuntu_version in
-    22.04)
+22.04)
         # Set NEEDRESTART frontend to avoid prompts
         sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
         sed -i "s/#\$nrconf{kernelhints} = -1;/\$nrconf{kernelhints} = -1;/g" /etc/needrestart/needrestart.conf
@@ -138,7 +118,7 @@ case $ubuntu_version in
         update_packages
 
         # Install dependencies
-        sudo apt install -y at git nodejs npm build-essential php php8.1-common php-gd php-mbstring php-curl php8.1-mysql php-json php8.1-xml php-fpm python2 python3 zip unzip dos2unix
+        sudo apt install -y at git nodejs npm build-essential python2 python3 zip unzip
         pip_dep
         systemctl start atd
         second_dep
@@ -151,11 +131,8 @@ case $ubuntu_version in
         install_docker_memlimit
         blank_env
         custom_docker_size
-        
-        # Install ioncube
-        install_ioncube
         ;;
-    20.04)
+20.04)
         # Set NEEDRESTART frontend to avoid prompts
         export DEBIAN_FRONTEND=noninteractive
         export NEEDRESTART_SUSPEND=1
@@ -167,7 +144,7 @@ case $ubuntu_version in
         update_packages
 
         # Install dependencies
-        sudo apt install -y at git nodejs npm build-essential php7.4-cli php-gd php-mbstring php-curl php-mysqli php-json php-dom php-fpm python2 python3 zip unzip dos2unix
+        sudo apt install -y at git nodejs npm build-essential python2 python3 zip unzip
         pip_dep
         systemctl start atd
         second_dep
@@ -180,18 +157,15 @@ case $ubuntu_version in
         install_docker_memlimit
         blank_env
         custom_docker_size
-        
-        # Install ioncube
-        install_ioncube
         ;;
-    18.04)        
+18.04)
         echo "Setting up Ubuntu $ubuntu_version.."
 
         # Update packages
         update_packages
 
         # Install dependencies
-        sudo apt install -y curl at git nodejs npm build-essential php php7.2-common php-gd php-mbstring php-curl php7.2-mysql php-json php7.2-xml php-fpm python2-minimal python3 zip unzip dos2unix
+        sudo apt install -y curl at git nodejs npm build-essential python2-minimal python3 zip unzip
         pip_dep
         systemctl start atd
         second_dep
@@ -204,8 +178,5 @@ case $ubuntu_version in
         install_docker_memlimit
         blank_env
         custom_docker_size
-        
-        # Install ioncube
-        install_ioncube
         ;;
 esac
