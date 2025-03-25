@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="5.17"
+VERSION="5.18"
 
 if [ "$(id -u)" != "0" ]; then
   echo "c9cli must be run as root!" 1>&2
@@ -94,6 +94,8 @@ bantuan() {
   echo "quickcreate         : Quick create C9 workspace in root"
   echo "  restart           : Restart quick created C9"
   echo "  fix               : Fix quick created C9 installation"
+  echo "  status            : Show status of quick created C9"
+  echo "  stop              : Stop quick created C9"
   echo "create"
   echo "  systemd           : Create a new SystemD workspace"
   echo "  systemdlimit      : Create a new SystemD workspace with limited RAM"
@@ -1011,6 +1013,8 @@ resetdocker() {
   docker compose -p $user up -d
 }
 
+# MANAGEMENTS
+
 backups() {
   while getopts "n:h:f:s:" opt; do
     case $opt in
@@ -1360,6 +1364,33 @@ fixquickcreate() {
   echo -e "Access Cloud9 IDE at: http://$ipvpsmu:8080"
 }
 
+statusquickcreate() {
+  echo "Checking C9 Server Status..."
+
+  if pgrep -f "node.*server.js" >/dev/null; then
+    echo "C9 Server is RUNNING"
+    ipvpsmu=$(curl -s ifconfig.me)
+    echo "Access Cloud9 IDE at: http://$ipvpsmu:8080"
+
+    # Show process details
+    echo -e "\nProcess details:"
+    ps aux | grep "node.*server.js" | grep -v grep
+  else
+    echo "C9 Server is NOT RUNNING"
+  fi
+}
+
+stopquickcreate() {
+  echo "Stopping C9 Server..."
+
+  if pgrep -f "node.*server.js" >/dev/null; then
+    pkill -f "node.*server.js"
+    echo "C9 Server Stopped Successfully"
+  else
+    echo "C9 Server is not running"
+  fi
+}
+
 # BASIC MENUS
 
 helps() {
@@ -1382,6 +1413,12 @@ quickcreate)
     ;;
   fix)
     fixquickcreate
+    ;;
+  status)
+    statusquickcreate
+    ;;
+  stop)
+    stopquickcreate
     ;;
   "")
     quickcreatec9
