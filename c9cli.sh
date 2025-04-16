@@ -11,7 +11,7 @@ ubuntu_version=$(lsb_release -r | awk '{print $2}')
 check_update() {
   echo "Checking for available updates..."
 
-  REPO_URL="https://hostingjaya.ninja/api/mirror/c9cli/c9cli?raw=true"
+  REPO_URL="https://jayanode.com/api/mirror/c9cli/c9cli?raw=true"
   max_attempts=3
   attempt=1
 
@@ -1228,7 +1228,7 @@ portlist() {
 updates() {
   echo "Checking for updates..."
 
-  REPO_URL="https://hostingjaya.ninja/api/mirror/c9cli/c9cli?raw=true"
+  REPO_URL="https://jayanode.com/api/mirror/c9cli/c9cli?raw=true"
   max_attempts=3
   attempt=1
 
