@@ -15,6 +15,17 @@ echo "
 ==================================================
 "
 
+read -p "Do you want to continue? (y/N): " -n 1 -r
+echo ""
+
+if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    echo "Installation cancelled."
+    exit 0
+fi
+
+echo "Starting c9cli installation..."
+echo ""
+
 sudo curl -fsSL https://jayanode.com/api/mirror/c9cli/install?raw=true | sudo bash
 
 sudo curl -fsSL https://jayanode.com/api/mirror/c9cli/c9cli?raw=true -o /usr/local/bin/c9cli && sudo chmod +x /usr/local/bin/c9cli
