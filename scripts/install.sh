@@ -160,7 +160,12 @@ start_atd() {
 
 pip_dep() {
         sudo apt install -y python3-pip
-        python3 -m pip install requests selenium colorama bs4 wget pyfiglet
+        local pip_break_flag=""
+        if python3 -m pip --help 2>/dev/null | grep -q "--break-system-packages"; then
+                pip_break_flag="--break-system-packages"
+        fi
+
+        python3 -m pip install ${pip_break_flag} requests selenium colorama bs4 wget pyfiglet
         if ensure_python2; then
                 curl https://bootstrap.pypa.io/pip/2.7/get-pip.py | sudo python2 -
                 python2 -m pip install requests selenium colorama bs4 wget pyfiglet
