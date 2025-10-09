@@ -37,7 +37,7 @@ c9cli quickcreate
 
 ## Supported Environments
 
-- Debian-based systems (Ubuntu 18.04, 20.04, 22.04)
+- Debian-based systems (Ubuntu 18.04, 20.04, 22.04, 24.04)
 
 ## Backup
 

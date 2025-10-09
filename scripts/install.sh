@@ -96,11 +96,49 @@ second_dep() {
         sudo apt install -y pythonpy apt-transport-https ca-certificates gnupg-agent software-properties-common
 }
 
+ensure_python2() {
+        if command -v python2 >/dev/null 2>&1; then
+                echo "Python2 already installed."
+                return 0
+        fi
+
+        if [[ "$ubuntu_version" = "24.04" || "$ubuntu_version" = "22.04" ]]; then
+                sudo apt install -y software-properties-common
+                if ! ls /etc/apt/sources.list.d/ | grep -qi "deadsnakes" 2>/dev/null; then
+                        sudo add-apt-repository -y ppa:deadsnakes/ppa
+                fi
+        fi
+
+        sudo apt update
+        if sudo apt install -y python2; then
+                return 0
+        fi
+
+        if sudo apt install -y python2-minimal; then
+                return 0
+        fi
+
+        echo "Python2 is not available via apt; skipping Python2 installation."
+        return 1
+}
+
+start_atd() {
+        if systemctl list-unit-files | grep -q '^atd.service'; then
+                sudo systemctl enable --now atd.service
+        else
+                echo "atd.service not found; skipping at daemon setup."
+        fi
+}
+
 pip_dep() {
         sudo apt install -y python3-pip
         python3 -m pip install requests selenium colorama bs4 wget pyfiglet
-        curl https://bootstrap.pypa.io/pip/2.7/get-pip.py | sudo python2 -
-        python2 -m pip install requests selenium colorama bs4 wget pyfiglet
+        if ensure_python2; then
+                curl https://bootstrap.pypa.io/pip/2.7/get-pip.py | sudo python2 -
+                python2 -m pip install requests selenium colorama bs4 wget pyfiglet
+        else
+                echo "Skipping Python2 pip dependencies."
+        fi
 }
 
 case $ubuntu_version in
@@ -118,9 +156,9 @@ case $ubuntu_version in
         update_packages
 
         # Install dependencies
-        sudo apt install -y at git nodejs npm build-essential python2 python3 zip unzip
+        sudo apt install -y curl at git nodejs npm build-essential python3 zip unzip
         pip_dep
-        systemctl start atd
+        start_atd
         second_dep
 
         # Install rclone
@@ -146,9 +184,9 @@ case $ubuntu_version in
         update_packages
 
         # Install dependencies
-        sudo apt install -y at git nodejs npm build-essential python2 python3 zip unzip
+        sudo apt install -y curl at git nodejs npm build-essential python3 zip unzip
         pip_dep
-        systemctl start atd
+        start_atd
         second_dep
 
         # Install rclone
@@ -172,9 +210,9 @@ case $ubuntu_version in
         update_packages
 
         # Install dependencies
-        sudo apt install -y at git nodejs npm build-essential python2 python3 zip unzip
+        sudo apt install -y curl at git nodejs npm build-essential python3 zip unzip
         pip_dep
-        systemctl start atd
+        start_atd
         second_dep
 
         # Install rclone
@@ -193,9 +231,9 @@ case $ubuntu_version in
         update_packages
 
         # Install dependencies
-        sudo apt install -y curl at git nodejs npm build-essential python2-minimal python3 zip unzip
+        sudo apt install -y curl at git nodejs npm build-essential python3 zip unzip
         pip_dep
-        systemctl start atd
+        start_atd
         second_dep
 
         # Install rclone
