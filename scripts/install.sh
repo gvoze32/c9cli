@@ -104,6 +104,34 @@ pip_dep() {
 }
 
 case $ubuntu_version in
+24.04)
+        # Set NEEDRESTART frontend to avoid prompts
+        sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
+        sed -i "s/#\$nrconf{kernelhints} = -1;/\$nrconf{kernelhints} = -1;/g" /etc/needrestart/needrestart.conf
+        export DEBIAN_FRONTEND=noninteractive
+        export NEEDRESTART_SUSPEND=1
+        export NEEDRESTART_MODE=l
+
+        echo "Setting up Ubuntu $ubuntu_version.."
+
+        # Update packages
+        update_packages
+
+        # Install dependencies
+        sudo apt install -y at git nodejs npm build-essential python2 python3 zip unzip
+        pip_dep
+        systemctl start atd
+        second_dep
+
+        # Install rclone
+        curl https://rclone.org/install.sh | sudo bash
+
+        install_docker_app
+        install_docker
+        install_docker_memlimit
+        blank_env
+        custom_docker_size
+        ;;
 22.04)
         # Set NEEDRESTART frontend to avoid prompts
         sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
