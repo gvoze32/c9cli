@@ -160,12 +160,14 @@ start_atd() {
 
 pip_dep() {
         sudo apt install -y python3-pip
-        local pip_break_flag=""
-        if python3 -m pip --help 2>/dev/null | grep -q "--break-system-packages"; then
-                pip_break_flag="--break-system-packages"
+        
+        # Ubuntu 24.04 and 22.04 require --break-system-packages flag due to PEP 668
+        if [[ "$ubuntu_version" = "24.04" || "$ubuntu_version" = "22.04" ]]; then
+                python3 -m pip install --break-system-packages --ignore-installed requests selenium colorama bs4 wget pyfiglet
+        else
+                python3 -m pip install requests selenium colorama bs4 wget pyfiglet
         fi
-
-        python3 -m pip install ${pip_break_flag} requests selenium colorama bs4 wget pyfiglet
+        
         if ensure_python2; then
                 curl https://bootstrap.pypa.io/pip/2.7/get-pip.py | sudo python2 -
                 python2 -m pip install requests selenium colorama bs4 wget pyfiglet
