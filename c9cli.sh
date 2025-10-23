@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="5.18"
+VERSION="5.19"
 
 if [ "$(id -u)" != "0" ]; then
   echo "c9cli must be run as root!" 1>&2
@@ -343,17 +343,30 @@ createnewdocker() {
     echo "1. Ubuntu 20.04"
     echo "2. Ubuntu 22.04"
     echo "3. Ubuntu 24.04"
-    read -p "Enter image option (1/3): " image_choice
-    if [ "$image_choice" == "1" ]; then
+    echo "4. Custom image"
+    read -p "Enter image option (1-4): " image_choice
+    case "$image_choice" in
+    1)
       image="gvoze32/cloud9:focal"
-    elif [ "$image_choice" == "2" ]; then
+      ;;
+    2)
       image="gvoze32/cloud9:jammy"
-    elif [ "$image_choice" == "3" ]; then
+      ;;
+    3)
       image="gvoze32/cloud9:noble"
-    else
+      ;;
+    4)
+      read -p "Enter custom Docker image (e.g., repo/image:tag): " image
+      if [[ -z "$image" ]]; then
+        echo "No image entered, using default image."
+        image="gvoze32/cloud9:jammy"
+      fi
+      ;;
+    *)
       echo "Invalid option, using default image."
       image="gvoze32/cloud9:jammy"
-    fi
+      ;;
+    esac
   else
     echo "Using provided image: $image"
   fi
@@ -421,17 +434,30 @@ createnewdockermemlimit() {
     echo "1. Ubuntu 20.04"
     echo "2. Ubuntu 22.04"
     echo "3. Ubuntu 24.04"
-    read -p "Enter image option (1/3) : " image_choice
-    if [ "$image_choice" == "1" ]; then
+    echo "4. Custom image"
+    read -p "Enter image option (1-4): " image_choice
+    case "$image_choice" in
+    1)
       image="gvoze32/cloud9:focal"
-    elif [ "$image_choice" == "2" ]; then
+      ;;
+    2)
       image="gvoze32/cloud9:jammy"
-    elif [ "$image_choice" == "3" ]; then
+      ;;
+    3)
       image="gvoze32/cloud9:noble"
-    else
+      ;;
+    4)
+      read -p "Enter custom Docker image (e.g., repo/image:tag): " image
+      if [[ -z "$image" ]]; then
+        echo "No image entered, using default image."
+        image="gvoze32/cloud9:jammy"
+      fi
+      ;;
+    *)
       echo "Invalid option, using default image."
       image="gvoze32/cloud9:jammy"
-    fi
+      ;;
+    esac
   else
     echo "Using provided image: $image"
   fi
@@ -748,7 +774,7 @@ statusdocker() {
 }
 
 changepassworddocker() {
-  while getopts "u:p:t:o:l:c:" opt; do
+  while getopts "u:p:t:o:l:c:i:" opt; do
     case $opt in
     u) user="$OPTARG" ;;
     p) newpw="$OPTARG" ;;
@@ -756,6 +782,7 @@ changepassworddocker() {
     o) port="$OPTARG" ;;
     l) mem="$OPTARG" ;;
     c) cpu_limit="$OPTARG" ;;
+    i) image="$OPTARG" ;;
     \?) echo "Invalid option: -$OPTARG" >&2 ;;
     esac
   done
@@ -802,19 +829,54 @@ changepassworddocker() {
     ;;
   esac
 
+  if [[ -z "$image" ]] && [ -f "$base_dir/.env" ]; then
+    image=$(grep '^DOCKER_IMAGE=' "$base_dir/.env" | cut -d '=' -f2-)
+  fi
+
+  if [[ -z "$image" ]]; then
+    echo "Select Docker image:"
+    echo "1. Ubuntu 20.04"
+    echo "2. Ubuntu 22.04"
+    echo "3. Ubuntu 24.04"
+    echo "4. Custom image"
+    read -p "Enter image option (1-4): " image_choice
+    case "$image_choice" in
+    1)
+      image="gvoze32/cloud9:focal"
+      ;;
+    2)
+      image="gvoze32/cloud9:jammy"
+      ;;
+    3)
+      image="gvoze32/cloud9:noble"
+      ;;
+    4)
+      read -p "Enter custom Docker image (e.g., repo/image:tag): " image
+      if [[ -z "$image" ]]; then
+        echo "No image entered, using default image."
+        image="gvoze32/cloud9:jammy"
+      fi
+      ;;
+    *)
+      echo "Invalid option, using default image."
+      image="gvoze32/cloud9:jammy"
+      ;;
+    esac
+  fi
+
   cd "$base_dir" || return
 
   cat >.env <<EOF
 NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$newpw
 PORT=$port
+DOCKER_IMAGE=$image
 EOF
 
   if [ "$response" = "2" ]; then
     cat >>.env <<EOF
 MEMORY=$mem
 CPU_LIMIT=$cpu_limit
-DOCKER_IMAGE=gvoze32/cloud9:jammy
 EOF
   fi
 
@@ -824,6 +886,7 @@ EOF
 PORT=$port
 NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$newpw
+DOCKER_IMAGE=$image
 EOF
 
     if [ "$response" = "2" ]; then
