@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="5.19"
+VERSION="5.20"
 
 if [ "$(id -u)" != "0" ]; then
   echo "c9cli must be run as root!" 1>&2
@@ -7,6 +7,113 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 ubuntu_version=$(lsb_release -r | awk '{print $2}')
+
+parse_quota_limit() {
+  local raw="$1"
+  raw="$(echo "$raw" | tr -d ' ')"
+
+  if [[ -z "$raw" ]]; then
+    echo ""
+    return 1
+  fi
+
+  if [[ "$raw" == "0" ]]; then
+    echo "0"
+    return 0
+  fi
+
+  if [[ "$raw" =~ ^([0-9]+)([MmGg])$ ]]; then
+    local num="${BASH_REMATCH[1]}"
+    local unit="${BASH_REMATCH[2]}"
+    case "$unit" in
+      M|m) echo $(( num * 1024 )) ;;
+      G|g) echo $(( num * 1024 * 1024 )) ;;
+      *) echo "" ; return 1 ;;
+    esac
+    return 0
+  fi
+
+  echo ""
+  return 1
+}
+
+ensure_ext4_usrquota_ready_for_path() {
+  local target_path="$1"
+
+  if ! command -v quotacheck >/dev/null 2>&1 || ! command -v quotaon >/dev/null 2>&1 || ! command -v setquota >/dev/null 2>&1; then
+    echo "WARN! quota tools not found (quotacheck/quotaon/setquota). Install 'quota' package to enable storage limits."
+    return 1
+  fi
+
+  local mountpoint
+  mountpoint="$(df -P "$target_path" 2>/dev/null | awk 'NR==2{print $6}')"
+  if [[ -z "$mountpoint" ]]; then
+    echo "WARN! Unable to determine mount point for $target_path. Storage limit skipped."
+    return 1
+  fi
+
+  local fstype
+  fstype="$(df -T -P "$target_path" 2>/dev/null | awk 'NR==2{print $2}')"
+  if [[ "$fstype" != "ext4" ]]; then
+    echo "WARN! Filesystem for $target_path is '$fstype' (not ext4). Storage limit skipped."
+    return 1
+  fi
+
+  if ! mount | awk -v mp="$mountpoint" '$3==mp{print $0}' | grep -q 'usrquota'; then
+    echo "WARN! usrquota is not enabled on mount point '$mountpoint'."
+    echo "      Enable it in /etc/fstab (add 'usrquota') then reboot, or remount with usrquota."
+    echo "      Storage limit skipped."
+    return 1
+  fi
+
+  if [[ ! -f "$mountpoint/aquota.user" ]]; then
+    echo "Initializing quota files on $mountpoint ..."
+    quotacheck -cum "$mountpoint" >/dev/null 2>&1 || true
+  fi
+
+  quotaon -u "$mountpoint" >/dev/null 2>&1 || true
+
+  return 0
+}
+
+set_user_storage_quota_for_path() {
+  local q_user="$1"
+  local limit_str="$2"
+  local ws_path="$3"
+
+  if [[ -z "$q_user" || -z "$limit_str" || -z "$ws_path" ]]; then
+    echo "WARN! Missing args for storage limit; skipped."
+    return 1
+  fi
+
+  local kb
+  kb="$(parse_quota_limit "$limit_str")"
+  if [[ -z "$kb" ]]; then
+    echo "WARN! Invalid storage limit '$limit_str' (use e.g. 10G, 500M, 0). Skipped."
+    return 1
+  fi
+
+  if ! ensure_ext4_usrquota_ready_for_path "$ws_path"; then
+    return 1
+  fi
+
+  local mountpoint
+  mountpoint="$(df -P "$ws_path" 2>/dev/null | awk 'NR==2{print $6}')"
+  if [[ -z "$mountpoint" ]]; then
+    echo "WARN! Unable to determine mount point for $ws_path. Storage limit skipped."
+    return 1
+  fi
+
+  if [[ "$kb" == "0" ]]; then
+    echo "Setting storage limit: unlimited (quota cleared) for user '$q_user' on $mountpoint"
+    setquota -u "$q_user" 0 0 0 0 "$mountpoint" >/dev/null 2>&1 || true
+    return 0
+  fi
+
+  echo "Setting storage limit: $limit_str for user '$q_user' on $mountpoint"
+  setquota -u "$q_user" "$kb" "$kb" 0 0 "$mountpoint" >/dev/null 2>&1 || true
+  return 0
+}
 
 check_update() {
   echo "Checking for available updates..."
@@ -139,6 +246,7 @@ bantuan() {
   echo "-c                  : CPU limit (e.g., 10% or 1.0)"
   echo "-i                  : Image (e.g., gvoze32/cloud9:jammy)"
   echo "-t                  : Type (e.g., 1 for Docker, 2 for Docker Memory Limit)"
+  echo "-q                  : Storage limit for workspace (ext4 quota, e.g., 10G / 500M; 0=unlimited)"
   echo "-n                  : Rclone remote name"
   echo "-h                  : Backup hour"
   echo "-f                  : Backup folder name"
@@ -319,12 +427,13 @@ EOF
 }
 
 createnewdocker() {
-  while getopts "u:p:o:i:" opt; do
+  while getopts "u:p:o:i:q:" opt; do
     case $opt in
     u) user="$OPTARG" ;;
     p) pw="$OPTARG" ;;
     o) port="$OPTARG" ;;
     i) image="$OPTARG" ;;
+    q) storage_limit="$OPTARG" ;;
     \?) echo "Invalid option: -$OPTARG" >&2 ;;
     esac
   done
@@ -370,12 +479,19 @@ createnewdocker() {
   else
     echo "Using provided image: $image"
   fi
+
+  if [[ -z "$storage_limit" ]]; then
+    read -p "Storage Limit (ext4 quota, e.g., 10G; 0=unlimited, blank=skip): " storage_limit
+  fi
   echo
   echo "Creating docker container:"
   echo "Username: $user"
   echo "Password: $pw"
   echo "Port: $port"
   echo "Image: $image"
+  if [[ -n "$storage_limit" ]]; then
+    echo "Storage Limit: $storage_limit"
+  fi
 
   cd /home/c9users
   rm .env
@@ -387,6 +503,10 @@ DOCKER_IMAGE=$image
 EOF
   docker compose -p $user up -d
   if [ -d "/home/c9users/$user" ]; then
+    if [[ -n "$storage_limit" ]]; then
+      set_user_storage_quota_for_path "$user" "$storage_limit" "/home/c9users/$user" || true
+    fi
+
     cd /home/c9users/$user
 
     ### Your custom default bundling files goes here, it's recommended to put it on resources directory
@@ -402,7 +522,7 @@ EOF
 
 # CREATE DOCKERLIMIT
 createnewdockermemlimit() {
-  while getopts "u:p:o:l:c:i:" opt; do
+  while getopts "u:p:o:l:c:i:q:" opt; do
     case $opt in
     u) user="$OPTARG" ;;
     p) pw="$OPTARG" ;;
@@ -410,6 +530,7 @@ createnewdockermemlimit() {
     l) limit="$OPTARG" ;;
     c) cpu_limit="$OPTARG" ;;
     i) image="$OPTARG" ;;
+    q) storage_limit="$OPTARG" ;;
     \?) echo "Invalid option: -$OPTARG" >&2 ;;
     esac
   done
@@ -466,9 +587,16 @@ createnewdockermemlimit() {
   echo "Username: $user"
   echo "Password: $pw"
   echo "Port: $port"
+  if [[ -z "$storage_limit" ]]; then
+    read -p "Storage Limit (ext4 quota, e.g., 10G; 0=unlimited, blank=skip): " storage_limit
+  fi
+
   echo "Memory Limit: $limit"
   echo "CPU Limit: $cpu_limit"
   echo "Image: $image"
+  if [[ -n "$storage_limit" ]]; then
+    echo "Storage Limit: $storage_limit"
+  fi
 
   cd /home/c9usersmemlimit
   rm .env
@@ -482,6 +610,10 @@ DOCKER_IMAGE=$image
 EOF
   docker compose -p $user up -d
   if [ -d "/home/c9usersmemlimit/$user" ]; then
+    if [[ -n "$storage_limit" ]]; then
+      set_user_storage_quota_for_path "$user" "$storage_limit" "/home/c9usersmemlimit/$user" || true
+    fi
+
     cd /home/c9usersmemlimit/$user
 
     ### Your custom default bundling files goes here, it's recommended to put it on resources directory
@@ -1161,39 +1293,39 @@ verify_backup() {
     local new_file="\$folder-\$user-\$date.zip"
     local retry_count=3
     local retry_delay=5
-    
+
     for ((i=1; i<=retry_count; i++)); do
         log_message "Verification attempt \$i of \$retry_count for \$new_file"
-        
+
         if rclone lsf "$name:$backup_path/\$new_file" &>/dev/null; then
             log_message "File \$new_file verified in remote"
             return 0
         fi
-        
+
         log_message "WARNING: \$new_file not found in remote"
         if [ \$i -lt \$retry_count ]; then
             log_message "Retrying in \$retry_delay seconds..."
             sleep \$retry_delay
         fi
     done
-    
+
     return 1
 }
 
 cleanup_old_backup() {
     local folder="\$1"
     local user="\$2"
-    
+
     log_message "Checking for old backup files for \$folder-\$user"
-    
+
     backup_files=\$(rclone lsf "$name:$backup_path" --include "\$folder-\$user-*.zip" | sort -r)
-    
+
     backup_count=\$(echo "\$backup_files" | wc -l)
-    
+
     if [ "\$backup_count" -gt 2 ]; then
         log_message "Keeping last 2 backups for \$folder-\$user"
         files_to_delete=\$(echo "\$backup_files" | tail -n +3)
-        
+
         while IFS= read -r file; do
             if [ ! -z "\$file" ]; then
                 log_message "Deleting old backup: \$file"
@@ -1217,7 +1349,7 @@ for folder in c9users c9usersmemlimit; do
         for user_folder in */; do
             user=\${user_folder%/}
             log_message "Backing up \$user from \$folder"
-            
+
             if ! zip -r "/home/backup/\$folder-\$user-\$date.zip" "\$user_folder" -x "*/\.c9/*" "$user_folder.c9/*" "*/node_modules/*" >> "\$log_file" 2>&1; then
                 log_message "ERROR: Failed to create zip for \$user in \$folder"
                 continue
@@ -1230,14 +1362,14 @@ for folder in c9users c9usersmemlimit; do
 
             while [ \$retry_count -lt \$max_retries ]; do
                 log_message "Upload attempt \$((retry_count + 1)) of \$max_retries"
-                
+
                 if rclone copy "/home/backup/\$folder-\$user-\$date.zip" "$name:$backup_path/" >> "\$log_file" 2>&1; then
                     if verify_backup "\$folder" "\$user"; then
                         upload_success=true
                         break
                     fi
                 fi
-                
+
                 retry_count=\$((retry_count + 1))
                 if [ \$retry_count -lt \$max_retries ]; then
                     log_message "Retry in 30 seconds..."

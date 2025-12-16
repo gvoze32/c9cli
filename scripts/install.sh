@@ -93,7 +93,7 @@ update_packages() {
 }
 
 second_dep() {
-        sudo apt install -y pythonpy apt-transport-https ca-certificates gnupg-agent software-properties-common
+        sudo apt install -y pythonpy apt-transport-https ca-certificates gnupg-agent software-properties-common quota
 }
 
 install_python2_from_source() {
@@ -160,14 +160,14 @@ start_atd() {
 
 pip_dep() {
         sudo apt install -y python3-pip
-        
+
         # Ubuntu 24.04 and 22.04 require --break-system-packages flag due to PEP 668
         if [[ "$ubuntu_version" = "24.04" || "$ubuntu_version" = "22.04" ]]; then
                 python3 -m pip install --break-system-packages --ignore-installed requests selenium colorama bs4 wget pyfiglet
         else
                 python3 -m pip install requests selenium colorama bs4 wget pyfiglet
         fi
-        
+
         if ensure_python2; then
                 curl https://bootstrap.pypa.io/pip/2.7/get-pip.py | sudo python2 -
                 python2 -m pip install requests selenium colorama bs4 wget pyfiglet
