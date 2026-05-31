@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="5.20"
+VERSION="5.30"
 
 if [ "$(id -u)" != "0" ]; then
   echo "c9cli must be run as root!" 1>&2
