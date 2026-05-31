@@ -252,13 +252,14 @@ bantuan() {
   echo "-f                  : Backup folder name"
   echo "-s                  : Backup service provider"
   echo
-  echo "Copyright (c) 2024 c9cli (under MIT License)"
+  echo "Copyright (c) 2024 c9cli (under AGPL-3.0 License)"
   echo "Built with love♡ by gvoze32"
 }
 
 # CREATE SYSTEMD
 
 createnewsystemd() {
+  OPTIND=1
   while getopts "u:p:o:" opt; do
     case $opt in
     u) user="$OPTARG" ;;
@@ -269,13 +270,13 @@ createnewsystemd() {
   done
 
   if [[ -z "$user" ]]; then
-    read -p "Username: " user
+    read -rp "Username: " user
   fi
   if [[ -z "$pw" ]]; then
-    read -p "Password: " pw
+    read -rp "Password: " pw
   fi
   if [[ -z "$port" ]]; then
-    read -p "Port: " port
+    read -rp "Port: " port
   fi
   echo
   echo "Creating workspace:"
@@ -285,30 +286,29 @@ createnewsystemd() {
 
   apt-get update -y
   apt-get upgrade -y
-  apt-get update -y
 
-  adduser --disabled-password --gecos "" $user
+  adduser --disabled-password --gecos "" "$user"
 
   case $ubuntu_version in
-  22.04 | 20.04)
+  24.04 | 22.04 | 20.04)
     echo "$user:$pw" | chpasswd
-    mkdir -p /home/$user/my-projects /home/$user/c9sdk
-    chown -R $user:$user /home/$user
-    chmod 700 /home/$user
-    sudo -u $user git clone --depth=5 https://github.com/c9/core.git /home/$user/c9sdk
-    sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
+    mkdir -p /home/"$user"/my-projects /home/"$user"/c9sdk
+    chown -R "$user":"$user" /home/"$user"
+    chmod 700 /home/"$user"
+    sudo -u "$user" git clone --depth=5 https://github.com/c9/core.git /home/"$user"/c9sdk
+    sudo -u "$user" bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
     ;;
   18.04)
-    echo -e "$pw\n$pw" | passwd $user
-    mkdir -p /home/$user/my-projects /home/$user/c9sdk
-    chown $user.$user /home/$user -R
-    chmod 700 /home/$user
-    sudo -u $user git clone --depth=5 https://github.com/c9/core.git /home/$user/c9sdk
-    sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
+    echo -e "$pw\n$pw" | passwd "$user"
+    mkdir -p /home/"$user"/my-projects /home/"$user"/c9sdk
+    chown -R "$user":"$user" /home/"$user"
+    chmod 700 /home/"$user"
+    sudo -u "$user" git clone --depth=5 https://github.com/c9/core.git /home/"$user"/c9sdk
+    sudo -u "$user" -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
     ;;
   esac
 
-  cat >/lib/systemd/system/c9-$user.service <<EOF
+  cat >"/lib/systemd/system/c9-$user.service" <<EOF
 [Unit]
 Description=c9 for $user
 After=network.target
@@ -330,13 +330,14 @@ WantedBy=multi-user.target
 EOF
 
   systemctl daemon-reload
-  systemctl enable c9-$user.service
-  systemctl restart c9-$user.service
+  systemctl enable "c9-$user.service"
+  systemctl restart "c9-$user.service"
   sleep 10
-  systemctl status c9-$user.service
+  systemctl status "c9-$user.service"
 }
 
 createnewsystemdlimit() {
+  OPTIND=1
   while getopts "u:p:o:l:c:" opt; do
     case $opt in
     u) user="$OPTARG" ;;
@@ -349,19 +350,19 @@ createnewsystemdlimit() {
   done
 
   if [[ -z "$user" ]]; then
-    read -p "Username: " user
+    read -rp "Username: " user
   fi
   if [[ -z "$pw" ]]; then
-    read -p "Password: " pw
+    read -rp "Password: " pw
   fi
   if [[ -z "$port" ]]; then
-    read -p "Port: " port
+    read -rp "Port: " port
   fi
   if [[ -z "$limit" ]]; then
-    read -p "Memory Limit (e.g., 1024m): " limit
+    read -rp "Memory Limit (e.g., 1024m): " limit
   fi
   if [[ -z "$cpu_limit" ]]; then
-    read -p "CPU Limit (e.g., 10%): " cpu_limit
+    read -rp "CPU Limit (e.g., 10%): " cpu_limit
   fi
   echo
   echo "Creating workspace with memory limit:"
@@ -375,28 +376,28 @@ createnewsystemdlimit() {
   apt-get upgrade -y
   apt-get update -y
 
-  adduser --disabled-password --gecos "" $user
+  adduser --disabled-password --gecos "" "$user"
 
   case $ubuntu_version in
-  22.04 | 20.04)
+  24.04 | 22.04 | 20.04)
     echo "$user:$pw" | chpasswd
-    mkdir -p /home/$user/my-projects /home/$user/c9sdk
-    chown -R $user:$user /home/$user
-    chmod 700 /home/$user
-    sudo -u $user git clone --depth=5 https://github.com/c9/core.git /home/$user/c9sdk
-    sudo -u $user bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
+    mkdir -p /home/"$user"/my-projects /home/"$user"/c9sdk
+    chown -R "$user":"$user" /home/"$user"
+    chmod 700 /home/"$user"
+    sudo -u "$user" git clone --depth=5 https://github.com/c9/core.git /home/"$user"/c9sdk
+    sudo -u "$user" bash -c "cd /home/$user/c9sdk && scripts/install-sdk.sh"
     ;;
   18.04)
-    echo -e "$pw\n$pw" | passwd $user
-    mkdir -p /home/$user/my-projects /home/$user/c9sdk
-    chown $user.$user /home/$user -R
-    chmod 700 /home/$user
-    sudo -u $user git clone --depth=5 https://github.com/c9/core.git /home/$user/c9sdk
-    sudo -u $user -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
+    echo -e "$pw\n$pw" | passwd "$user"
+    mkdir -p /home/"$user"/my-projects /home/"$user"/c9sdk
+    chown -R "$user":"$user" /home/"$user"
+    chmod 700 /home/"$user"
+    sudo -u "$user" git clone --depth=5 https://github.com/c9/core.git /home/"$user"/c9sdk
+    sudo -u "$user" -H sh -c "cd /home/$user/c9sdk; scripts/install-sdk.sh"
     ;;
   esac
 
-  cat >/lib/systemd/system/c9-$user.service <<EOF
+  cat >"/lib/systemd/system/c9-$user.service" <<EOF
 [Unit]
 Description=c9 for $user
 After=network.target
@@ -420,13 +421,14 @@ WantedBy=multi-user.target
 EOF
 
   systemctl daemon-reload
-  systemctl enable c9-$user.service
-  systemctl restart c9-$user.service
+  systemctl enable "c9-$user.service"
+  systemctl restart "c9-$user.service"
   sleep 10
-  systemctl status c9-$user.service
+  systemctl status "c9-$user.service"
 }
 
 createnewdocker() {
+  OPTIND=1
   while getopts "u:p:o:i:q:" opt; do
     case $opt in
     u) user="$OPTARG" ;;
@@ -439,13 +441,13 @@ createnewdocker() {
   done
 
   if [[ -z "$user" ]]; then
-    read -p "Username: " user
+    read -rp "Username: " user
   fi
   if [[ -z "$pw" ]]; then
-    read -p "Password: " pw
+    read -rp "Password: " pw
   fi
   if [[ -z "$port" ]]; then
-    read -p "Port: " port
+    read -rp "Port: " port
   fi
   if [[ -z "$image" ]]; then
     echo "Select image:"
@@ -453,7 +455,7 @@ createnewdocker() {
     echo "2. Ubuntu 22.04"
     echo "3. Ubuntu 24.04"
     echo "4. Custom image"
-    read -p "Enter image option (1-4): " image_choice
+    read -rp "Enter image option (1-4): " image_choice
     case "$image_choice" in
     1)
       image="gvoze32/cloud9:focal"
@@ -465,7 +467,7 @@ createnewdocker() {
       image="gvoze32/cloud9:noble"
       ;;
     4)
-      read -p "Enter custom Docker image (e.g., repo/image:tag): " image
+      read -rp "Enter custom Docker image (e.g., repo/image:tag): " image
       if [[ -z "$image" ]]; then
         echo "No image entered, using default image."
         image="gvoze32/cloud9:jammy"
@@ -481,7 +483,7 @@ createnewdocker() {
   fi
 
   if [[ -z "$storage_limit" ]]; then
-    read -p "Storage Limit (ext4 quota, e.g., 10G; 0=unlimited, blank=skip): " storage_limit
+    read -rp "Storage Limit (ext4 quota, e.g., 10G; 0=unlimited, blank=skip): " storage_limit
   fi
   echo
   echo "Creating docker container:"
@@ -493,28 +495,28 @@ createnewdocker() {
     echo "Storage Limit: $storage_limit"
   fi
 
-  cd /home/c9users
-  rm .env
+  cd /home/c9users || return 1
+  rm -f .env
   cat >/home/c9users/.env <<EOF
 NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$pw
 PORT=$port
 DOCKER_IMAGE=$image
 EOF
-  docker compose -p $user up -d
+  docker compose -p "$user" up -d
   if [ -d "/home/c9users/$user" ]; then
     if [[ -n "$storage_limit" ]]; then
       set_user_storage_quota_for_path "$user" "$storage_limit" "/home/c9users/$user" || true
     fi
 
-    cd /home/c9users/$user
+    cd /home/c9users/"$user" || return 1
 
     ### Your custom default bundling files goes here, it's recommended to put it on resources directory
     ### START
 
     ### END
 
-    cd
+    cd ~ || true
   else
     echo -e "\033[33mWARN! Workspace directory not found - Ignore this message if you are not adding default bundling files\033[0m"
   fi
@@ -522,6 +524,7 @@ EOF
 
 # CREATE DOCKERLIMIT
 createnewdockermemlimit() {
+  OPTIND=1
   while getopts "u:p:o:l:c:i:q:" opt; do
     case $opt in
     u) user="$OPTARG" ;;
@@ -536,19 +539,19 @@ createnewdockermemlimit() {
   done
 
   if [[ -z "$user" ]]; then
-    read -p "Username: " user
+    read -rp "Username: " user
   fi
   if [[ -z "$pw" ]]; then
-    read -p "Password: " pw
+    read -rp "Password: " pw
   fi
   if [[ -z "$port" ]]; then
-    read -p "Port: " port
+    read -rp "Port: " port
   fi
   if [[ -z "$limit" ]]; then
-    read -p "Memory Limit (e.g., 1024m): " limit
+    read -rp "Memory Limit (e.g., 1024m): " limit
   fi
   if [[ -z "$cpu_limit" ]]; then
-    read -p "CPU Limit (e.g., 1.0 for 1 core): " cpu_limit
+    read -rp "CPU Limit (e.g., 1.0 for 1 core): " cpu_limit
   fi
   if [[ -z "$image" ]]; then
     echo "Select image:"
@@ -556,7 +559,7 @@ createnewdockermemlimit() {
     echo "2. Ubuntu 22.04"
     echo "3. Ubuntu 24.04"
     echo "4. Custom image"
-    read -p "Enter image option (1-4): " image_choice
+    read -rp "Enter image option (1-4): " image_choice
     case "$image_choice" in
     1)
       image="gvoze32/cloud9:focal"
@@ -568,7 +571,7 @@ createnewdockermemlimit() {
       image="gvoze32/cloud9:noble"
       ;;
     4)
-      read -p "Enter custom Docker image (e.g., repo/image:tag): " image
+      read -rp "Enter custom Docker image (e.g., repo/image:tag): " image
       if [[ -z "$image" ]]; then
         echo "No image entered, using default image."
         image="gvoze32/cloud9:jammy"
@@ -588,7 +591,7 @@ createnewdockermemlimit() {
   echo "Password: $pw"
   echo "Port: $port"
   if [[ -z "$storage_limit" ]]; then
-    read -p "Storage Limit (ext4 quota, e.g., 10G; 0=unlimited, blank=skip): " storage_limit
+    read -rp "Storage Limit (ext4 quota, e.g., 10G; 0=unlimited, blank=skip): " storage_limit
   fi
 
   echo "Memory Limit: $limit"
@@ -598,8 +601,8 @@ createnewdockermemlimit() {
     echo "Storage Limit: $storage_limit"
   fi
 
-  cd /home/c9usersmemlimit
-  rm .env
+  cd /home/c9usersmemlimit || return 1
+  rm -f .env
   cat >/home/c9usersmemlimit/.env <<EOF
 NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$pw
@@ -608,20 +611,20 @@ MEMORY=$limit
 CPU_LIMIT=$cpu_limit
 DOCKER_IMAGE=$image
 EOF
-  docker compose -p $user up -d
+  docker compose -p "$user" up -d
   if [ -d "/home/c9usersmemlimit/$user" ]; then
     if [[ -n "$storage_limit" ]]; then
       set_user_storage_quota_for_path "$user" "$storage_limit" "/home/c9usersmemlimit/$user" || true
     fi
 
-    cd /home/c9usersmemlimit/$user
+    cd /home/c9usersmemlimit/"$user" || return 1
 
     ### Your custom default bundling files goes here, it's recommended to put it on resources directory
     ### START
 
     ### END
 
-    cd
+    cd ~ || true
   else
     echo -e "\033[33mWARN! Workspace directory not found - Ignore this message if you are not adding default bundling files\033[0m"
   fi
@@ -630,6 +633,7 @@ EOF
 # MANAGE SYSTEMD
 
 stopsystemd() {
+  OPTIND=1
   while getopts "u:" opt; do
     case $opt in
     u) user="$OPTARG" ;;
@@ -638,14 +642,15 @@ stopsystemd() {
   done
 
   if [[ -z "$user" ]]; then
-    read -p "Input User: " user
+    read -rp "Input User: " user
   fi
 
   sleep 3
-  systemctl stop c9-$user.service
+  systemctl stop "c9-$user.service"
 }
 
 startsystemd() {
+  OPTIND=1
   while getopts "u:" opt; do
     case $opt in
     u) user="$OPTARG" ;;
@@ -654,14 +659,15 @@ startsystemd() {
   done
 
   if [[ -z "$user" ]]; then
-    read -p "Input User: " user
+    read -rp "Input User: " user
   fi
 
   sleep 3
-  systemctl start c9-$user.service
+  systemctl start "c9-$user.service"
 }
 
 deletesystemd() {
+  OPTIND=1
   while getopts "u:" opt; do
     case $opt in
     u) user="$OPTARG" ;;
@@ -670,20 +676,21 @@ deletesystemd() {
   done
 
   if [[ -z "$user" ]]; then
-    read -p "Input User: " user
+    read -rp "Input User: " user
   fi
 
   sleep 3
-  systemctl stop c9-$user.service
+  systemctl stop "c9-$user.service"
   sleep 3
-  killall -u $user
+  killall -u "$user"
   sleep 3
-  userdel $user
+  userdel "$user"
   # OPTIONAL: Remove user directory
   # rm -rf /home/$user
 }
 
 statussystemd() {
+  OPTIND=1
   while getopts "u:" opt; do
     case $opt in
     u) user="$OPTARG" ;;
@@ -692,13 +699,14 @@ statussystemd() {
   done
 
   if [[ -z "$user" ]]; then
-    read -p "Input User: " user
+    read -rp "Input User: " user
   fi
 
-  systemctl status c9-$user.service
+  systemctl status "c9-$user.service"
 }
 
 restartsystemd() {
+  OPTIND=1
   while getopts "u:" opt; do
     case $opt in
     u) user="$OPTARG" ;;
@@ -707,17 +715,18 @@ restartsystemd() {
   done
 
   if [[ -z "$user" ]]; then
-    read -p "Input User: " user
+    read -rp "Input User: " user
   fi
 
   systemctl daemon-reload
-  systemctl enable c9-$user.service
-  systemctl restart c9-$user.service
+  systemctl enable "c9-$user.service"
+  systemctl restart "c9-$user.service"
   sleep 10
-  systemctl status c9-$user.service
+  systemctl status "c9-$user.service"
 }
 
 changepasswordsystemd() {
+  OPTIND=1
   while getopts "u:p:o:" opt; do
     case $opt in
     u) user="$OPTARG" ;;
@@ -728,28 +737,28 @@ changepasswordsystemd() {
   done
 
   if [[ -z "$user" ]]; then
-    read -p "Input User: " user
+    read -rp "Input User: " user
   fi
 
   if [[ -z "$password" ]]; then
-    read -p "Input New Password: " password
+    read -rp "Input New Password: " password
   fi
 
   if [[ -z "$port" ]]; then
-    read -p "Input New Port: " port
+    read -rp "Input New Port: " port
   fi
 
-  sed -i "s/-a $user:.*/-a $user:$password/" /lib/systemd/system/c9-$user.service
-  sed -i "s/PORT=.*/PORT=$port/" /lib/systemd/system/c9-$user.service
+  sed -i "s/-a $user:[^ ]*/-a $user:$password/" "/lib/systemd/system/c9-$user.service"
+  sed -i "s/PORT=.*/PORT=$port/" "/lib/systemd/system/c9-$user.service"
 
   systemctl daemon-reload
-  systemctl restart c9-$user.service
+  systemctl restart "c9-$user.service"
   sleep 10
-  systemctl status c9-$user.service
+  systemctl status "c9-$user.service"
 }
 
 schedulesystemd() {
-  read -p "Input User: " user
+  read -rp "Input User: " user
   echo " "
   echo "Format Example for Time: "
   echo " "
@@ -765,15 +774,15 @@ schedulesystemd() {
   echo "now + 1 year"
   echo "midnight"
   echo " "
-  read -p "Time: " waktu
-  at $waktu <<END
+  read -rp "Time: " waktu
+  at "$waktu" <<END
 sleep 3
-systemctl stop c9-$user.service
+systemctl stop "c9-$user.service"
 # OPTIONAL: Remove user directory
 # sleep 3
-# killall -u $user
+# killall -u "$user"
 # sleep 3
-# userdel $user
+# userdel "$user"
 END
 }
 
@@ -782,21 +791,22 @@ scheduledatq() {
 }
 
 convertsystemd() {
-  read -p "Input User: " user
+  read -rp "Input User: " user
   echo "Input user password"
-  passwd $user
+  passwd "$user"
   echo "Warning, C9 will be restart!"
-  usermod -aG sudo $user
+  usermod -aG sudo "$user"
   systemctl daemon-reload
-  systemctl enable c9-$user.service
-  systemctl restart c9-$user.service
+  systemctl enable "c9-$user.service"
+  systemctl restart "c9-$user.service"
   sleep 10
-  systemctl status c9-$user.service
+  systemctl status "c9-$user.service"
 }
 
 # MANAGE DOCKER
 
 stopdocker() {
+  OPTIND=1
   while getopts "u:t:" opt; do
     case $opt in
     u) user="$OPTARG" ;;
@@ -806,11 +816,11 @@ stopdocker() {
   done
 
   if [[ -z "$user" ]]; then
-    read -p "Input User: " user
+    read -rp "Input User: " user
   fi
 
   if [[ -z "$type" ]]; then
-    echo "Are the file is using Docker or Docker Memory Limit?"
+    echo "Is this workspace using Docker or Docker Memory Limit?"
     echo "1. Docker"
     echo "2. Docker Memory Limit"
     read -r -p "Choose: " response
@@ -820,16 +830,17 @@ stopdocker() {
 
   case "$response" in
   1)
-    cd /home/c9users
+    cd /home/c9users || return 1
     ;;
   *)
-    cd /home/c9usersmemlimit
+    cd /home/c9usersmemlimit || return 1
     ;;
   esac
-  docker compose -p $user stop
+  docker compose -p "$user" stop
 }
 
 startdocker() {
+  OPTIND=1
   while getopts "u:t:" opt; do
     case $opt in
     u) user="$OPTARG" ;;
@@ -839,11 +850,11 @@ startdocker() {
   done
 
   if [[ -z "$user" ]]; then
-    read -p "Input User: " user
+    read -rp "Input User: " user
   fi
 
   if [[ -z "$type" ]]; then
-    echo "Are the file is using Docker or Docker Memory Limit?"
+    echo "Is this workspace using Docker or Docker Memory Limit?"
     echo "1. Docker"
     echo "2. Docker Memory Limit"
     read -r -p "Choose: " response
@@ -853,16 +864,17 @@ startdocker() {
 
   case "$response" in
   1)
-    cd /home/c9users
+    cd /home/c9users || return 1
     ;;
   *)
-    cd /home/c9usersmemlimit
+    cd /home/c9usersmemlimit || return 1
     ;;
   esac
-  docker compose -p $user start
+  docker compose -p "$user" start
 }
 
 deletedocker() {
+  OPTIND=1
   while getopts "u:t:" opt; do
     case $opt in
     u) user="$OPTARG" ;;
@@ -872,11 +884,11 @@ deletedocker() {
   done
 
   if [[ -z "$user" ]]; then
-    read -p "Input User: " user
+    read -rp "Input User: " user
   fi
 
   if [[ -z "$type" ]]; then
-    echo "Are the file is using Docker or Docker Memory Limit?"
+    echo "Is this workspace using Docker or Docker Memory Limit?"
     echo "1. Docker"
     echo "2. Docker Memory Limit"
     read -r -p "Choose: " response
@@ -886,13 +898,13 @@ deletedocker() {
 
   case "$response" in
   1)
-    cd /home/c9users
+    cd /home/c9users || return 1
     ;;
   *)
-    cd /home/c9usersmemlimit
+    cd /home/c9usersmemlimit || return 1
     ;;
   esac
-  docker compose -p $user down
+  docker compose -p "$user" down
   # OPTIONAL: Remove user directory
   # rm -rf $user
 }
@@ -906,6 +918,7 @@ statusdocker() {
 }
 
 changepassworddocker() {
+  OPTIND=1
   while getopts "u:p:t:o:l:c:i:" opt; do
     case $opt in
     u) user="$OPTARG" ;;
@@ -920,15 +933,15 @@ changepassworddocker() {
   done
 
   if [[ -z "$user" ]]; then
-    read -p "Input Username: " user
+    read -rp "Input Username: " user
   fi
 
   if [[ -z "$newpw" ]]; then
-    read -p "Input New Password: " newpw
+    read -rp "Input New Password: " newpw
   fi
 
   if [[ -z "$port" ]]; then
-    read -p "Input Port: " port
+    read -rp "Input Port: " port
   fi
 
   if [[ -z "$type" ]]; then
@@ -949,10 +962,10 @@ changepassworddocker() {
   2)
     base_dir="/home/c9usersmemlimit"
     if [[ -z "$mem" ]]; then
-      read -p "Memory Limit (e.g., 1024m): " mem
+      read -rp "Memory Limit (e.g., 1024m): " mem
     fi
     if [[ -z "$cpu_limit" ]]; then
-      read -p "CPU Limit (e.g., 1.0 for 1 core): " cpu_limit
+      read -rp "CPU Limit (e.g., 1.0 for 1 core): " cpu_limit
     fi
     ;;
   *)
@@ -971,7 +984,7 @@ changepassworddocker() {
     echo "2. Ubuntu 22.04"
     echo "3. Ubuntu 24.04"
     echo "4. Custom image"
-    read -p "Enter image option (1-4): " image_choice
+    read -rp "Enter image option (1-4): " image_choice
     case "$image_choice" in
     1)
       image="gvoze32/cloud9:focal"
@@ -983,7 +996,7 @@ changepassworddocker() {
       image="gvoze32/cloud9:noble"
       ;;
     4)
-      read -p "Enter custom Docker image (e.g., repo/image:tag): " image
+      read -rp "Enter custom Docker image (e.g., repo/image:tag): " image
       if [[ -z "$image" ]]; then
         echo "No image entered, using default image."
         image="gvoze32/cloud9:jammy"
@@ -1028,10 +1041,10 @@ CPU_LIMIT=$cpu_limit
 EOF
     fi
 
-    cd "$base_dir"
+    cd "$base_dir" || return 1
     echo "Password, port and .env updated for user $user"
-    docker compose -p $user down
-    docker compose -p $user up -d
+    docker compose -p "$user" down
+    docker compose -p "$user" up -d
     echo "Docker container recreated for user $user"
   else
     echo "User $user does not exist or workspace directory not found"
@@ -1039,8 +1052,8 @@ EOF
 }
 
 scheduledocker() {
-  read -p "Input User: " user
-  echo Are the file is using docker or dockermemlimit?
+  read -rp "Input User: " user
+  echo Is this workspace using docker or dockermemlimit?
   read -r -p "Answer Y if you are using docker and answer N if you are using dockermemlimit [y/N] " response
   echo " "
   echo "Format Example for Time: "
@@ -1057,89 +1070,90 @@ scheduledocker() {
   echo "now + 1 year"
   echo "midnight"
   echo " "
-  read -p "Time: " waktu
+  read -rp "Time: " waktu
   case "$response" in
   [yY][eE][sS] | [yY])
-    at $waktu <<END
+    at "$waktu" <<END
 cd /home/c9users
-docker compose -p $user stop
+docker compose -p "$user" stop
 # OPTIONAL: Remove user setup
-# docker compose -p $user down
+# docker compose -p "$user" down
 END
     ;;
   *)
-    at $waktu <<END
+    at "$waktu" <<END
 cd /home/c9usersmemlimit
-docker compose -p $user stop
+docker compose -p "$user" stop
 # OPTIONAL: Remove user setup
-# docker compose -p $user down
+# docker compose -p "$user" down
 END
     ;;
   esac
 }
 
 configuredocker() {
-  read -p "Input User: " user
-  echo 1. Stop
-  echo 2. Start
-  echo 3. Restart
-  read -r -p "Choose: " response
-  case "$restart" in
+  read -rp "Input User: " user
+  echo "1. Stop"
+  echo "2. Start"
+  echo "3. Restart"
+  read -r -p "Choose: " action
+  case "$action" in
   1)
-    echo Are the file is using Docker or Docker Memory Limit?
-    echo 1. Docker
-    echo 2. Docker Memory Limit
+    echo "Is this workspace using Docker or Docker Memory Limit?"
+    echo "1. Docker"
+    echo "2. Docker Memory Limit"
     read -r -p "Choose: " response
     case "$response" in
     1)
-      cd /home/c9users
+      cd /home/c9users || return 1
       ;;
     *)
-      cd /home/c9usersmemlimit
+      cd /home/c9usersmemlimit || return 1
       ;;
     esac
-    docker container stop $user
+    docker container stop "$user"
     # OPTIONAL: Remove user setup
-    # docker compose -p $user down
+    # docker compose -p "$user" down
     ;;
   2)
-    echo Are the file is using Docker or Docker Memory Limit?
-    echo 1. Docker
-    echo 2. Docker Memory Limit
+    echo "Is this workspace using Docker or Docker Memory Limit?"
+    echo "1. Docker"
+    echo "2. Docker Memory Limit"
     read -r -p "Choose: " response
     case "$response" in
     1)
-      cd /home/c9users
+      cd /home/c9users || return 1
       ;;
     *)
-      cd /home/c9usersmemlimit
+      cd /home/c9usersmemlimit || return 1
       ;;
     esac
-    docker container start $user
+    docker container start "$user"
     ;;
   *)
-    echo Are the file is using Docker or Docker Memory Limit?
-    echo 1. Docker
-    echo 2. Docker Memory Limit
+    echo "Is this workspace using Docker or Docker Memory Limit?"
+    echo "1. Docker"
+    echo "2. Docker Memory Limit"
     read -r -p "Choose: " response
     case "$response" in
     1)
-      cd /home/c9users
+      cd /home/c9users || return 1
       ;;
     *)
-      cd /home/c9usersmemlimit
+      cd /home/c9usersmemlimit || return 1
       ;;
     esac
-    docker container stop $user
-    docker container start $user
+    docker container stop "$user"
+    docker container start "$user"
     # OPTIONAL: Remove user setup
-    # docker compose -p $user down
-    # docker compose -p $user up -d
+    # docker compose -p "$user" down
+    # docker compose -p "$user" up -d
     ;;
   esac
 }
 
 restartdocker() {
+  OPTIND=1
   while getopts "u:" opt; do
     case $opt in
     u) user="$OPTARG" ;;
@@ -1152,7 +1166,7 @@ restartdocker() {
   echo "$containers" | sed 's/^c9-//'
 
   if [[ -z "$user" ]]; then
-    read -p "Input User: " user
+    read -rp "Input User: " user
   fi
 
   container_name="c9-$user"
@@ -1171,10 +1185,16 @@ restartdocker() {
 }
 
 restartdockerall() {
-  docker restart $(docker ps -q)
+  running=$(docker ps -q)
+  if [[ -n "$running" ]]; then
+    docker restart "$running"
+  else
+    echo "No running containers to restart."
+  fi
 }
 
 resetdocker() {
+  OPTIND=1
   while getopts "u:t:" opt; do
     case $opt in
     u) user="$OPTARG" ;;
@@ -1184,11 +1204,11 @@ resetdocker() {
   done
 
   if [[ -z "$user" ]]; then
-    read -p "Input User: " user
+    read -rp "Input User: " user
   fi
 
   if [[ -z "$type" ]]; then
-    echo "Are the file is using Docker or Docker Memory Limit?"
+    echo "Is this workspace using Docker or Docker Memory Limit?"
     echo "1. Docker"
     echo "2. Docker Memory Limit"
     read -r -p "Choose: " response
@@ -1198,19 +1218,20 @@ resetdocker() {
 
   case "$response" in
   1)
-    cd /home/c9users
+    cd /home/c9users || return 1
     ;;
   *)
-    cd /home/c9usersmemlimit
+    cd /home/c9usersmemlimit || return 1
     ;;
   esac
-  docker compose -p $user down
-  docker compose -p $user up -d
+  docker compose -p "$user" down
+  docker compose -p "$user" up -d
 }
 
 # MANAGEMENTS
 
 backups() {
+  OPTIND=1
   while getopts "n:h:f:s:" opt; do
     case $opt in
     n) name="$OPTARG" ;;
@@ -1226,13 +1247,13 @@ backups() {
   echo "If your storage is bucket type, then name the rclone config name same as your bucket name"
   echo ""
   if [[ -z "$name" ]]; then
-    read -p "If all has been set up correctly, then input your rclone remote name: " name
+    read -rp "If all has been set up correctly, then input your rclone remote name: " name
   fi
   if [[ -z "$hour" ]]; then
-    read -p "Enter the time for backup (hour 0-23): " hour
+    read -rp "Enter the time for backup (hour 0-23): " hour
   fi
   if [[ -z "$cloud_folder" ]]; then
-    read -p "Define the backup folder name on the cloud: " cloud_folder
+    read -rp "Define the backup folder name on the cloud: " cloud_folder
   fi
   if [[ -z "$service" ]]; then
     echo ""
@@ -1247,30 +1268,8 @@ backups() {
     response="$service"
   fi
   case "$response" in
-  1)
+  1|2|3|4|5)
     backup_path="$cloud_folder"
-    list_path="$cloud_folder"
-    use_purge=false
-    ;;
-  2)
-    backup_path="$cloud_folder"
-    list_path="$cloud_folder"
-    use_purge=true
-    ;;
-  3)
-    backup_path="$cloud_folder"
-    list_path="$cloud_folder"
-    use_purge=true
-    ;;
-  4)
-    backup_path="$cloud_folder"
-    list_path="$cloud_folder"
-    use_purge=false
-    ;;
-  5)
-    backup_path="$cloud_folder"
-    list_path="$cloud_folder"
-    use_purge=false
     ;;
   *)
     echo "Invalid option"
@@ -1278,7 +1277,7 @@ backups() {
     ;;
   esac
 
-  cat >/home/backup-$name.sh <<EOF
+  cat >/home/backup-"$name".sh <<EOF
 #!/bin/bash
 date=\$(date +%Y%m%d)
 log_file="/home/backup-$name.log"
@@ -1350,7 +1349,7 @@ for folder in c9users c9usersmemlimit; do
             user=\${user_folder%/}
             log_message "Backing up \$user from \$folder"
 
-            if ! zip -r "/home/backup/\$folder-\$user-\$date.zip" "\$user_folder" -x "*/\.c9/*" "$user_folder.c9/*" "*/node_modules/*" >> "\$log_file" 2>&1; then
+            if ! zip -r "/home/backup/\$folder-\$user-\$date.zip" "\$user_folder" -x "*/\.c9/*" "\$user_folder.c9/*" "*/node_modules/*" >> "\$log_file" 2>&1; then
                 log_message "ERROR: Failed to create zip for \$user in \$folder"
                 continue
             fi
@@ -1399,12 +1398,12 @@ rm -rf /home/backup >> "\$log_file" 2>&1
 log_message "Backup process completed"
 EOF
 
-  chmod +x /home/backup-$name.sh
+  chmod +x /home/backup-"$name".sh
   echo ""
   echo "Backup command created"
 
   crontab -l >current_cron
-  echo "0 $hour * * * /home/backup-$name.sh > /home/backup-$name.log 2>&1" >>current_cron
+  echo "0 $hour * * * /home/backup-$name.sh >> /home/backup-$name.log 2>&1" >>current_cron
   crontab current_cron
   rm current_cron
 
@@ -1488,7 +1487,7 @@ quickcreatec9() {
     git clone https://github.com/c9/core.git /root/c9sdk
   fi
 
-  cd /root/c9sdk
+  cd /root/c9sdk || { echo "C9 SDK not found"; return 1; }
   ./scripts/install-sdk.sh
 
   echo "Starting C9 Server..."
@@ -1569,7 +1568,7 @@ statusquickcreate() {
 
     # Show process details
     echo -e "\nProcess details:"
-    ps aux | grep "node.*server.js" | grep -v grep
+    pgrep -af "node.*server.js"
   else
     echo "C9 Server is NOT RUNNING"
   fi
@@ -1740,10 +1739,6 @@ update)
 
 backup)
   backups "${@:2}"
-  ;;
-
-daemon)
-  dockerdaemon
   ;;
 
 help)

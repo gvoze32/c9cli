@@ -22,7 +22,7 @@ install_docker_app() {
 
 install_docker() {
         sudo adduser --disabled-password --gecos "" c9users
-        sudo cat >/home/c9users/docker-compose.yml <<EOF
+        cat >/home/c9users/docker-compose.yml <<EOF
 services:
   cloud9:
     image: \${DOCKER_IMAGE}
@@ -41,7 +41,7 @@ EOF
 
 install_docker_memlimit() {
         sudo adduser --disabled-password --gecos "" c9usersmemlimit
-        sudo cat >/home/c9usersmemlimit/docker-compose.yml <<EOF
+        cat >/home/c9usersmemlimit/docker-compose.yml <<EOF
 services:
   cloud9:
     image: \${DOCKER_IMAGE}
@@ -64,14 +64,14 @@ EOF
 }
 
 blank_env() {
-        >/home/c9users/.env
-        >/home/c9usersmemlimit/.env
+        true >/home/c9users/.env
+        true >/home/c9usersmemlimit/.env
 }
 
 custom_docker_size() {
         echo "Creating /etc/docker/daemon.json file"
         echo "Setting custom Docker default address pools"
-        sudo cat >/etc/docker/daemon.json <<EOF
+        cat >/etc/docker/daemon.json <<EOF
 {
     "default-address-pools": [
         {
