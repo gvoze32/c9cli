@@ -45,6 +45,12 @@ c9cli supports backing up workspaces to various cloud storage providers using Rc
 
 To set up a backup, use the `c9cli backup` command and follow the prompts.
 
+Additional folders or files can be included in every archive with the repeatable `-a` option. Paths are relative to each workspace root and may use `{folder}` and `{user}` placeholders:
+
+```bash
+c9cli backup -n drive -h 2 -f backups -s 1 -a 'additional/{user}/data'
+```
+
 ## Updating
 
 To update c9cli to the latest version, run:

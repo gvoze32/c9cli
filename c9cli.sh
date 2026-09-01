@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="5.30"
+VERSION="5.31"
 
 if [ "$(id -u)" != "0" ]; then
   echo "c9cli must be run as root!" 1>&2
@@ -251,6 +251,7 @@ bantuan() {
   echo "-h                  : Backup hour"
   echo "-f                  : Backup folder name"
   echo "-s                  : Backup service provider"
+  echo "-a                  : Additional folder/file (repeatable)"
   echo
   echo "Copyright (c) 2024 c9cli (under AGPL-3.0 License)"
   echo "Built with love♡ by gvoze32"
@@ -1231,13 +1232,21 @@ resetdocker() {
 # MANAGEMENTS
 
 backups() {
+  local -a additional_paths=()
   OPTIND=1
-  while getopts "n:h:f:s:" opt; do
+  while getopts "n:h:f:s:a:" opt; do
     case $opt in
     n) name="$OPTARG" ;;
     h) hour="$OPTARG" ;;
     f) cloud_folder="$OPTARG" ;;
     s) service="$OPTARG" ;;
+    a)
+      if [[ -z "$OPTARG" || "$OPTARG" == -* ]]; then
+        echo "Invalid additional folder/file path" >&2
+        return 1
+      fi
+      additional_paths+=("$OPTARG")
+      ;;
     \?) echo "Invalid option: -$OPTARG" >&2 ;;
     esac
   done
@@ -1276,6 +1285,14 @@ backups() {
     exit 1
     ;;
   esac
+  local additional_paths_config=""
+  local additional_path
+  local quoted_additional_path
+  for additional_path in "${additional_paths[@]}"; do
+    printf -v quoted_additional_path '%q' "$additional_path"
+    additional_paths_config+="  ${quoted_additional_path}"$'\n'
+  done
+
 
   cat >/home/backup-"$name".sh <<EOF
 #!/bin/bash
@@ -1284,6 +1301,32 @@ log_file="/home/backup-$name.log"
 
 log_message() {
     echo "\$(date '+%Y-%m-%d %H:%M:%S') - \$1" >> "\$log_file"
+}
+additional_paths=(
+$additional_paths_config
+)
+
+resolve_additional_path() {
+    local configured_path="\$1"
+    configured_path="\${configured_path//\\{folder\\}/\$folder}"
+    configured_path="\${configured_path//\\{user\\}/\$user}"
+    printf '%s' "\$configured_path"
+}
+
+should_skip_additional_folder() {
+    local candidate="\$1"
+    local configured_path=""
+    local additional_pattern=""
+
+    for configured_path in "\${additional_paths[@]}"; do
+        additional_pattern="\${configured_path//\\{folder\\}/*}"
+        additional_pattern="\${additional_pattern//\\{user\\}/*}"
+        if [[ "\$candidate" == \$additional_pattern || "\$candidate" == \${additional_pattern}/ ]]; then
+            return 0
+        fi
+    done
+
+    return 1
 }
 
 verify_backup() {
@@ -1346,10 +1389,29 @@ for folder in c9users c9usersmemlimit; do
         log_message "Processing \$folder"
         cd "\$folder"
         for user_folder in */; do
+            if [ ! -d "\$user_folder" ]; then
+                continue
+            fi
+            if should_skip_additional_folder "\$user_folder"; then
+                log_message "Skipping additional folder \$user_folder"
+                continue
+            fi
+
             user=\${user_folder%/}
             log_message "Backing up \$user from \$folder"
 
-            if ! zip -r "/home/backup/\$folder-\$user-\$date.zip" "\$user_folder" -x "*/\.c9/*" "\$user_folder.c9/*" "*/node_modules/*" >> "\$log_file" 2>&1; then
+            zip_sources=("\$user_folder")
+            for additional_path in "\${additional_paths[@]}"; do
+                resolved_path="\$(resolve_additional_path "\$additional_path")"
+                if [ -e "\$resolved_path" ]; then
+                    zip_sources+=("\$resolved_path")
+                    log_message "Including additional path \$resolved_path"
+                else
+                    log_message "WARNING: Additional path \$resolved_path not found"
+                fi
+            done
+
+            if ! zip -r "/home/backup/\$folder-\$user-\$date.zip" "\${zip_sources[@]}" -x "*/\.c9/*" "\$user_folder.c9/*" "*/node_modules/*" >> "\$log_file" 2>&1; then
                 log_message "ERROR: Failed to create zip for \$user in \$folder"
                 continue
             fi
