@@ -37,7 +37,8 @@ c9cli quickcreate
 
 ## Supported Environments
 
-- Debian-based systems (Ubuntu 18.04, 20.04, 22.04, 24.04)
+- Debian-based systems (Ubuntu 18.04, 20.04, 22.04, 24.04, 26.04)
+- Docker workspace images support Ubuntu 20.04, 22.04, 24.04, and 26.04 Cloud9 image tags.
 
 ## Backup
 

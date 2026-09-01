@@ -129,7 +129,7 @@ ensure_python2() {
                 return 0
         fi
 
-        if [[ "$ubuntu_version" = "24.04" ]]; then
+        if [[ "$ubuntu_version" = "26.04" || "$ubuntu_version" = "24.04" ]]; then
                 if install_python2_from_source; then
                         return 0
                 fi
@@ -161,8 +161,8 @@ start_atd() {
 pip_dep() {
         sudo apt install -y python3-pip
 
-        # Ubuntu 24.04 and 22.04 require --break-system-packages flag due to PEP 668
-        if [[ "$ubuntu_version" = "24.04" || "$ubuntu_version" = "22.04" ]]; then
+        # Ubuntu 26.04, 24.04 and 22.04 require --break-system-packages due to PEP 668
+        if [[ "$ubuntu_version" = "26.04" || "$ubuntu_version" = "24.04" || "$ubuntu_version" = "22.04" ]]; then
                 python3 -m pip install --break-system-packages --ignore-installed requests selenium colorama bs4 wget pyfiglet
         else
                 python3 -m pip install requests selenium colorama bs4 wget pyfiglet
@@ -177,7 +177,7 @@ pip_dep() {
 }
 
 case $ubuntu_version in
-24.04)
+26.04 | 24.04)
         # Set NEEDRESTART frontend to avoid prompts
         sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
         sed -i "s/#\$nrconf{kernelhints} = -1;/\$nrconf{kernelhints} = -1;/g" /etc/needrestart/needrestart.conf

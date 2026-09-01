@@ -186,7 +186,7 @@ about() {
   echo "Name of File  : c9cli.sh"
   echo "Version       : $VERSION"
   echo "Tested on     :"
-  echo "    - Debian  : Ubuntu 18.04, 20.04, 22.04"
+  echo "    - Debian  : Ubuntu 18.04, 20.04, 22.04, 24.04, 26.04"
   echo
   echo "Built with love♡ by gvoze32"
 }
@@ -291,7 +291,7 @@ createnewsystemd() {
   adduser --disabled-password --gecos "" "$user"
 
   case $ubuntu_version in
-  24.04 | 22.04 | 20.04)
+  26.04 | 24.04 | 22.04 | 20.04)
     echo "$user:$pw" | chpasswd
     mkdir -p /home/"$user"/my-projects /home/"$user"/c9sdk
     chown -R "$user":"$user" /home/"$user"
@@ -380,7 +380,7 @@ createnewsystemdlimit() {
   adduser --disabled-password --gecos "" "$user"
 
   case $ubuntu_version in
-  24.04 | 22.04 | 20.04)
+  26.04 | 24.04 | 22.04 | 20.04)
     echo "$user:$pw" | chpasswd
     mkdir -p /home/"$user"/my-projects /home/"$user"/c9sdk
     chown -R "$user":"$user" /home/"$user"
@@ -451,7 +451,7 @@ createnewdocker() {
     read -rp "Port: " port
   fi
   if [[ -z "$image" ]]; then
-    echo "Select image:"
+    echo "Select image (Docker container base):"
     echo "1. Ubuntu 20.04"
     echo "2. Ubuntu 22.04"
     echo "3. Ubuntu 24.04"
@@ -555,7 +555,7 @@ createnewdockermemlimit() {
     read -rp "CPU Limit (e.g., 1.0 for 1 core): " cpu_limit
   fi
   if [[ -z "$image" ]]; then
-    echo "Select image:"
+    echo "Select image (Docker container base):"
     echo "1. Ubuntu 20.04"
     echo "2. Ubuntu 22.04"
     echo "3. Ubuntu 24.04"
@@ -980,7 +980,7 @@ changepassworddocker() {
   fi
 
   if [[ -z "$image" ]]; then
-    echo "Select Docker image:"
+    echo "Select Docker image (container base):"
     echo "1. Ubuntu 20.04"
     echo "2. Ubuntu 22.04"
     echo "3. Ubuntu 24.04"
