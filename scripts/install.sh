@@ -150,11 +150,15 @@ ensure_python2() {
         return 1
 }
 
-start_atd() {
-        if systemctl list-unit-files | grep -q '^atd.service'; then
-                sudo systemctl enable --now atd.service
-        else
-                echo "atd.service not found; skipping at daemon setup."
+install_atd() {
+        echo "Installing at package and enabling atd.service..."
+        if ! sudo apt-get install -y at; then
+                echo "Failed to install the at package." >&2
+                return 1
+        fi
+        if ! sudo systemctl enable --now atd.service; then
+                echo "Failed to enable atd.service." >&2
+                return 1
         fi
 }
 
@@ -191,9 +195,9 @@ case $ubuntu_version in
         update_packages
 
         # Install dependencies
-        sudo apt install -y curl at git nodejs npm build-essential python3 zip unzip
+        sudo apt install -y curl git nodejs npm build-essential python3 zip unzip
         pip_dep
-        start_atd
+        install_atd || exit 1
         second_dep
 
         # Install rclone
@@ -219,9 +223,9 @@ case $ubuntu_version in
         update_packages
 
         # Install dependencies
-        sudo apt install -y curl at git nodejs npm build-essential python3 zip unzip
+        sudo apt install -y curl git nodejs npm build-essential python3 zip unzip
         pip_dep
-        start_atd
+        install_atd || exit 1
         second_dep
 
         # Install rclone
@@ -245,9 +249,9 @@ case $ubuntu_version in
         update_packages
 
         # Install dependencies
-        sudo apt install -y curl at git nodejs npm build-essential python3 zip unzip
+        sudo apt install -y curl git nodejs npm build-essential python3 zip unzip
         pip_dep
-        start_atd
+        install_atd || exit 1
         second_dep
 
         # Install rclone
@@ -266,9 +270,9 @@ case $ubuntu_version in
         update_packages
 
         # Install dependencies
-        sudo apt install -y curl at git nodejs npm build-essential python3 zip unzip
+        sudo apt install -y curl git nodejs npm build-essential python3 zip unzip
         pip_dep
-        start_atd
+        install_atd || exit 1
         second_dep
 
         # Install rclone
