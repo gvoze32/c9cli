@@ -162,6 +162,22 @@ install_atd() {
         fi
 }
 
+# NodeSource nodejs bundles npm and conflicts with the distro npm package;
+# a conflict aborts the whole apt transaction, so only add what is missing.
+install_base_deps() {
+        local packages=(curl git build-essential python3 zip unzip)
+        if ! command -v node >/dev/null 2>&1; then
+                packages+=(nodejs)
+        fi
+        if ! command -v npm >/dev/null 2>&1; then
+                packages+=(npm)
+        fi
+        if ! sudo apt-get install -y "${packages[@]}"; then
+                echo "Failed to install dependencies: ${packages[*]}" >&2
+                return 1
+        fi
+}
+
 pip_dep() {
         sudo apt install -y python3-pip
 
@@ -195,7 +211,7 @@ case $ubuntu_version in
         update_packages
 
         # Install dependencies
-        sudo apt install -y curl git nodejs npm build-essential python3 zip unzip
+        install_base_deps || exit 1
         pip_dep
         install_atd || exit 1
         second_dep
@@ -223,7 +239,7 @@ case $ubuntu_version in
         update_packages
 
         # Install dependencies
-        sudo apt install -y curl git nodejs npm build-essential python3 zip unzip
+        install_base_deps || exit 1
         pip_dep
         install_atd || exit 1
         second_dep
@@ -249,7 +265,7 @@ case $ubuntu_version in
         update_packages
 
         # Install dependencies
-        sudo apt install -y curl git nodejs npm build-essential python3 zip unzip
+        install_base_deps || exit 1
         pip_dep
         install_atd || exit 1
         second_dep
@@ -270,7 +286,7 @@ case $ubuntu_version in
         update_packages
 
         # Install dependencies
-        sudo apt install -y curl git nodejs npm build-essential python3 zip unzip
+        install_base_deps || exit 1
         pip_dep
         install_atd || exit 1
         second_dep
