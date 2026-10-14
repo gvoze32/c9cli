@@ -1,6 +1,14 @@
 #!/bin/bash
+# c9cli bootstrap: runs the all-in installer, then installs the c9cli binary.
+#   curl -fsSL https://jayanode.com/api/mirror/c9cli/build?raw=true | sudo bash
 
-echo "
+BASE_URL="https://jayanode.com/api/mirror/c9cli"
+INSTALL_PATH="/usr/local/bin/c9cli"
+tmp_dir="" # global: the EXIT trap runs after main() has returned
+
+banner() {
+  cat <<'EOF'
+
 =================================================
              ____ ___   ____ _     ___               
             / ___/ _ \ / ___| |   |_ _|              
@@ -13,18 +21,43 @@ echo "
  |___|_| \_|____/ |_/_/   \_\_____|_____|_____|_| \_\
                                                      
 ==================================================
-"
 
-sudo curl -fsSL https://jayanode.com/api/mirror/c9cli/install?raw=true | sudo bash
-if [ $? -ne 0 ]; then
-    echo -e "\e[31mInstallation script failed.\e[0m"
-    exit 1
-fi
+EOF
+}
 
-if sudo curl -fsSL https://jayanode.com/api/mirror/c9cli/c9cli?raw=true -o /usr/local/bin/c9cli && sudo chmod +x /usr/local/bin/c9cli; then
-    echo "c9cli installation successful!"
-    sudo c9cli version
-    echo "Type 'sudo c9cli help' to see the available commands."
-else
-    echo -e "\e[31mc9cli installation failed.\e[0m"
-fi
+fail() {
+  echo -e "\e[31m$1\e[0m" >&2
+  exit 1
+}
+
+# fetch <url> <destination>
+fetch() {
+  curl -fsSL --proto '=https' --tlsv1.2 --retry 3 --connect-timeout 15 "$1" -o "$2"
+}
+
+main() {
+  local sudo_cmd=""
+  if [ "$(id -u)" != "0" ]; then
+    sudo_cmd="sudo"
+  fi
+
+  banner
+
+  tmp_dir="$(mktemp -d)" || fail "Cannot create a temporary directory."
+  trap '[ -n "$tmp_dir" ] && rm -rf "$tmp_dir"' EXIT
+
+  fetch "$BASE_URL/install?raw=true" "$tmp_dir/install.sh" || fail "Installation script could not be downloaded."
+  $sudo_cmd bash "$tmp_dir/install.sh" || fail "Installation script failed."
+
+  fetch "$BASE_URL/c9cli?raw=true" "$tmp_dir/c9cli" || fail "c9cli installation failed."
+  if ! bash -n "$tmp_dir/c9cli" || ! grep -q '^VERSION=' "$tmp_dir/c9cli"; then
+    fail "c9cli installation failed (downloaded file is invalid)."
+  fi
+  $sudo_cmd install -m 0755 "$tmp_dir/c9cli" "$INSTALL_PATH" || fail "c9cli installation failed."
+
+  echo "c9cli installation successful!"
+  $sudo_cmd c9cli version
+  echo "Type 'sudo c9cli help' to see the available commands."
+}
+
+main "$@"
